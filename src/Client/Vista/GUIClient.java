@@ -11,19 +11,17 @@ import javax.swing.JFrame;
  *
  * @author villa
  */
-public class GUIClient extends JFrame{
-    
-    
-    
-    public GUIClient(){
+public class GUIClient extends JFrame {
+
+    public GUIClient() {
         setTitle("Cliente");
         setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         pack();
     }
-    
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         GUIClient client = new GUIClient();
-        
-        
+
     }
 }
