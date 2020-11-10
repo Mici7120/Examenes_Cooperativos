@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Vista;
+package Server.Vista;
 
 /**
  *
  * @author villa
  */
-public class GUI {
+public class GUIServer {
     
 }
