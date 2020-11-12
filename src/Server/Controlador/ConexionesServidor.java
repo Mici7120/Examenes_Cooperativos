@@ -6,6 +6,8 @@
 package Server.Controlador;
 
 import Server.Vista.GUIServer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -13,13 +15,12 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
-import javax.swing.JTextArea;
 
 /**
  *
  * @author villa
  */
-public class ConexionesServidor {
+public class ConexionesServidor implements ActionListener {
 
     private ServerSocket serverSocket;
     private int estudiantes = 0;
@@ -29,8 +30,14 @@ public class ConexionesServidor {
 
     private DatagramPacket datagrama;
     byte[] vacio = new byte[0];
-    
-    private GUIServer interfaz = new GUIServer();
+
+    GUIServer interfaz;
+
+    public ConexionesServidor(GUIServer gui) {
+        interfaz = gui;
+        interfaz.asignarEscuchasBotones(this);
+        ejecutarServidor();
+    }
 
     /**
      * Método que crea el serverSocket, se queda a espera de que un cliente se
@@ -60,15 +67,16 @@ public class ConexionesServidor {
 
         try {
             serverSocket = new ServerSocket(12345);
-            interfaz.estadoServidor.append("Iniciado servidor por el puerto " + serverSocket.getLocalPort());
 
-            while (estudiantes < 4) {
+            interfaz.appendEstadoServidor("Iniciado servidor por el puerto " + serverSocket.getLocalPort());
+
+            while (estudiantes < 3) {
                 try {
-                    interfaz.estadoServidor.append("\nEsperando conexiones...\n");
+                    interfaz.appendEstadoServidor("\nEsperando conexiones...\n");
                     Socket socket = serverSocket.accept(); // permite al servidor aceptar la conexión                    
                     estudiantes++;
                     hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama);
-                    interfaz.estadoServidor.append("\n Conectado el estudiante: " + estudiantes);
+                    interfaz.appendEstadoServidor("\n Conectado el estudiante: " + estudiantes);
 
                 } catch (EOFException excepcionEOF) {
                     System.out.println("\nServidor termino la conexion");
@@ -79,9 +87,20 @@ public class ConexionesServidor {
             System.out.println(exepcionES.getMessage());
         } // fin de catch
     } // fin del método ejecutarServidor
-    
-    public static void main(String[] args) {
-        ConexionesServidor conexiones = new ConexionesServidor();
-        conexiones.ejecutarServidor();
+
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+        if (ae.getSource() == interfaz.getBAgregarExamen()) {
+            interfaz.getNombreExamen();
+            interfaz.setNumeroPregunta(0);
+            //interfaz.borrarCampo(interfaz.pregunta);
+        }else if(ae.getSource() == interfaz.getBIniciarExamen()){
+            //ejecutarServidor();
+        }else if(ae.getSource() == interfaz.getBAgregarPregunta()){
+            interfaz.setNumeroPregunta(1);
+            interfaz.borrarOpcionesPregunta();
+        }
+        
     }
+
 }

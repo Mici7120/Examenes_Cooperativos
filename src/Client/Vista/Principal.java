@@ -14,7 +14,7 @@ import Client.Controlador.LogicaCliente;
 public class Principal {
      public static void main(String[] args) {
         GUIClient client = new GUIClient();
-        //LogicaCliente logica = new LogicaCliente(client);   
-        //logica.conectar("127.0.0.1");
+        LogicaCliente logica = new LogicaCliente(client);   
+        logica.conectar("127.0.0.1");
     }
 }

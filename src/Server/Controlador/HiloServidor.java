@@ -44,12 +44,12 @@ public class HiloServidor extends Thread {
 
     @Override
     public void run() {
-        interfaz.estadoServidor.append("\n Server hilo" + idCliente + " por el puerto " + sCliente.getPort() + " iniciado.");
+        interfaz.appendEstadoServidor("\n Server hilo" + idCliente + " por el puerto " + sCliente.getPort() + " iniciado.");
         String mensaje = "";
         do {
             try {
                 mensaje = (String) entrada.readObject();
-                interfaz.estadoServidor.append("\n Cliente " + idCliente + ": " + mensaje);
+                interfaz.appendEstadoServidor("\n Cliente " + idCliente + ": " + mensaje);
 
                 if (mensaje.toLowerCase().contains("hola")) {
                     enviarMensaje("Hola, como estas cliente " + idCliente + " ?");
@@ -134,7 +134,7 @@ public class HiloServidor extends Thread {
             salida.flush();
 
             entrada = new ObjectInputStream(sCliente.getInputStream());
-            interfaz.estadoServidor.append("\n Se obtuvieron los flujos de E/S del cliente: " + idCliente);
+            interfaz.appendEstadoServidor("\n Se obtuvieron los flujos de E/S del cliente: " + idCliente);
 
         } catch (IOException ex) {
             System.out.println("error a abrir los flujos del cliente " + idCliente);
