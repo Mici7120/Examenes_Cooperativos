@@ -5,13 +5,21 @@
  */
 package Server.Controlador;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author villa
  */
 public class Pregunta {
-    String Enunciado;
-    public Pregunta(){
-        
+    String enunciado, cuerpo;
+    ArrayList <String> opciones;
+    int verdadera;
+    public Pregunta(String enunciado, String cuerpo, ArrayList<String> opciones, int verdadera){
+        this.enunciado = enunciado;
+        this.cuerpo = cuerpo;
+        this.opciones = opciones;
+        this.verdadera = verdadera;
     }
+    
 }

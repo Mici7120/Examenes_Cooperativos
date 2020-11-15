@@ -9,6 +9,7 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -28,7 +29,8 @@ public class GUIServer extends JFrame {
     Container container;
     JTabbedPane pestañas;
     JPanel pConfiExamenes, pIniExamen, pInfoExamenes, pIngresarExamen, pOpIniExamen, pIngresarPreguntas, pPreguntas;
-    JTextField nombreExamen, pregunta, tfOpcion1, tfOpcion2, tfOpcion3, tfOpcion4;
+    JTextArea cuerpoPregunta;
+    JTextField nombreExamen, enunciadoPregunta, tfOpcion1, tfOpcion2, tfOpcion3, tfOpcion4;
     JTextArea estadoServidor;
     JLabel lNombreExamen, lNumeroPregunta;
     JButton bIniciarExamen, bAgregarPregunta, bAgregarExamen;
@@ -61,9 +63,10 @@ public class GUIServer extends JFrame {
         pIngresarExamen.add(bAgregarExamen);
         
         pIngresarPreguntas = new JPanel();
-        pIngresarPreguntas.setLayout(new GridLayout(5, 2));
+        pIngresarPreguntas.setLayout(new BorderLayout());
         lNumeroPregunta = new JLabel("Pregunta #" + numeroPregunta + ":");
-        pregunta = new JTextField();                
+        enunciadoPregunta = new JTextField();
+        cuerpoPregunta = new JTextArea();
         rbOpcion1 = new JRadioButton("Opcion1");
         tfOpcion1 = new JTextField();
         rbOpcion2 = new JRadioButton("Opcion2");
@@ -73,16 +76,23 @@ public class GUIServer extends JFrame {
         rbOpcion4 = new JRadioButton("Opcion4");
         tfOpcion4 = new JTextField();
         
-        pIngresarPreguntas.add(lNumeroPregunta);
-        pIngresarPreguntas.add(pregunta);
-        pIngresarPreguntas.add(rbOpcion1);
-        pIngresarPreguntas.add(tfOpcion1);
-        pIngresarPreguntas.add(rbOpcion2);
-        pIngresarPreguntas.add(tfOpcion2);
-        pIngresarPreguntas.add(rbOpcion3);
-        pIngresarPreguntas.add(tfOpcion3);
-        pIngresarPreguntas.add(rbOpcion4);
-        pIngresarPreguntas.add(tfOpcion4);
+        JPanel pEnunciado = new JPanel(new BorderLayout());
+        pEnunciado.add(lNumeroPregunta, BorderLayout.WEST);
+        pEnunciado.add(enunciadoPregunta, BorderLayout.CENTER);
+        pIngresarPreguntas.add(pEnunciado, BorderLayout.NORTH);
+        
+        pIngresarPreguntas.add(cuerpoPregunta, BorderLayout.CENTER);
+        
+        JPanel pOpciones = new JPanel(new GridLayout(4, 2));
+        pOpciones.add(rbOpcion1);
+        pOpciones.add(tfOpcion1);
+        pOpciones.add(rbOpcion2);
+        pOpciones.add(tfOpcion2);
+        pOpciones.add(rbOpcion3);
+        pOpciones.add(tfOpcion3);
+        pOpciones.add(rbOpcion4);
+        pOpciones.add(tfOpcion4);
+        pIngresarPreguntas.add(pOpciones, BorderLayout.SOUTH);
         
         pPreguntas = new JPanel();
         jcbPreguntas = new JComboBox();
@@ -114,11 +124,11 @@ public class GUIServer extends JFrame {
         pestañas = new JTabbedPane();
         pestañas.add(pConfiExamenes, "ConfigurarExamenes");
         pestañas.add(pIniExamen, "Iniciar Examen");
-        pestañas.add(pInfoExamenes, "Informacion de Examanes Prestados");
+        pestañas.add(pInfoExamenes, "Informacion de Examanes Presentados");
         container.add(pestañas);
 
         setVisible(true);
-        setSize(550, 400);
+        setSize(700, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
@@ -152,12 +162,13 @@ public class GUIServer extends JFrame {
         return nombreExamen.getText();
     }
     
-    public void borrarCampo(JTextField campo){
-        campo.setText("");
+    public void borrarCamposExamenes(){
+        nombreExamen.setText("");
     }
     
-    public void borrarOpcionesPregunta(){
-        pregunta.setText("");
+    public void borrarCamposOpcionesPregunta(){
+        enunciadoPregunta.setText("");
+        cuerpoPregunta.setText("");
         tfOpcion1.setText("");
         tfOpcion2.setText("");
         tfOpcion3.setText("");
@@ -172,4 +183,47 @@ public class GUIServer extends JFrame {
         }
         lNumeroPregunta.setText("Pregunta #" + numeroPregunta + ":");
     }
+    
+    public String getEnunciadoPregunta(){
+        return enunciadoPregunta.getText();
+    }
+    
+    public String getCuerpoPregunta(){
+        return cuerpoPregunta.getText();
+    }
+    
+    public ArrayList getOpciones(){
+        ArrayList<String> opciones = new ArrayList<>();
+        opciones.add(tfOpcion1.getText());
+        opciones.add(tfOpcion2.getText());
+        opciones.add(tfOpcion3.getText());
+        opciones.add(tfOpcion4.getText());
+        return opciones;
+    }
+    
+    public void actualizarPreguntas(){
+
+    }
+    
+    public int opcionVerdadera(){
+        if(rbOpcion1.getAutoscrolls()){
+            return 1;
+        }
+        else if(rbOpcion2.getAutoscrolls()){
+            return 2;
+        }
+        else if (rbOpcion3.getAutoscrolls()){
+            return 3;
+        }
+        else if(rbOpcion4.getAutoscrolls()){
+            return 4;
+        }else{
+            return 0;
+        }
+    }
+    
+    public void addExamen(String nombreExamen){
+        jcbExamenes.addItem(nombreExamen);
+    }
+
 }

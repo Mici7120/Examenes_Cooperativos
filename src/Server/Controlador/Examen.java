@@ -12,13 +12,22 @@ import java.util.ArrayList;
  * @author villa
  */
 public class Examen {
-    ArrayList<Pregunta> preguntas;
-    
-    public Examen(){
-        
+
+    String nombre;
+    ArrayList<Pregunta> preguntas = new ArrayList<>();
+
+    public Examen() {
     }
-    
-    public void addPregunta(Pregunta p){
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void addPregunta(Pregunta p) {
         preguntas.add(p);
     }
 }

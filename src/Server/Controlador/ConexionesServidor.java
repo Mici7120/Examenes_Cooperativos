@@ -15,6 +15,7 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  *
@@ -30,12 +31,17 @@ public class ConexionesServidor implements ActionListener {
 
     private DatagramPacket datagrama;
     byte[] vacio = new byte[0];
+    
+    ArrayList<Examen> Examenes;
+    Examen examen;
 
     GUIServer interfaz;
 
     public ConexionesServidor(GUIServer gui) {
         interfaz = gui;
         interfaz.asignarEscuchasBotones(this);
+        examen = new Examen();
+        Examenes = new ArrayList<>();
         ejecutarServidor();
     }
 
@@ -76,7 +82,7 @@ public class ConexionesServidor implements ActionListener {
                     Socket socket = serverSocket.accept(); // permite al servidor aceptar la conexión                    
                     estudiantes++;
                     hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama);
-                    interfaz.appendEstadoServidor("\n Conectado el estudiante: " + estudiantes);
+                    interfaz.appendEstadoServidor("\nConectado el estudiante: " + estudiantes);
 
                 } catch (EOFException excepcionEOF) {
                     System.out.println("\nServidor termino la conexion");
@@ -91,14 +97,22 @@ public class ConexionesServidor implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource() == interfaz.getBAgregarExamen()) {
-            interfaz.getNombreExamen();
+            examen.setNombre(interfaz.getNombreExamen());
+            Examenes.add(examen);
+            
+            interfaz.addExamen(examen.getNombre());
             interfaz.setNumeroPregunta(0);
-            //interfaz.borrarCampo(interfaz.pregunta);
+            interfaz.actualizarPreguntas();
+            interfaz.borrarCamposExamenes();
+            
+            examen = new Examen();
         }else if(ae.getSource() == interfaz.getBIniciarExamen()){
-            //ejecutarServidor();
+            
         }else if(ae.getSource() == interfaz.getBAgregarPregunta()){
+            Pregunta p = new Pregunta(interfaz.getEnunciadoPregunta(),interfaz.getCuerpoPregunta(), interfaz.getOpciones(), 4);
+            examen.addPregunta(p);
             interfaz.setNumeroPregunta(1);
-            interfaz.borrarOpcionesPregunta();
+            interfaz.borrarCamposOpcionesPregunta();
         }
         
     }
