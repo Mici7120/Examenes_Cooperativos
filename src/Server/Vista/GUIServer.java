@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -32,36 +33,35 @@ public class GUIServer extends JFrame {
     JTextArea cuerpoPregunta;
     JTextField nombreExamen, enunciadoPregunta, tfOpcion1, tfOpcion2, tfOpcion3, tfOpcion4;
     JTextArea estadoServidor;
+    JScrollPane jcpEstadoServidor;
     JLabel lNombreExamen, lNumeroPregunta;
-    JButton bIniciarExamen, bAgregarPregunta, bAgregarExamen;
+    JButton bAgregarExamen, bAgregarPregunta, bIniciarExamen, bLimpiarAreaEstadoServidor;
     JComboBox jcbPreguntas, jcbExamenes;
     JRadioButton rbOpcion1, rbOpcion2, rbOpcion3, rbOpcion4;
-    
+
     int numeroPregunta = 1;
 
     public GUIServer() {
         super("Servidor - Examenes Cooperativos");
 
         container = getContentPane();
-        container.setLayout(new BorderLayout());
+        container.setLayout(new BorderLayout());        
 
-        lNombreExamen = new JLabel("Nombre del examen:");
-        nombreExamen = new JTextField("");
-        estadoServidor = new JTextArea();
-        bIniciarExamen = new JButton("Iniciar Examen");
-        bAgregarExamen = new JButton("Agregar Examen");
         jcbExamenes = new JComboBox();
 
         //configuracion de la pestaña configurar examenes
         pConfiExamenes = new JPanel();
         pConfiExamenes.setLayout(new BorderLayout());
+        lNombreExamen = new JLabel("Nombre del examen:");
+        nombreExamen = new JTextField("");
+        bAgregarExamen = new JButton("Agregar Examen");
 
         pIngresarExamen = new JPanel();
         pIngresarExamen.setLayout(new GridLayout(1, 3));
         pIngresarExamen.add(lNombreExamen);
         pIngresarExamen.add(nombreExamen);
         pIngresarExamen.add(bAgregarExamen);
-        
+
         pIngresarPreguntas = new JPanel();
         pIngresarPreguntas.setLayout(new BorderLayout());
         lNumeroPregunta = new JLabel("Pregunta #" + numeroPregunta + ":");
@@ -75,14 +75,14 @@ public class GUIServer extends JFrame {
         tfOpcion3 = new JTextField();
         rbOpcion4 = new JRadioButton("Opcion4");
         tfOpcion4 = new JTextField();
-        
+
         JPanel pEnunciado = new JPanel(new BorderLayout());
         pEnunciado.add(lNumeroPregunta, BorderLayout.WEST);
         pEnunciado.add(enunciadoPregunta, BorderLayout.CENTER);
         pIngresarPreguntas.add(pEnunciado, BorderLayout.NORTH);
-        
+
         pIngresarPreguntas.add(cuerpoPregunta, BorderLayout.CENTER);
-        
+
         JPanel pOpciones = new JPanel(new GridLayout(4, 2));
         pOpciones.add(rbOpcion1);
         pOpciones.add(tfOpcion1);
@@ -93,29 +93,34 @@ public class GUIServer extends JFrame {
         pOpciones.add(rbOpcion4);
         pOpciones.add(tfOpcion4);
         pIngresarPreguntas.add(pOpciones, BorderLayout.SOUTH);
-        
+
         pPreguntas = new JPanel();
         jcbPreguntas = new JComboBox();
         pPreguntas.add(new JLabel("Preguntas:"));
         pPreguntas.add(jcbPreguntas);
-        
+
         bAgregarPregunta = new JButton("Agregar Pregunta");
 
         pConfiExamenes.add(pIngresarExamen, BorderLayout.NORTH);
         pConfiExamenes.add(pIngresarPreguntas, BorderLayout.CENTER);
-        pConfiExamenes.add(pPreguntas, BorderLayout.EAST);        
+        pConfiExamenes.add(pPreguntas, BorderLayout.EAST);
         pConfiExamenes.add(bAgregarPregunta, BorderLayout.SOUTH);
 
         //configuracion de la pestaña iniciar examen
+        estadoServidor = new JTextArea();
+        bIniciarExamen = new JButton("Iniciar Examen");
+        bLimpiarAreaEstadoServidor = new JButton("Limpiar Area");
         pIniExamen = new JPanel();
         pIniExamen.setLayout(new BorderLayout());
 
         pOpIniExamen = new JPanel();
         pOpIniExamen.add(jcbExamenes);
         pOpIniExamen.add(bIniciarExamen);
+        pOpIniExamen.add(bLimpiarAreaEstadoServidor);
 
+        jcpEstadoServidor = new JScrollPane(estadoServidor);
         pIniExamen.add(pOpIniExamen, BorderLayout.NORTH);
-        pIniExamen.add(estadoServidor, BorderLayout.CENTER);
+        pIniExamen.add(jcpEstadoServidor, BorderLayout.CENTER);
 
         //configuracion de la pestaña informacion de examenes prestados
         pInfoExamenes = new JPanel();
@@ -128,7 +133,7 @@ public class GUIServer extends JFrame {
         container.add(pestañas);
 
         setVisible(true);
-        setSize(700, 500);
+        setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
@@ -136,37 +141,38 @@ public class GUIServer extends JFrame {
         bIniciarExamen.addActionListener(escucha);
         bAgregarExamen.addActionListener(escucha);
         bAgregarPregunta.addActionListener(escucha);
+        bLimpiarAreaEstadoServidor.addActionListener(escucha);
     }
 
     public String getExamenSeleccionado() {
         return jcbExamenes.getSelectedItem().toString();
     }
-    
-    public JButton getBIniciarExamen(){
+
+    public JButton getBIniciarExamen() {
         return bIniciarExamen;
     }
-    
-    public JButton getBAgregarPregunta(){
+
+    public JButton getBAgregarPregunta() {
         return bAgregarPregunta;
     }
-    
-    public JButton getBAgregarExamen(){
+
+    public JButton getBAgregarExamen() {
         return bAgregarExamen;
     }
-    
-    public void appendEstadoServidor(String mensaje){
+
+    public void appendEstadoServidor(String mensaje) {
         estadoServidor.append(mensaje);
     }
-    
-    public String getNombreExamen(){
+
+    public String getNombreExamen() {
         return nombreExamen.getText();
     }
-    
-    public void borrarCamposExamenes(){
+
+    public void borrarCamposExamenes() {
         nombreExamen.setText("");
     }
-    
-    public void borrarCamposOpcionesPregunta(){
+
+    public void borrarCamposOpcionesPregunta() {
         enunciadoPregunta.setText("");
         cuerpoPregunta.setText("");
         tfOpcion1.setText("");
@@ -174,25 +180,25 @@ public class GUIServer extends JFrame {
         tfOpcion3.setText("");
         tfOpcion4.setText("");
     }
-    
-    public void setNumeroPregunta(int x){
-        if(x == 1){
-            numeroPregunta ++;
-        }else{
+
+    public void setNumeroPregunta(int x) {
+        if (x == 1) {
+            numeroPregunta++;
+        } else {
             numeroPregunta = 1;
         }
         lNumeroPregunta.setText("Pregunta #" + numeroPregunta + ":");
     }
-    
-    public String getEnunciadoPregunta(){
+
+    public String getEnunciadoPregunta() {
         return enunciadoPregunta.getText();
     }
-    
-    public String getCuerpoPregunta(){
+
+    public String getCuerpoPregunta() {
         return cuerpoPregunta.getText();
     }
-    
-    public ArrayList getOpciones(){
+
+    public ArrayList getOpciones() {
         ArrayList<String> opciones = new ArrayList<>();
         opciones.add(tfOpcion1.getText());
         opciones.add(tfOpcion2.getText());
@@ -200,30 +206,38 @@ public class GUIServer extends JFrame {
         opciones.add(tfOpcion4.getText());
         return opciones;
     }
-    
-    public void actualizarPreguntas(){
 
+    public void addPreguntaJCB(String pregunta) {
+        jcbPreguntas.addItem(pregunta);
     }
-    
-    public int opcionVerdadera(){
-        if(rbOpcion1.getAutoscrolls()){
+
+    public int opcionVerdadera() {
+        if (rbOpcion1.getAutoscrolls()) {
             return 1;
-        }
-        else if(rbOpcion2.getAutoscrolls()){
+        } else if (rbOpcion2.getAutoscrolls()) {
             return 2;
-        }
-        else if (rbOpcion3.getAutoscrolls()){
+        } else if (rbOpcion3.getAutoscrolls()) {
             return 3;
-        }
-        else if(rbOpcion4.getAutoscrolls()){
+        } else if (rbOpcion4.getAutoscrolls()) {
             return 4;
-        }else{
+        } else {
             return 0;
         }
     }
-    
-    public void addExamen(String nombreExamen){
+
+    public void addExamenJCB(String nombreExamen) {
         jcbExamenes.addItem(nombreExamen);
     }
+    
+    public JButton getBLimpiarAreaEstadoServidor(){
+        return bLimpiarAreaEstadoServidor;
+    }
+    
+    public void limpiarAreaEstadoServidor(){
+        estadoServidor.setText("");
+    }
 
+    public void resetJCBPreguntas(){
+        jcbPreguntas.removeAllItems();
+    }
 }

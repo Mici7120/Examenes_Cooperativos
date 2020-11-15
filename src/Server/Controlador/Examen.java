@@ -30,4 +30,8 @@ public class Examen {
     public void addPregunta(Pregunta p) {
         preguntas.add(p);
     }
+
+    public int numeroPreguntas() {
+        return preguntas.size();
+    }
 }

@@ -77,6 +77,7 @@ public class LogicaCliente implements ActionListener{
             try 
             {   mensajeRecibido = ( String ) entrada.readObject();
                 //interfaz.mostrarDatos("\n" + mensajeRecibido);
+                System.out.println(mensajeRecibido);
                 
             } catch ( ClassNotFoundException ene ){
                 System.out.println( "nSe recibio un tipo de objeto desconocido"+ene.getMessage() );

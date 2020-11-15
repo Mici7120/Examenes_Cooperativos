@@ -25,17 +25,19 @@ public class HiloServidor extends Thread {
     private Socket sCliente;
     private int idCliente;
     private GUIServer interfaz;
+    private Examen examen;
 
     //--------------------multicast -------------------------------
     private MulticastSocket sMulti;
     private DatagramPacket datagrama;
     //------------------------------------------------
 
-    public HiloServidor(Socket socket, int numeroEstudiante, GUIServer interfaz, MulticastSocket multi, DatagramPacket paquete) {
+    public HiloServidor(Socket socket, int numeroEstudiante, GUIServer interfaz, MulticastSocket multi, DatagramPacket paquete, Examen examen) {
 
         sCliente = socket;
         idCliente = numeroEstudiante;
         this.interfaz = interfaz;
+        this.examen = examen;
         //-----------------Multicast ----------------------
         sMulti = multi;
         datagrama = paquete;
@@ -44,7 +46,10 @@ public class HiloServidor extends Thread {
 
     @Override
     public void run() {
-        interfaz.appendEstadoServidor("\n Server hilo" + idCliente + " por el puerto " + sCliente.getPort() + " iniciado.");
+        //interfaz.appendEstadoServidor("\n Server hilo" + idCliente + " por el puerto " + sCliente.getPort() + " iniciado.");
+        abrirFlujos();
+        enviarNumeroPreguntas();
+        
         String mensaje = "";
         do {
             try {
@@ -53,11 +58,6 @@ public class HiloServidor extends Thread {
 
                 if (mensaje.toLowerCase().contains("hola")) {
                     enviarMensaje("Hola, como estas cliente " + idCliente + " ?");
-                }
-                if (mensaje.toLowerCase().contains("+")) {
-                    enviarMensaje("se recibió la operación de suma de cliente " + idCliente);
-                    String datos[] = mensaje.split("\\+");
-                    // String primerValor[] = datos[0].split(" ");                 
                 }
 
                 //-------------ENVIO MENSAJE POR MULTICAST ------------------------------
@@ -122,7 +122,15 @@ public class HiloServidor extends Thread {
             salida.flush(); // envía toda la salida al cliente
         } catch (IOException exepcionES) {
             System.out.println("\nError al escribir objeto");
-        } // fin de catch
+        }
+    }
+    
+    public void enviarNumeroPreguntas(){
+        try{
+        salida.writeObject(examen.numeroPreguntas());
+        }catch(IOException ioe){
+            System.out.println("Error al escribir el objeto");
+        }
     }
 
     /**
