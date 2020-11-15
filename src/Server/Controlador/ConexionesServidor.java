@@ -16,6 +16,8 @@ import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -107,7 +109,15 @@ public class ConexionesServidor implements ActionListener {
             
             examen = new Examen();
         }else if(ae.getSource() == interfaz.getBIniciarExamen()){
-            
+            String prueba = "cosa de prueba";
+            byte[] buffer = prueba.getBytes();
+            datagrama.setData(buffer);
+            datagrama.setLength(buffer.length);
+            try {
+                socketCast.send(datagrama);
+            } catch (IOException ex) {
+                Logger.getLogger(ConexionesServidor.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }else if(ae.getSource() == interfaz.getBAgregarPregunta()){
             Pregunta p = new Pregunta(interfaz.getEnunciadoPregunta(),interfaz.getCuerpoPregunta(), interfaz.getOpciones(), 4);
             examen.addPregunta(p);

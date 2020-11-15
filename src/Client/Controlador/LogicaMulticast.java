@@ -53,13 +53,16 @@ public class LogicaMulticast extends Thread{
                  String salida = new String (dgp.getData());
                  
                  // Adaptamos la información al tamaño de lo que se envió por si se envió menos de 1024):
-                // byte [] buffer2 = new byte [dgp.getLength ()];
+                byte [] buffer2 = new byte [dgp.getLength ()];
                  // Copiamos los datos en el nuevo array de tamaño adecuado:
-                // System.arraycopy (dgp.getData(),0,buffer2,0, dgp.getLength());
+                System.arraycopy (dgp.getData(),0,buffer2,0, dgp.getLength());
 
                  //Vemos los datos recibidos por pantalla:
-                 //String salida = new String (buffer2);
-                 //interfaz.mostrarDatos("\nDesde multicast: "+salida);
+                 salida = new String (buffer2);
+                 System.out.print(salida);
+                 
+                 
+                 interfaz.tAreaMensajes.setText("\nDesde multicast: "+salida);
             }catch(IOException e){
                 System.out.println("Error en el multicast al recibir mensaje en el cliente");
             }

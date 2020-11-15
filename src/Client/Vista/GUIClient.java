@@ -20,7 +20,7 @@ public class GUIClient extends JFrame{
     JTextField tRestTime;
     JComboBox<String> selectPregunta;
     JButton bObtener, bEnviar, pCancelar;
-    JTextArea tAreaMensajes;
+    public JTextArea tAreaMensajes;
     JScrollPane barras;
     JCheckBox cPreguntaA, cPreguntaB, cPreguntaC, cPreguntaD;
     
