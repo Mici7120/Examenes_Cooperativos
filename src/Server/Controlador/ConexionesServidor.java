@@ -16,6 +16,7 @@ import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,6 +45,7 @@ public class ConexionesServidor implements ActionListener {
         interfaz = gui;
         interfaz.asignarEscuchasBotones(this);
         examen = new Examen();
+        agregarExamenPrueba();
         Examenes = new ArrayList<>();
         ejecutarServidor();
     }
@@ -141,6 +143,32 @@ public class ConexionesServidor implements ActionListener {
             interfaz.limpiarAreaEstadoServidor();
         }
 
+    }
+
+    public void agregarExamenPrueba() {
+        examen.setNombre("Examen de prueba: variado");
+        Pregunta p1 = new Pregunta(
+            "Determine el resultado",
+            "1+1",
+            new ArrayList<String>(Arrays.asList("pez", "1", "2", "ninguna de las anteriores")),
+            3
+        );
+        Pregunta p2 = new Pregunta(
+            "Aproximadamente, ¿cuántos huesos tiene el cuerpo humano?",
+            "",
+            new ArrayList<String>(Arrays.asList("5", "40", "390", "208")),
+            4
+        );
+        Pregunta p3 = new Pregunta(
+            "Responde la siguiente trivia sobre Avengers",
+            "¿Cómo se llama la nave de los Guardianes de la galaxia en Avengers: Infinity War?",
+            new ArrayList<String>(Arrays.asList("El Milano", "El Comodoro", "El Benatar", "El Halcón milenario")),
+            3
+        );
+        examen.addPregunta(p1);
+        examen.addPregunta(p2);
+        examen.addPregunta(p3);
+        interfaz.addExamenJCB(examen.getNombre());
     }
 
 }
