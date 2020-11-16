@@ -13,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 /**
  *
@@ -24,12 +25,14 @@ public class LogicaCliente implements ActionListener{
     private ObjectInputStream entrada;
     private Socket cliente;
     private GUIClient interfaz;
+    private ArrayList<EstadoPregunta> estadoPreguntas;
     
     LogicaMulticast multicast;
     
     public LogicaCliente(GUIClient interfaz)
     {
         this.interfaz = interfaz;
+        estadoPreguntas = new ArrayList();
     }
     
     /**
@@ -42,7 +45,7 @@ public class LogicaCliente implements ActionListener{
         
         //--------------------- MULTICAST ------------------------------------
         //creo el hilo del multicast y lo arranco
-        multicast = new LogicaMulticast(interfaz);
+        multicast = new LogicaMulticast(this, interfaz);
         multicast.start();
         //--------------------------------------------------------------------
 
@@ -65,7 +68,7 @@ public class LogicaCliente implements ActionListener{
         }
        
         //invoco a escuchar al servidor
-        //escucharAlServidor();
+        escucharAlServidor();
     }
     
     public void escucharAlServidor() 
@@ -80,7 +83,7 @@ public class LogicaCliente implements ActionListener{
                 System.out.println(mensajeRecibido);
                 
             } catch ( ClassNotFoundException ene ){
-                System.out.println( "nSe recibio un tipo de objeto desconocido"+ene.getMessage() );
+                System.out.println("Se recibio un tipo de objeto desconocido"+ene.getMessage());
             } catch (IOException ex) {
                 System.out.println("Se arrojó un ioexcepcion cuando se trataba de leer del servidor "+ex.getMessage());
                 break;
@@ -125,6 +128,23 @@ public class LogicaCliente implements ActionListener{
     public void actionPerformed(ActionEvent ae) {
            //interfaz.mostrarDatos(enviarDatos(interfaz.obtenerDato()));
            //interfaz.limpiarCampos();
+    }
+
+    public void iniciarExamen(int cantidadPreguntas) {
+        interfaz.tAreaMensajes.append("\nDesde iniciarExamen: "+cantidadPreguntas);
+        for (int i=0; i <= cantidadPreguntas; i++) {
+            estadoPreguntas.add(new EstadoPregunta(i+1, true));
+        }
+        actualizarCBpreguntas();
+    }
+
+    public void actualizarCBpreguntas() {
+        for (EstadoPregunta pregunta : estadoPreguntas) {
+            if (pregunta.esVisible()) {
+                interfaz.selectPregunta.addItem(Integer.toString(pregunta.getNumero()));
+            }
+        }
+        interfaz.pIzquierdo.revalidate();
     }
     
 }

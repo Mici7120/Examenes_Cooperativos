@@ -15,15 +15,17 @@ import java.net.MulticastSocket;
  *
  * @author ruzbe
  */
-public class LogicaMulticast extends Thread{
+public class LogicaMulticast extends Thread {
     
     private GUIClient interfaz;
+    private LogicaCliente logicaCliente;
     /*Lo necesario para escuchar de un multicast */
     private MulticastSocket socketMultiEscucha;
     private InetAddress grupo;  //para especificar la dirección de red
     
-    public LogicaMulticast(GUIClient inter)
+    public LogicaMulticast(LogicaCliente lgClient, GUIClient inter)
     {
+        logicaCliente = lgClient;
         interfaz = inter;
         try {
             //Creamos un socket multicast en el puerto local 10000:
@@ -49,25 +51,37 @@ public class LogicaMulticast extends Thread{
             
             try{
                 // Recibimos el paquete del socket:
-                 socketMultiEscucha.receive(dgp);
-                 String salida = new String (dgp.getData());
+                socketMultiEscucha.receive(dgp);
+                String salida = new String (dgp.getData());
                  
-                 // Adaptamos la información al tamaño de lo que se envió por si se envió menos de 1024):
+                // Adaptamos la información al tamaño de lo que se envió por si se envió menos de 1024):
                 byte [] buffer2 = new byte [dgp.getLength ()];
-                 // Copiamos los datos en el nuevo array de tamaño adecuado:
+                // Copiamos los datos en el nuevo array de tamaño adecuado:
                 System.arraycopy (dgp.getData(),0,buffer2,0, dgp.getLength());
 
-                 //Vemos los datos recibidos por pantalla:
-                 salida = new String (buffer2);
-                 System.out.print(salida);
-                 
-                 
-                 interfaz.tAreaMensajes.setText("\nDesde multicast: "+salida);
+                //Vemos los datos recibidos por pantalla:
+                salida = new String (buffer2);                 
+                interfaz.tAreaMensajes.setText("\nDesde multicast: "+salida);
+
+                procesarSalida(salida);
             }catch(IOException e){
                 System.out.println("Error en el multicast al recibir mensaje en el cliente");
             }
        }//fin while
-        
-        
     }//fin run
+
+    private void procesarSalida(String salida) {
+        String[] mensaje = salida.split(":");
+        switch(mensaje[0]) {
+            case "SERVIDOR>>> INICIO":
+                int cantidadPreguntas = Integer.parseInt(mensaje[1].trim());
+                logicaCliente.iniciarExamen(cantidadPreguntas);
+                // interfaz.selectPregunta.addItem();
+                break;
+            case "SERVIDOR>>> TIEMPO RESTANTE":
+                break;
+            case "SERVIDOR>>> ACTUALIZAR-PREGUNTA":
+                break;
+        }
+    }
 }

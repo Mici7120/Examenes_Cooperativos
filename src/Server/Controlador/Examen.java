@@ -32,7 +32,7 @@ public class Examen {
         this.duracion = duracion;
     }
 
-    public String getDuracion() {
+    public int getDuracion() {
         return duracion;
     }
 

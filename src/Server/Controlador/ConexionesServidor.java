@@ -118,8 +118,8 @@ public class ConexionesServidor implements ActionListener {
                 if (estudiantes == 3) {
                     interfaz.appendEstadoServidor("\n\nSe ha iniciado el examen");
                     examenIniciado = true;
-                    String prueba = "Inicio el examen put*s";
-                    byte[] buffer = prueba.getBytes();
+                    String mensaje = "SERVIDOR>>> INICIO: " + examen.numeroPreguntas() + " : " + examen.getNombre();
+                    byte[] buffer = mensaje.getBytes();
                     datagrama.setData(buffer);
                     datagrama.setLength(buffer.length);
                     try {
@@ -146,7 +146,8 @@ public class ConexionesServidor implements ActionListener {
     }
 
     public void agregarExamenPrueba() {
-        examen.setNombre("Examen de prueba: variado");
+        examen.setNombre("Examen de prueba mixto");
+        examen.setDuracion(5);
         Pregunta p1 = new Pregunta(
             "Determine el resultado",
             "1+1",

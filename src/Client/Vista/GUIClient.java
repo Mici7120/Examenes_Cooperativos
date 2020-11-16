@@ -15,10 +15,10 @@ import javax.swing.*;
 public class GUIClient extends JFrame{
 
     Container contenPPal;
-    JPanel pExamColab, pDerecho, pIzquierdo, pCentro, pCenArri, pCenAbaj;
+    public JPanel pExamColab, pDerecho, pIzquierdo, pCentro, pCenArri, pCenAbaj;
     JLabel lPreguntas, lTimeRest; 
     JTextField tRestTime;
-    JComboBox<String> selectPregunta;
+    public JComboBox<String> selectPregunta;
     JButton bObtener, bEnviar, pCancelar;
     public JTextArea tAreaMensajes;
     JScrollPane barras;
@@ -55,8 +55,6 @@ public class GUIClient extends JFrame{
         cPreguntaB = new JCheckBox("B. ");
         cPreguntaC = new JCheckBox("C. ");
         cPreguntaD = new JCheckBox("D. ");
-        
-        selectPregunta.addItem("Seleccione la pregunta");
         
         lPreguntas.setAlignmentX(Component.RIGHT_ALIGNMENT);
         bObtener.setAlignmentX(Component.CENTER_ALIGNMENT);
