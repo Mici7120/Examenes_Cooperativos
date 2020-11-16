@@ -15,6 +15,7 @@ public class Examen {
 
     String nombre;
     ArrayList<Pregunta> preguntas = new ArrayList<>();
+    int duracion;
 
     public Examen() {
     }
@@ -25,6 +26,14 @@ public class Examen {
 
     public String getNombre() {
         return nombre;
+    }
+
+    public void setDuracion(int duracion) {
+        this.duracion = duracion;
+    }
+
+    public String getDuracion() {
+        return duracion;
     }
 
     public void addPregunta(Pregunta p) {
