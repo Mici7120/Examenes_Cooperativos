@@ -6,6 +6,7 @@
 package Client.Vista;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 
 /**
@@ -19,7 +20,7 @@ public class GUIClient extends JFrame{
     JLabel lPreguntas, lTimeRest; 
     JTextField tRestTime;
     public JComboBox<String> selectPregunta;
-    JButton bObtener, bEnviar, pCancelar;
+    public JButton bObtener, bEnviar, bCancelar;
     public JTextArea tAreaMensajes;
     JScrollPane barras;
     JCheckBox cPreguntaA, cPreguntaB, cPreguntaC, cPreguntaD;
@@ -46,7 +47,7 @@ public class GUIClient extends JFrame{
         
         bObtener = new JButton("Obtener");
         bEnviar = new JButton("Enviar");
-        pCancelar = new JButton("Cancelar");
+        bCancelar = new JButton("Cancelar");
         
         tAreaMensajes = new JTextArea("Mensaje: ");
         barras = new JScrollPane(tAreaMensajes);
@@ -81,7 +82,7 @@ public class GUIClient extends JFrame{
         pCenAbaj.add(Box.createRigidArea(new Dimension(0,10)));
         pCenAbaj.add(bEnviar);
         pCenAbaj.add(Box.createRigidArea(new Dimension(0,10)));
-        pCenAbaj.add(pCancelar);
+        pCenAbaj.add(bCancelar);
         
         pCentro.setLayout(new BoxLayout(pCentro, 1));
         pCentro.add(pCenArri);
@@ -111,6 +112,12 @@ public class GUIClient extends JFrame{
         //setVisible(true);
         
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+
+    public void asignarEscuchasBotones(ActionListener escucha) {
+        bObtener.addActionListener(escucha);
+        bEnviar.addActionListener(escucha);
+        bCancelar.addActionListener(escucha);
     }
 
 }

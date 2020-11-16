@@ -76,9 +76,8 @@ public class LogicaMulticast extends Thread {
             case "SERVIDOR>>> INICIO":
                 int cantidadPreguntas = Integer.parseInt(mensaje[1].trim());
                 logicaCliente.iniciarExamen(cantidadPreguntas);
-                // interfaz.selectPregunta.addItem();
                 break;
-            case "SERVIDOR>>> TIEMPO RESTANTE":
+            case "SERVIDOR>>> TIEMPO-RESTANTE":
                 break;
             case "SERVIDOR>>> ACTUALIZAR-PREGUNTA":
                 break;

@@ -43,4 +43,8 @@ public class Examen {
     public int numeroPreguntas() {
         return preguntas.size();
     }
+
+    public Pregunta getPregunta(int indice) {
+        return preguntas.get(indice);
+    }
 }

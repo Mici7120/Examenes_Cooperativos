@@ -32,6 +32,7 @@ public class LogicaCliente implements ActionListener{
     public LogicaCliente(GUIClient interfaz)
     {
         this.interfaz = interfaz;
+        interfaz.asignarEscuchasBotones(this);
         estadoPreguntas = new ArrayList();
     }
     
@@ -81,6 +82,7 @@ public class LogicaCliente implements ActionListener{
             {   mensajeRecibido = ( String ) entrada.readObject();
                 //interfaz.mostrarDatos("\n" + mensajeRecibido);
                 System.out.println(mensajeRecibido);
+                interfaz.tAreaMensajes.append("\n"+mensajeRecibido);
                 
             } catch ( ClassNotFoundException ene ){
                 System.out.println("Se recibio un tipo de objeto desconocido"+ene.getMessage());
@@ -126,13 +128,23 @@ public class LogicaCliente implements ActionListener{
     
      @Override
     public void actionPerformed(ActionEvent ae) {
-           //interfaz.mostrarDatos(enviarDatos(interfaz.obtenerDato()));
-           //interfaz.limpiarCampos();
+        //interfaz.mostrarDatos(enviarDatos(interfaz.obtenerDato()));
+        //interfaz.limpiarCampos();
+        if (ae.getSource() == interfaz.bObtener) {
+            String numPregunta = interfaz.selectPregunta.getItemAt(interfaz.selectPregunta.getSelectedIndex());
+            String mensaje = "PEDIR-PREGUNTA : " + numPregunta;
+            System.out.println( mensaje );
+            System.out.println( enviarDatos(mensaje) );
+        } else if (ae.getSource() == interfaz.bEnviar) {
+
+        } else if (ae.getSource() == interfaz.bCancelar) {
+
+        }
     }
 
     public void iniciarExamen(int cantidadPreguntas) {
         interfaz.tAreaMensajes.append("\nDesde iniciarExamen: "+cantidadPreguntas);
-        for (int i=0; i <= cantidadPreguntas; i++) {
+        for (int i=0; i < cantidadPreguntas; i++) {
             estadoPreguntas.add(new EstadoPregunta(i+1, true));
         }
         actualizarCBpreguntas();

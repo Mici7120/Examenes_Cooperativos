@@ -26,6 +26,7 @@ public class HiloServidor extends Thread {
     private int idCliente;
     private GUIServer interfaz;
     private Examen examen;
+    private int preguntaSeleccionada;
 
     //--------------------multicast -------------------------------
     private MulticastSocket sMulti;
@@ -46,15 +47,25 @@ public class HiloServidor extends Thread {
 
     @Override
     public void run() {
-        //interfaz.appendEstadoServidor("\n Server hilo" + idCliente + " por el puerto " + sCliente.getPort() + " iniciado.");
+        interfaz.appendEstadoServidor("\n Server hilo" + idCliente + " por el puerto " + sCliente.getPort() + " iniciado.");
         abrirFlujos();
-        enviarNumeroPreguntas();
         
         String mensaje = "";
         do {
             try {
                 mensaje = (String) entrada.readObject();
-                interfaz.appendEstadoServidor("\n Cliente " + idCliente + ": " + mensaje);
+                interfaz.appendEstadoServidor("\nCliente " + idCliente + ": " + mensaje);
+
+                if (mensaje.contains("CLIENTE>>> PEDIR-PREGUNTA")) {
+                    String[] partes = mensaje.split(":");
+                    int numPregunta = Integer.parseInt(partes[1].trim());
+                    // HACER: si numPregunta está libre, preguntaSeleccionada = numPregunta
+                    // Luego, usar preguntaSeleccionada para verificar respuesta y guardar
+                    String enviarMsg = examen.getPregunta(numPregunta-1).getEnunciado();
+                    enviarMsg += "\n" + examen.getPregunta(numPregunta-1).getCuerpo();
+                    enviarMensaje("SERVIDOR>>> PREGUNTA:" + enviarMsg);
+                    // HACER: enviar opciones
+                }
 
                 if (mensaje.toLowerCase().contains("hola")) {
                     enviarMensaje("Hola, como estas cliente " + idCliente + " ?");
@@ -125,13 +136,6 @@ public class HiloServidor extends Thread {
         }
     }
     
-    public void enviarNumeroPreguntas(){
-        try{
-        salida.writeObject(examen.numeroPreguntas());
-        }catch(IOException ioe){
-            System.out.println("Error al escribir el objeto");
-        }
-    }
 
     /**
      * crea los flujos de entrada y salida para la comunicación con el cliente
