@@ -17,6 +17,10 @@ public class EstadoPregunta {
         this.numero = num;
         this.visible = vis;
     }
+    
+    public void setVisible(boolean estado){
+        visible = estado;
+    }
 
     public boolean esVisible() {
         return visible;

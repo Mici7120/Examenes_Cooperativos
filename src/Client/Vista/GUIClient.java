@@ -23,7 +23,7 @@ public class GUIClient extends JFrame{
     public JButton bObtener, bEnviar, bCancelar;
     public JTextArea tAreaMensajes;
     JScrollPane barras;
-    JCheckBox cPreguntaA, cPreguntaB, cPreguntaC, cPreguntaD;
+    public JCheckBox cPreguntaA, cPreguntaB, cPreguntaC, cPreguntaD;
     
     
     public GUIClient() 
@@ -38,7 +38,7 @@ public class GUIClient extends JFrame{
         pCenArri = new JPanel();
         pCenAbaj = new JPanel();
                 
-        lPreguntas = new JLabel("Preguntas: ");
+        lPreguntas = new JLabel("Preguntas Disponibles:");
         lTimeRest = new JLabel("Tiempo restante: ");
         
         selectPregunta = new JComboBox<>();
@@ -109,7 +109,6 @@ public class GUIClient extends JFrame{
         setVisible(true);
      
         //pack();
-        //setVisible(true);
         
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }

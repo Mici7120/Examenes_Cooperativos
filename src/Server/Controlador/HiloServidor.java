@@ -12,6 +12,8 @@ import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTextArea;
 
 /**
@@ -47,9 +49,9 @@ public class HiloServidor extends Thread {
 
     @Override
     public void run() {
-        interfaz.appendEstadoServidor("\n Server hilo" + idCliente + " por el puerto " + sCliente.getPort() + " iniciado.");
+        interfaz.appendEstadoServidor("\nServer hilo" + idCliente + " por el puerto " + sCliente.getPort() + " iniciado.");
         abrirFlujos();
-        
+
         String mensaje = "";
         do {
             try {
@@ -61,41 +63,33 @@ public class HiloServidor extends Thread {
                     int numPregunta = Integer.parseInt(partes[1].trim());
                     // HACER: si numPregunta está libre, preguntaSeleccionada = numPregunta
                     // Luego, usar preguntaSeleccionada para verificar respuesta y guardar
-                    String enviarMsg = examen.getPregunta(numPregunta-1).getEnunciado();
-                    enviarMsg += "\n" + examen.getPregunta(numPregunta-1).getCuerpo();
-                    enviarMensaje("SERVIDOR>>> PREGUNTA:" + enviarMsg);
-                    // HACER: enviar opciones
+                    if (examen.getPregunta(numPregunta - 1).getDisponible()) {
+                        String enviarMsg = examen.getPregunta(numPregunta - 1).getEnunciado();
+                        enviarMsg += "\n" + examen.getPregunta(numPregunta - 1).getCuerpo();
+                        enviarMensaje("SERVIDOR>>> PREGUNTA:" + enviarMsg);
+                        // HACER: enviar opciones
+                        String opciones = "OPCIONES\n";
+                        for (String x : examen.getPregunta(numPregunta - 1).getOpciones()) {
+                            opciones += x + "\n";
+                        }
+                        
+                        examen.getPregunta(numPregunta - 1).setDisponible(false);
+                        
+                        enviarMensaje(opciones);
+                        String estadoPreguntas = "SERVIDOR>>> ACTUALIZAR-PREGUNTA:";
+                        for (Pregunta x : examen.preguntas) {
+                            if (x.getDisponible()) {
+                                estadoPreguntas += "DISPONIBLE,";
+                            } else {
+                                estadoPreguntas += "NO-DISPONIBLE,";
+                            }
+                        }
+                        enviarMensajeMulticast(estadoPreguntas);
+                    }else{
+                        enviarMensaje("SERVIDOR>>> PREGUNTA OCUPADO O RESPONDIDA\n");
+                    }
                 }
 
-                if (mensaje.toLowerCase().contains("hola")) {
-                    enviarMensaje("Hola, como estas cliente " + idCliente + " ?");
-                }
-
-                //-------------ENVIO MENSAJE POR MULTICAST ------------------------------
-                /**
-                 * para mandar un mensaje de multicast, cuando lea un "chao"
-                 */
-                if (mensaje.toLowerCase().contains("chao")) {
-
-                    // mensaje a enviar por multicast a los clientes
-                    String men = "[s] mensaje a todos los que estan conectados multicast!!!!\n El cliente: " + idCliente + " dijo chao!";
-                    //----- ***** se prepara el mensaje a enviar por el datagrama ***** -----
-                    byte[] buffer = men.getBytes();
-                    //Pasamos los datos al datagrama
-                    datagrama.setData(buffer);
-                    //Establecemos la longitud
-                    datagrama.setLength(buffer.length);
-                    //------SE ENVIA EL DATAGRAMA POR EL SOCKET MULTICAST-------------
-                    sMulti.send(datagrama);
-                    System.out.println("DESPUES DE ENVIAR DATAGRAMA");
-                    //---------fin envio mensaje por multicast----------------------------------
-                    //método para salirse de un grupo un participante.  para tenerlo en cuenta
-                    //en el cliente, cuando se salga o se termine el examen, entonces que abandone el grupo
-                    //// Si recibe "Adios" abandona el grupo
-                    //socket.leaveGroup(grupo);
-
-                }
-                //-----------------------------------------    
             } catch (ClassNotFoundException enc) {
                 System.out.println("\nSe recibio un tipo de objeto desconocido");
             } catch (IOException ex) {
@@ -135,7 +129,17 @@ public class HiloServidor extends Thread {
             System.out.println("\nError al escribir objeto");
         }
     }
-    
+
+    public void enviarMensajeMulticast(String mens) {
+        byte[] buffer = mens.getBytes();
+        datagrama.setData(buffer);
+        datagrama.setLength(buffer.length);
+        try {
+            sMulti.send(datagrama);
+        } catch (IOException ex) {
+            Logger.getLogger(HiloServidor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * crea los flujos de entrada y salida para la comunicación con el cliente
@@ -146,7 +150,7 @@ public class HiloServidor extends Thread {
             salida.flush();
 
             entrada = new ObjectInputStream(sCliente.getInputStream());
-            interfaz.appendEstadoServidor("\n Se obtuvieron los flujos de E/S del cliente: " + idCliente);
+            interfaz.appendEstadoServidor("\nSe obtuvieron los flujos de E/S del cliente: " + idCliente);
 
         } catch (IOException ex) {
             System.out.println("error a abrir los flujos del cliente " + idCliente);

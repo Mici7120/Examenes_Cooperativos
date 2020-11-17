@@ -79,8 +79,8 @@ public class ConexionesServidor implements ActionListener {
         try {
             serverSocket = new ServerSocket(12345);
 
-            interfaz.appendEstadoServidor("Iniciado servidor por el puerto " + serverSocket.getLocalPort());
-            interfaz.appendEstadoServidor("\nEsperando conexiones...");
+            interfaz.appendEstadoServidor("Iniciado servidor por el puerto " + serverSocket.getLocalPort() + "\n");
+            interfaz.appendEstadoServidor("Esperando conexiones...");
             
             while (estudiantes < 3) {
                 try {
@@ -88,7 +88,7 @@ public class ConexionesServidor implements ActionListener {
                     estudiantes++;
                     hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama, examen);
                     hilo.start();
-                    interfaz.appendEstadoServidor("\n\nConectado el estudiante: " + estudiantes);
+                    interfaz.appendEstadoServidor("Conectado el estudiante: " + estudiantes + "\n");
 
                 } catch (EOFException excepcionEOF) {
                     System.out.println("\nServidor termino la conexion");
@@ -114,10 +114,10 @@ public class ConexionesServidor implements ActionListener {
             examen = new Examen();
         } else if (ae.getSource() == interfaz.getBIniciarExamen()) {
             if (examenIniciado) {
-                interfaz.appendEstadoServidor("\n\nYa se ha iniciado el examen");
+                interfaz.appendEstadoServidor("Ya se ha iniciado el examen\n");
             } else {
                 if (estudiantes == 3) {
-                    interfaz.appendEstadoServidor("\n\nSe ha iniciado el examen");
+                    interfaz.appendEstadoServidor("Se ha iniciado el examen\n");
                     examenIniciado = true;
                     String mensaje = "SERVIDOR>>> INICIO: " + examen.numeroPreguntas() + " : " + examen.getNombre();
                     byte[] buffer = mensaje.getBytes();
@@ -129,7 +129,7 @@ public class ConexionesServidor implements ActionListener {
                         Logger.getLogger(ConexionesServidor.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else {
-                    interfaz.appendEstadoServidor("\n\nNo estan conectados los 3 estudiantes");
+                    interfaz.appendEstadoServidor("No estan conectados los 3 estudiantes\n");
                 }
             }
         } else if (ae.getSource() == interfaz.getBAgregarPregunta()) {

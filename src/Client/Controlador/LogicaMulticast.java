@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.util.StringTokenizer;
 
 /**
  *
@@ -60,17 +61,18 @@ public class LogicaMulticast extends Thread {
                 System.arraycopy (dgp.getData(),0,buffer2,0, dgp.getLength());
 
                 //Vemos los datos recibidos por pantalla:
-                salida = new String (buffer2);                 
-                interfaz.tAreaMensajes.setText("\nDesde multicast: "+salida);
+                salida = new String (buffer2);
+                //interfaz.tAreaMensajes.setText("\nDesde multicast: "+salida);
+                
 
-                procesarSalida(salida);
+                procesarEntrada(salida);
             }catch(IOException e){
                 System.out.println("Error en el multicast al recibir mensaje en el cliente");
             }
        }//fin while
     }//fin run
 
-    private void procesarSalida(String salida) {
+    private void procesarEntrada(String salida) {
         String[] mensaje = salida.split(":");
         switch(mensaje[0]) {
             case "SERVIDOR>>> INICIO":
@@ -80,7 +82,21 @@ public class LogicaMulticast extends Thread {
             case "SERVIDOR>>> TIEMPO-RESTANTE":
                 break;
             case "SERVIDOR>>> ACTUALIZAR-PREGUNTA":
+                StringTokenizer estadoPreguntas = new StringTokenizer(mensaje[1], ",");
+                int index = 0;
+                while(estadoPreguntas.hasMoreTokens()){
+                    switch(estadoPreguntas.nextToken()){
+                        case "DISPONIBLE":
+                            logicaCliente.getEstadoPreguntas().get(index).setVisible(true);
+                            break;
+                        case "NO-DISPONIBLE":
+                            logicaCliente.getEstadoPreguntas().get(index).setVisible(false);
+                            break;
+                    }
+                    index ++;
+                }
                 break;
         }
+        logicaCliente.actualizarCBpreguntas();
     }
 }

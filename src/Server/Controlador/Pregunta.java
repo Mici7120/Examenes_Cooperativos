@@ -15,12 +15,14 @@ public class Pregunta {
     String enunciado, cuerpo;
     ArrayList <String> opciones;
     int verdadera;
+    boolean disponible;
 
     public Pregunta(String enunciado, String cuerpo, ArrayList<String> opciones, int verdadera){
         this.enunciado = enunciado;
         this.cuerpo = cuerpo;
         this.opciones = opciones;
         this.verdadera = verdadera;
+        disponible = true;
     }
 
     public String getEnunciado() {
@@ -39,4 +41,11 @@ public class Pregunta {
         return opciones;
     }
     
+    public boolean getDisponible(){
+        return disponible;
+    }
+    
+    public void setDisponible(boolean estado){
+        disponible = estado;
+    }
 }
