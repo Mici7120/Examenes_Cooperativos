@@ -30,10 +30,8 @@ public class HiloServidor extends Thread {
     private Examen examen;
     private int preguntaSeleccionada;
 
-    //--------------------multicast -------------------------------
     private MulticastSocket sMulti;
     private DatagramPacket datagrama;
-    //------------------------------------------------
 
     public HiloServidor(Socket socket, int numeroEstudiante, GUIServer interfaz, MulticastSocket multi, DatagramPacket paquete, Examen examen) {
 
@@ -41,10 +39,8 @@ public class HiloServidor extends Thread {
         idCliente = numeroEstudiante;
         this.interfaz = interfaz;
         this.examen = examen;
-        //-----------------Multicast ----------------------
         sMulti = multi;
         datagrama = paquete;
-        //-----------------------------------------------
     }
 
     @Override

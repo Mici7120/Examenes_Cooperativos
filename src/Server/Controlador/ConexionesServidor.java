@@ -5,6 +5,7 @@
  */
 package Server.Controlador;
 
+import Server.Modelo.Fachada;
 import Server.Vista.GUIServer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +18,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,18 +37,19 @@ public class ConexionesServidor implements ActionListener {
     private DatagramPacket datagrama;
     byte[] vacio = new byte[0];
 
-    ArrayList<Examen> Examenes;
+    ArrayList<Examen> examenes;
     Examen examen;
     boolean examenIniciado;
 
     GUIServer interfaz;
+    Fachada fachada;
 
-    public ConexionesServidor(GUIServer gui) {
-        interfaz = gui;
+    public ConexionesServidor(GUIServer interfaz) {
+        this.interfaz = interfaz;
+        fachada = new Fachada();
         interfaz.asignarEscuchasBotones(this);
-        examen = new Examen();
         agregarExamenPrueba();
-        Examenes = new ArrayList<>();
+        examenes = new ArrayList<>();
         ejecutarServidor();
     }
 
@@ -56,11 +59,6 @@ public class ConexionesServidor implements ActionListener {
      * cliente
      */
     public void ejecutarServidor() {
-        //-------------------------------MULTICAST -----------------------
-        /**
-         * vamos a hacer la creación del socket de multicast y el datagrama
-         * declarado
-         */
         try {
             socketCast = new MulticastSocket();
             // Creamos la ip multicast donde se va a poner el mensaje
@@ -74,14 +72,13 @@ public class ConexionesServidor implements ActionListener {
         } catch (IOException ex) {
             System.out.println("error al crear socket de multicast" + ex);
         }
-        //-----------------Fin creación multicast -----------------------------------------------    
 
         try {
             serverSocket = new ServerSocket(12345);
 
             interfaz.appendEstadoServidor("Iniciado servidor por el puerto " + serverSocket.getLocalPort() + "\n");
-            interfaz.appendEstadoServidor("Esperando conexiones...");
-            
+            interfaz.appendEstadoServidor("Esperando conexiones...\n\n");
+
             while (estudiantes < 3) {
                 try {
                     Socket socket = serverSocket.accept(); // permite al servidor aceptar la conexión                    
@@ -102,16 +99,15 @@ public class ConexionesServidor implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        if (ae.getSource() == interfaz.getBAgregarExamen()) {
+        if (ae.getSource() == interfaz.getbCargarArchivo()) {
+            cargarArchivo();
+        } else if (ae.getSource() == interfaz.getBAgregarExamen()) {
             examen.setNombre(interfaz.getNombreExamen());
-            Examenes.add(examen);
-
-            interfaz.addExamenJCB(examen.getNombre());
-            interfaz.setNumeroPregunta(0);
-            interfaz.borrarCamposExamenes();
-            interfaz.resetJCBPreguntas();
-
-            examen = new Examen();
+            examen.setDuracion(interfaz.getDuracion());
+            examenes.add(examen);
+            interfaz.addExamenJCB(interfaz.getNombreExamen());
+            interfaz.limpiarCamposPregunta();
+            interfaz.borrarTabla();
         } else if (ae.getSource() == interfaz.getBIniciarExamen()) {
             if (examenIniciado) {
                 interfaz.appendEstadoServidor("Ya se ha iniciado el examen\n");
@@ -132,14 +128,6 @@ public class ConexionesServidor implements ActionListener {
                     interfaz.appendEstadoServidor("No estan conectados los 3 estudiantes\n");
                 }
             }
-        } else if (ae.getSource() == interfaz.getBAgregarPregunta()) {
-            if (Validaciones.validarCampoOpcionesPregunta(interfaz)) {
-                Pregunta p = new Pregunta(interfaz.getEnunciadoPregunta(), interfaz.getCuerpoPregunta(), interfaz.getOpciones(), 4);
-                examen.addPregunta(p);
-                interfaz.addPreguntaJCB(interfaz.getEnunciadoPregunta());
-                interfaz.setNumeroPregunta(1);
-                interfaz.borrarCamposOpcionesPregunta();
-            }
         } else if (ae.getSource() == interfaz.getBLimpiarAreaEstadoServidor()) {
             interfaz.limpiarAreaEstadoServidor();
         }
@@ -147,25 +135,26 @@ public class ConexionesServidor implements ActionListener {
     }
 
     public void agregarExamenPrueba() {
+        examen = new Examen();
         examen.setNombre("Examen de prueba mixto");
         examen.setDuracion(5);
         Pregunta p1 = new Pregunta(
-            "Determine el resultado",
-            "1+1",
-            new ArrayList<String>(Arrays.asList("pez", "1", "2", "ninguna de las anteriores")),
-            3
+                "Determine el resultado",
+                "1+1",
+                new ArrayList<String>(Arrays.asList("pez", "1", "2", "ninguna de las anteriores")),
+                3
         );
         Pregunta p2 = new Pregunta(
-            "Aproximadamente, ¿cuántos huesos tiene el cuerpo humano?",
-            "",
-            new ArrayList<String>(Arrays.asList("5", "40", "390", "208")),
-            4
+                "Aproximadamente, ¿cuántos huesos tiene el cuerpo humano?",
+                "",
+                new ArrayList<String>(Arrays.asList("5", "40", "390", "208")),
+                4
         );
         Pregunta p3 = new Pregunta(
-            "Responde la siguiente trivia sobre Avengers",
-            "¿Cómo se llama la nave de los Guardianes de la galaxia en Avengers: Infinity War?",
-            new ArrayList<String>(Arrays.asList("El Milano", "El Comodoro", "El Benatar", "El Halcón milenario")),
-            3
+                "Responde la siguiente trivia sobre Avengers",
+                "¿Cómo se llama la nave de los Guardianes de la galaxia en Avengers: Infinity War?",
+                new ArrayList<String>(Arrays.asList("El Milano", "El Comodoro", "El Benatar", "El Halcón milenario")),
+                3
         );
         examen.addPregunta(p1);
         examen.addPregunta(p2);
@@ -173,4 +162,22 @@ public class ConexionesServidor implements ActionListener {
         interfaz.addExamenJCB(examen.getNombre());
     }
 
+    public void cargarArchivo() {
+        ArrayList<String> datos = fachada.cargarArchivo();
+        examen = new Examen();
+        Iterator iterator = datos.iterator();
+        while (iterator.hasNext()) {
+            String enunciado = iterator.next().toString();
+            String cuerpo = iterator.next().toString();
+
+            ArrayList<String> opciones = new ArrayList<>();
+            for (int x = 0; x < 4; x++) {
+                iterator.next().toString();
+            }
+            int verdadera = Integer.parseInt(iterator.next().toString());
+            examen.addPregunta(new Pregunta(enunciado, cuerpo, opciones, verdadera));
+        }
+        examenes.add(examen);
+        interfaz.mostrarPreguntasTabla(examen.getInfoPreguntas());
+    }
 }

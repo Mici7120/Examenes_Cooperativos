@@ -47,4 +47,13 @@ public class Examen {
     public Pregunta getPregunta(int indice) {
         return preguntas.get(indice);
     }
+
+    public ArrayList<String> getInfoPreguntas() {
+        ArrayList<String> enunciados = new ArrayList<>();
+        for(Pregunta x: preguntas){
+            enunciados.add(x.getEnunciado());
+            enunciados.add(x.getCuerpo());
+        }
+        return enunciados;
+    }
 }
