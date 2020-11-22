@@ -12,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
 import java.net.Socket;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTextArea;
@@ -41,6 +42,7 @@ public class HiloServidor extends Thread {
         this.examen = examen;
         sMulti = multi;
         datagrama = paquete;
+        numPreguntaSeleccionada = 0;
     }
 
     @Override
@@ -54,31 +56,48 @@ public class HiloServidor extends Thread {
                 mensaje = (String) entrada.readObject();
                 interfaz.appendEstadoServidor("\nCliente " + idCliente + ": " + mensaje);
 
-                if (mensaje.contains("PEDIR-PREGUNTA")) {
-                    String[] partes = mensaje.split(":");
-                    int numPregunta = Integer.parseInt(partes[1].trim());
-                    // HACER: usar numPreguntaSeleccionada para verificar respuesta y guardar
-                    if (examen.getPregunta(numPregunta - 1).getDisponible()) {
-                        numPreguntaSeleccionada = numPregunta;
-                        String enviarMsg = examen.getPregunta(numPregunta - 1).getEnunciado();
-                        enviarMsg += "\n" + examen.getPregunta(numPregunta - 1).getCuerpo();
-                        enviarMensaje("PREGUNTA:" + enviarMsg);
-                        // HACER: enviar opciones
-                        String opciones = "OPCIONES\n";
-                        for (String x : examen.getPregunta(numPregunta - 1).getOpciones()) {
-                            opciones += x + "\n";
-                        }
+                StringTokenizer token = new StringTokenizer(mensaje, ":");
+                String accion = token.nextToken().trim();
 
-                        examen.getPregunta(numPregunta - 1).setDisponible(false);
-                        
-                        enviarMensaje(opciones);
-                        enviarMensajeMulticast(getEstadoPreguntas());
-                    }else{
-                        enviarMensaje("PREGUNTA OCUPADO O RESPONDIDA\n");
-                    }
-                } else if (mensaje.contains("CANCELAR-PREGUNTA")) {
-                    examen.getPregunta(numPreguntaSeleccionada - 1).setDisponible(true);
-                    enviarMensajeMulticast(getEstadoPreguntas());
+                switch (accion) {
+                    case "PEDIR-PREGUNTA":
+                        int numPregunta = Integer.parseInt(token.nextToken());
+                        if (examen.getPregunta(numPregunta - 1).getDisponible()) {
+                            numPreguntaSeleccionada = numPregunta;
+                            String enviarMsg = examen.getPregunta(numPregunta - 1).getEnunciado();
+                            enviarMsg += "\n" + examen.getPregunta(numPregunta - 1).getCuerpo();
+                            enviarMensaje("PREGUNTA:" + enviarMsg);
+                            String opciones = "OPCIONES\n";
+                            for (String x : examen.getPregunta(numPregunta - 1).getOpciones()) {
+                                opciones += x + "\n";
+                            }
+
+                            examen.getPregunta(numPregunta - 1).setEstado("Ocupada");
+                            
+                            enviarMensaje(opciones);
+                            enviarMensajeMulticast(getEstadoPreguntas());
+                        }else{
+                            enviarMensaje("PREGUNTA OCUPADO O RESPONDIDA\n");
+                        }
+                        break;
+                    case "CANCELAR-PREGUNTA":
+                        if (numPreguntaSeleccionada > 0) {
+                            examen.getPregunta(numPreguntaSeleccionada - 1).setEstado("Libre");
+                            numPreguntaSeleccionada = 0;
+                            enviarMensajeMulticast(getEstadoPreguntas());
+                        }
+                        break;
+                    case "ENVIAR-RESPUESTA":
+                        if (numPreguntaSeleccionada > 0) {
+                            String respuestaCliente = token.nextToken();;
+                            Pregunta preguntaSelec = examen.getPregunta(numPreguntaSeleccionada - 1);
+                            boolean calificacion = respuestaCliente.equals(preguntaSelec.getOpcCorrecta());
+                            // HACER: guardar nombre del cliente para pasarselo a setRespondida(calificacion, nombre)
+                            examen.getPregunta(numPreguntaSeleccionada - 1).setRespondida(calificacion, Integer.toString(idCliente));
+                            enviarMensajeMulticast(getEstadoPreguntas());
+                            numPreguntaSeleccionada = 0;
+                        }
+                        break;
                 }
 
             } catch (ClassNotFoundException enc) {

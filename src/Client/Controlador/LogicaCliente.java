@@ -136,12 +136,16 @@ public class LogicaCliente implements ActionListener {
         //interfaz.limpiarCampos();
         if (ae.getSource() == interfaz.bObtener) {
             String numPregunta = interfaz.selectPregunta.getItemAt(interfaz.selectPregunta.getSelectedIndex());
-            String mensaje = "PEDIR-PREGUNTA : " + numPregunta;
+            String mensaje = "PEDIR-PREGUNTA :" + numPregunta;
             actualizarCBpreguntas();
             enviarDatos(mensaje);
             // mostrar mensaje de dialogo si enviarDatos devuelve error
         } else if (ae.getSource() == interfaz.bEnviar) {
-
+            // HACER: validar que respuestaSeleccionada sea diferente a vacio ""
+            String mensaje = "ENVIAR-RESPUESTA :" + interfaz.getRespuestaSeleccionada();
+            enviarDatos(mensaje);
+            interfaz.limpiarAreaMensajes();
+            interfaz.limpiarOpciones();
         } else if (ae.getSource() == interfaz.bCancelar) {
             String mensaje = "CANCELAR-PREGUNTA";
             enviarDatos(mensaje);

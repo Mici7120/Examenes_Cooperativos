@@ -143,4 +143,17 @@ public class GUIClient extends JFrame{
         rBPreguntaD.setText("");
     }
 
+    public String getRespuestaSeleccionada() {
+        if(rBPreguntaA.isSelected()) {
+            return "A";
+        } else if(rBPreguntaB.isSelected()) {
+            return "B";
+        } else if(rBPreguntaC.isSelected()) {
+            return "C";
+        } else if(rBPreguntaD.isSelected()) {
+            return "D";
+        }
+        return "";
+    }
+
 }
