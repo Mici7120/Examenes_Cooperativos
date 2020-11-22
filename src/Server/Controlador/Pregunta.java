@@ -14,14 +14,14 @@ import java.util.ArrayList;
 public class Pregunta {
     String enunciado, cuerpo;
     ArrayList <String> opciones;
-    int verdadera;
+    String opcCorrecta;
     boolean disponible;
 
-    public Pregunta(String enunciado, String cuerpo, ArrayList<String> opciones, int verdadera){
+    public Pregunta(String enunciado, String cuerpo, ArrayList<String> opciones, String opcCorrecta){
         this.enunciado = enunciado;
         this.cuerpo = cuerpo;
         this.opciones = opciones;
-        this.verdadera = verdadera;
+        this.opcCorrecta = opcCorrecta;
         disponible = true;
     }
 
@@ -33,8 +33,8 @@ public class Pregunta {
         return cuerpo;
     }
 
-    public int esCorrecta() {
-        return verdadera;
+    public String getOpcCorrecta() {
+        return opcCorrecta;
     }
 
     public ArrayList<String> getOpciones() {

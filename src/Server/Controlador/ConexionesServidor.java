@@ -142,19 +142,19 @@ public class ConexionesServidor implements ActionListener {
                 "Determine el resultado",
                 "1+1",
                 new ArrayList<String>(Arrays.asList("pez", "1", "2", "ninguna de las anteriores")),
-                3
+                "C"
         );
         Pregunta p2 = new Pregunta(
                 "Aproximadamente, ¿cuántos huesos tiene el cuerpo humano?",
                 "",
                 new ArrayList<String>(Arrays.asList("5", "40", "390", "208")),
-                4
+                "D"
         );
         Pregunta p3 = new Pregunta(
                 "Responde la siguiente trivia sobre Avengers",
                 "¿Cómo se llama la nave de los Guardianes de la galaxia en Avengers: Infinity War?",
                 new ArrayList<String>(Arrays.asList("El Milano", "El Comodoro", "El Benatar", "El Halcón milenario")),
-                3
+                "C"
         );
         examen.addPregunta(p1);
         examen.addPregunta(p2);
@@ -174,8 +174,8 @@ public class ConexionesServidor implements ActionListener {
             for (int x = 0; x < 4; x++) {
                 iterator.next().toString();
             }
-            int verdadera = Integer.parseInt(iterator.next().toString());
-            examen.addPregunta(new Pregunta(enunciado, cuerpo, opciones, verdadera));
+            String opcCorrecta = iterator.next().toString();
+            examen.addPregunta(new Pregunta(enunciado, cuerpo, opciones, opcCorrecta));
         }
         examenes.add(examen);
         interfaz.mostrarPreguntasTabla(examen.getInfoPreguntas());
