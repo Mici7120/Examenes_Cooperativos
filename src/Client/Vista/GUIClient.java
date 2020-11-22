@@ -23,7 +23,7 @@ public class GUIClient extends JFrame{
     public JButton bObtener, bEnviar, bCancelar;
     public JTextArea tAreaMensajes;
     JScrollPane barras;
-    public JCheckBox cPreguntaA, cPreguntaB, cPreguntaC, cPreguntaD;
+    public JRadioButton rBPreguntaA, rBPreguntaB, rBPreguntaC, rBPreguntaD;
     
     
     public GUIClient() 
@@ -51,12 +51,18 @@ public class GUIClient extends JFrame{
         
         tAreaMensajes = new JTextArea("Mensaje: ");
         barras = new JScrollPane(tAreaMensajes);
+
+        rBPreguntaA = new JRadioButton("");
+        rBPreguntaB = new JRadioButton("");
+        rBPreguntaC = new JRadioButton("");
+        rBPreguntaD = new JRadioButton("");
         
-        cPreguntaA = new JCheckBox("A. ");
-        cPreguntaB = new JCheckBox("B. ");
-        cPreguntaC = new JCheckBox("C. ");
-        cPreguntaD = new JCheckBox("D. ");
-        
+        ButtonGroup rBgrupo = new ButtonGroup();
+        rBgrupo.add(rBPreguntaA);
+        rBgrupo.add(rBPreguntaB);
+        rBgrupo.add(rBPreguntaC);
+        rBgrupo.add(rBPreguntaD);
+
         lPreguntas.setAlignmentX(Component.RIGHT_ALIGNMENT);
         bObtener.setAlignmentX(Component.CENTER_ALIGNMENT);
         
@@ -70,13 +76,13 @@ public class GUIClient extends JFrame{
         pCenArri.setLayout(new BoxLayout(pCenArri, 1));
         pCenArri.add(barras);
         pCenArri.add(Box.createRigidArea(new Dimension(0,5)));
-        pCenArri.add(cPreguntaA);
+        pCenArri.add(rBPreguntaA);
         pCenArri.add(Box.createRigidArea(new Dimension(0,5)));
-        pCenArri.add(cPreguntaB);
+        pCenArri.add(rBPreguntaB);
         pCenArri.add(Box.createRigidArea(new Dimension(0,5)));
-        pCenArri.add(cPreguntaC);
+        pCenArri.add(rBPreguntaC);
         pCenArri.add(Box.createRigidArea(new Dimension(0,5)));
-        pCenArri.add(cPreguntaD);
+        pCenArri.add(rBPreguntaD);
         
         pCenAbaj.setLayout(new BoxLayout(pCenAbaj, 2));
         pCenAbaj.add(Box.createRigidArea(new Dimension(0,10)));
@@ -117,6 +123,13 @@ public class GUIClient extends JFrame{
         bObtener.addActionListener(escucha);
         bEnviar.addActionListener(escucha);
         bCancelar.addActionListener(escucha);
+    }
+
+    public void setRBOpciones(String opcionA, String opcionB, String opcionC, String opcionD) {
+        rBPreguntaA.setText("A. " + opcionA);
+        rBPreguntaB.setText("B. " + opcionB);
+        rBPreguntaC.setText("C. " + opcionC);
+        rBPreguntaD.setText("D. " + opcionD);
     }
 
 }

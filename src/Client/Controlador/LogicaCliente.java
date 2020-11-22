@@ -85,10 +85,7 @@ public class LogicaCliente implements ActionListener {
                 } else if (mensajeRecibido.contains("OPCIONES")) {
                     StringTokenizer token = new StringTokenizer(mensajeRecibido, "\n");
                     token.nextToken();
-                    interfaz.cPreguntaA.setText("A. " + token.nextToken());
-                    interfaz.cPreguntaB.setText("B. " + token.nextToken());
-                    interfaz.cPreguntaC.setText("C. " + token.nextToken());
-                    interfaz.cPreguntaD.setText("D. " + token.nextToken());
+                    interfaz.setRBOpciones(token.nextToken(), token.nextToken(), token.nextToken(), token.nextToken());
                 } else {
                     interfaz.tAreaMensajes.append(mensajeRecibido);
                 }
