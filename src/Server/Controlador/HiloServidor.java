@@ -28,7 +28,7 @@ public class HiloServidor extends Thread {
     private int idCliente;
     private GUIServer interfaz;
     private Examen examen;
-    private int preguntaSeleccionada;
+    private int numPreguntaSeleccionada;
 
     private MulticastSocket sMulti;
     private DatagramPacket datagrama;
@@ -54,36 +54,31 @@ public class HiloServidor extends Thread {
                 mensaje = (String) entrada.readObject();
                 interfaz.appendEstadoServidor("\nCliente " + idCliente + ": " + mensaje);
 
-                if (mensaje.contains("CLIENTE>>> PEDIR-PREGUNTA")) {
+                if (mensaje.contains("PEDIR-PREGUNTA")) {
                     String[] partes = mensaje.split(":");
                     int numPregunta = Integer.parseInt(partes[1].trim());
-                    // HACER: si numPregunta está libre, preguntaSeleccionada = numPregunta
-                    // Luego, usar preguntaSeleccionada para verificar respuesta y guardar
+                    // HACER: usar numPreguntaSeleccionada para verificar respuesta y guardar
                     if (examen.getPregunta(numPregunta - 1).getDisponible()) {
+                        numPreguntaSeleccionada = numPregunta;
                         String enviarMsg = examen.getPregunta(numPregunta - 1).getEnunciado();
                         enviarMsg += "\n" + examen.getPregunta(numPregunta - 1).getCuerpo();
-                        enviarMensaje("SERVIDOR>>> PREGUNTA:" + enviarMsg);
+                        enviarMensaje("PREGUNTA:" + enviarMsg);
                         // HACER: enviar opciones
                         String opciones = "OPCIONES\n";
                         for (String x : examen.getPregunta(numPregunta - 1).getOpciones()) {
                             opciones += x + "\n";
                         }
-                        
+
                         examen.getPregunta(numPregunta - 1).setDisponible(false);
                         
                         enviarMensaje(opciones);
-                        String estadoPreguntas = "SERVIDOR>>> ACTUALIZAR-PREGUNTA:";
-                        for (Pregunta x : examen.preguntas) {
-                            if (x.getDisponible()) {
-                                estadoPreguntas += "DISPONIBLE,";
-                            } else {
-                                estadoPreguntas += "NO-DISPONIBLE,";
-                            }
-                        }
-                        enviarMensajeMulticast(estadoPreguntas);
+                        enviarMensajeMulticast(getEstadoPreguntas());
                     }else{
-                        enviarMensaje("SERVIDOR>>> PREGUNTA OCUPADO O RESPONDIDA\n");
+                        enviarMensaje("PREGUNTA OCUPADO O RESPONDIDA\n");
                     }
+                } else if (mensaje.contains("CANCELAR-PREGUNTA")) {
+                    examen.getPregunta(numPreguntaSeleccionada - 1).setDisponible(true);
+                    enviarMensajeMulticast(getEstadoPreguntas());
                 }
 
             } catch (ClassNotFoundException enc) {
@@ -95,6 +90,18 @@ public class HiloServidor extends Thread {
             } // fin de catch
         } while (true);
 
+    }
+
+    private String getEstadoPreguntas() {
+        String estadoPreguntas = "ACTUALIZAR-PREGUNTA:";
+        for (Pregunta x : examen.preguntas) {
+            if (x.getDisponible()) {
+                estadoPreguntas += "DISPONIBLE,";
+            } else {
+                estadoPreguntas += "NO-DISPONIBLE,";
+            }
+        }
+        return estadoPreguntas;
     }
 
     public void cerrar() {
@@ -146,7 +153,7 @@ public class HiloServidor extends Thread {
             salida.flush();
 
             entrada = new ObjectInputStream(sCliente.getInputStream());
-            interfaz.appendEstadoServidor("\nSe obtuvieron los flujos de E/S del cliente: " + idCliente + "\n");
+            interfaz.appendEstadoServidor("\nSe obtuvieron los flujos de E/S del cliente: " + idCliente + "\n\n");
         } catch (IOException ex) {
             System.out.println("error a abrir los flujos del cliente " + idCliente);
         }

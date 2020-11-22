@@ -75,13 +75,13 @@ public class LogicaMulticast extends Thread {
     private void procesarEntrada(String salida) {
         String[] mensaje = salida.split(":");
         switch(mensaje[0]) {
-            case "SERVIDOR>>> INICIO":
+            case "INICIO":
                 int cantidadPreguntas = Integer.parseInt(mensaje[1].trim());
                 logicaCliente.iniciarExamen(cantidadPreguntas);
                 break;
-            case "SERVIDOR>>> TIEMPO-RESTANTE":
+            case "TIEMPO-RESTANTE":
                 break;
-            case "SERVIDOR>>> ACTUALIZAR-PREGUNTA":
+            case "ACTUALIZAR-PREGUNTA":
                 StringTokenizer estadoPreguntas = new StringTokenizer(mensaje[1], ",");
                 int index = 0;
                 while(estadoPreguntas.hasMoreTokens()){

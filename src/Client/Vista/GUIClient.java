@@ -132,4 +132,15 @@ public class GUIClient extends JFrame{
         rBPreguntaD.setText("D. " + opcionD);
     }
 
+    public void limpiarAreaMensajes() {
+        tAreaMensajes.setText("");
+    }
+
+    public void limpiarOpciones() {
+        rBPreguntaA.setText("");
+        rBPreguntaB.setText("");
+        rBPreguntaC.setText("");
+        rBPreguntaD.setText("");
+    }
+
 }

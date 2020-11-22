@@ -119,9 +119,9 @@ public class LogicaCliente implements ActionListener {
         String mensajeS = "";
 
         try {
-            salida.writeObject("CLIENTE>>> " + mensaje + "\n");
+            salida.writeObject(mensaje);
             salida.flush(); // envía todos los datos a la salida
-            mensajeS = "\nCLIENTE>>> " + mensaje;
+            mensajeS = mensaje;
 
         } catch (IOException excepcionES) {
             mensajeS = "\nError al escribir objeto";
@@ -138,17 +138,20 @@ public class LogicaCliente implements ActionListener {
             String numPregunta = interfaz.selectPregunta.getItemAt(interfaz.selectPregunta.getSelectedIndex());
             String mensaje = "PEDIR-PREGUNTA : " + numPregunta;
             actualizarCBpreguntas();
-            System.out.println(mensaje);
-            System.out.println(enviarDatos(mensaje));
+            enviarDatos(mensaje);
+            // mostrar mensaje de dialogo si enviarDatos devuelve error
         } else if (ae.getSource() == interfaz.bEnviar) {
 
         } else if (ae.getSource() == interfaz.bCancelar) {
-
+            String mensaje = "CANCELAR-PREGUNTA";
+            enviarDatos(mensaje);
+            interfaz.limpiarAreaMensajes();
+            interfaz.limpiarOpciones();
         }
     }
 
     public void iniciarExamen(int cantidadPreguntas) {
-        interfaz.tAreaMensajes.append("\nDesde iniciarExamen: " + cantidadPreguntas);
+        interfaz.tAreaMensajes.append("\nInicia examen.\nCantidad de preguntas: " + cantidadPreguntas);
         for (int i = 0; i < cantidadPreguntas; i++) {
             estadoPreguntas.add(new EstadoPregunta(i + 1, true));
         }

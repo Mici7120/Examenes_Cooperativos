@@ -85,7 +85,7 @@ public class ConexionesServidor implements ActionListener {
                     estudiantes++;
                     hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama, examen);
                     hilo.start();
-                    interfaz.appendEstadoServidor("Conectado el estudiante: " + estudiantes + "\n");
+                    interfaz.appendEstadoServidor("Conectado el estudiante: " + estudiantes);
 
                 } catch (EOFException excepcionEOF) {
                     System.out.println("\nServidor termino la conexion");
@@ -112,10 +112,10 @@ public class ConexionesServidor implements ActionListener {
             if (examenIniciado) {
                 interfaz.appendEstadoServidor("Ya se ha iniciado el examen\n");
             } else {
-                if (estudiantes == 3) {
+                if (estudiantes <= 3) {
                     interfaz.appendEstadoServidor("Se ha iniciado el examen\n");
                     examenIniciado = true;
-                    String mensaje = "SERVIDOR>>> INICIO: " + examen.numeroPreguntas() + " : " + examen.getNombre();
+                    String mensaje = "INICIO: " + examen.numeroPreguntas() + " : " + examen.getNombre();
                     byte[] buffer = mensaje.getBytes();
                     datagrama.setData(buffer);
                     datagrama.setLength(buffer.length);
