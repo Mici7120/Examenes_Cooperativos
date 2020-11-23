@@ -155,5 +155,9 @@ public class GUIClient extends JFrame{
         }
         return "";
     }
+    
+    public void setTimeRest(int segundos){
+        tRestTime.setText("" + segundos);
+    }
 
 }

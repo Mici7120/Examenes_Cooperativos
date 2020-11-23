@@ -37,10 +37,10 @@ public class GUIServer extends JFrame {
     Container container;
     JTabbedPane pestañas;
     JPanel /*1 Pestaña*/ pConfiExamenes, pConfiguracion,/*2 Pestaña*/ pIniExamen, pInfoExamenes, pCargarExamen, pOpIniExamen;
-    JTextField nombreExamen, tfDuracion;
+    JTextField nombreExamen, tfDuracion, estadoTiempo;
     JTextArea estadoServidor;
     JScrollPane jcpEstadoServidor, spTabla;
-    JLabel lNombreExamen, lDuracion;
+    JLabel lNombreExamen, lDuracion, lInfoDuracion;
     JButton bAgregarExamen, bCargarArchivo, bIniciarExamen, bLimpiarAreaEstadoServidor;
     JComboBox jcbExamenes;
     JTable tablePreguntas;
@@ -87,14 +87,18 @@ public class GUIServer extends JFrame {
         pIniExamen = new JPanel();
         pIniExamen.setLayout(new BorderLayout());
         estadoServidor = new JTextArea();
+        estadoTiempo = new JTextField();
         bIniciarExamen = new JButton("Iniciar Examen");
         bLimpiarAreaEstadoServidor = new JButton("Limpiar Area");
         jcbExamenes = new JComboBox();
+        lInfoDuracion = new JLabel("Duracion Restante");
 
-        pOpIniExamen = new JPanel();
+        pOpIniExamen = new JPanel(new GridLayout(0, 5, 10, 0));
         pOpIniExamen.add(jcbExamenes);
         pOpIniExamen.add(bIniciarExamen);
         pOpIniExamen.add(bLimpiarAreaEstadoServidor);
+        pOpIniExamen.add(lInfoDuracion);
+        pOpIniExamen.add(estadoTiempo);
 
         jcpEstadoServidor = new JScrollPane(estadoServidor);
         pIniExamen.add(pOpIniExamen, BorderLayout.NORTH);
@@ -111,7 +115,8 @@ public class GUIServer extends JFrame {
         container.add(pestañas);
 
         setVisible(true);
-        setSize(900, 600);
+        setSize(800, 500);
+        setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
@@ -187,4 +192,7 @@ public class GUIServer extends JFrame {
         estadoServidor.setText("");
     }
 
+    public void setDuracionRestante(int segundos) {
+        estadoTiempo.setText("" + segundos);
+    }
 }

@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Timer;
 
 /**
  *
@@ -31,6 +32,8 @@ public class ConexionesServidor implements ActionListener {
     private ServerSocket serverSocket;
     private int estudiantes = 0;
     private HiloServidor hilo;
+    private Timer tiempo;
+    int s;
 
     private MulticastSocket socketCast;
 
@@ -83,7 +86,7 @@ public class ConexionesServidor implements ActionListener {
                 try {
                     Socket socket = serverSocket.accept(); // permite al servidor aceptar la conexión                    
                     estudiantes++;
-                    hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama, examen);
+                    hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama);
                     hilo.start();
                     interfaz.appendEstadoServidor("Conectado el estudiante: " + estudiantes);
 
@@ -119,6 +122,7 @@ public class ConexionesServidor implements ActionListener {
                     byte[] buffer = mensaje.getBytes();
                     datagrama.setData(buffer);
                     datagrama.setLength(buffer.length);
+                    iniciarTiempo();
                     try {
                         socketCast.send(datagrama);
                     } catch (IOException ex) {
@@ -162,6 +166,17 @@ public class ConexionesServidor implements ActionListener {
         interfaz.addExamenJCB(examen.getNombre());
     }
 
+    public void enviarMensajeMulticast(String mens) {
+        byte[] buffer = mens.getBytes();
+        datagrama.setData(buffer);
+        datagrama.setLength(buffer.length);
+        try {
+            socketCast.send(datagrama);
+        } catch (IOException ex) {
+            Logger.getLogger(HiloServidor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public void cargarArchivo() {
         ArrayList<String> datos = fachada.cargarArchivo();
         examen = new Examen();
@@ -179,5 +194,20 @@ public class ConexionesServidor implements ActionListener {
         }
         examenes.add(examen);
         interfaz.mostrarPreguntasTabla(examen.getInfoPreguntas());
+    }
+
+    public void iniciarTiempo() {
+        s = 100;
+        ActionListener acciones = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                s--;
+                interfaz.setDuracionRestante(s);
+                String mens = "TIEMPO-RESTANTE:" + s;
+                enviarMensajeMulticast(mens);
+            }
+        };
+        tiempo = new Timer(1000, acciones);
+        tiempo.start();
     }
 }

@@ -6,6 +6,7 @@
 package Server.Controlador;
 
 import Server.Vista.GUIServer;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,7 +16,6 @@ import java.net.Socket;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JTextArea;
 
 /**
  *
@@ -34,12 +34,12 @@ public class HiloServidor extends Thread {
     private MulticastSocket sMulti;
     private DatagramPacket datagrama;
 
-    public HiloServidor(Socket socket, int numeroEstudiante, GUIServer interfaz, MulticastSocket multi, DatagramPacket paquete, Examen examen) {
+
+    public HiloServidor(Socket socket, int numeroEstudiante, GUIServer interfaz, MulticastSocket multi, DatagramPacket paquete) {
 
         sCliente = socket;
         idCliente = numeroEstudiante;
         this.interfaz = interfaz;
-        this.examen = examen;
         sMulti = multi;
         datagrama = paquete;
         numPreguntaSeleccionada = 0;
@@ -177,4 +177,6 @@ public class HiloServidor extends Thread {
             System.out.println("error a abrir los flujos del cliente " + idCliente);
         }
     }
+    
+
 }
