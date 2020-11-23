@@ -15,6 +15,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -26,12 +27,14 @@ public class LogicaCliente implements ActionListener {
     private ObjectInputStream entrada;
     private Socket cliente;
     private GUIClient interfaz;
+    private String nombreCliente;
     private ArrayList<EstadoPregunta> estadoPreguntas;
 
     LogicaMulticast multicast;
 
     public LogicaCliente(GUIClient interfaz) {
         this.interfaz = interfaz;
+        nombreCliente = JOptionPane.showInputDialog("Ingrese su nombre: ");
         interfaz.asignarEscuchasBotones(this);
         estadoPreguntas = new ArrayList<>();
     }
@@ -136,13 +139,13 @@ public class LogicaCliente implements ActionListener {
         //interfaz.limpiarCampos();
         if (ae.getSource() == interfaz.bObtener) {
             String numPregunta = interfaz.selectPregunta.getItemAt(interfaz.selectPregunta.getSelectedIndex());
-            String mensaje = "PEDIR-PREGUNTA :" + numPregunta;
+            String mensaje = "PEDIR-PREGUNTA : " + numPregunta;
             actualizarCBpreguntas();
             enviarDatos(mensaje);
             // mostrar mensaje de dialogo si enviarDatos devuelve error
         } else if (ae.getSource() == interfaz.bEnviar) {
             // HACER: validar que respuestaSeleccionada sea diferente a vacio ""
-            String mensaje = "ENVIAR-RESPUESTA :" + interfaz.getRespuestaSeleccionada();
+            String mensaje = "ENVIAR-RESPUESTA : " + interfaz.getRespuestaSeleccionada() + " : " + nombreCliente;
             enviarDatos(mensaje);
             interfaz.limpiarAreaMensajes();
             interfaz.limpiarOpciones();

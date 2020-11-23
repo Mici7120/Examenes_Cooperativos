@@ -56,7 +56,7 @@ public class HiloServidor extends Thread {
                 mensaje = (String) entrada.readObject();
                 interfaz.appendEstadoServidor("\nCliente " + idCliente + ": " + mensaje);
 
-                StringTokenizer token = new StringTokenizer(mensaje, ":");
+                StringTokenizer token = new StringTokenizer(mensaje, " : ");
                 String accion = token.nextToken().trim();
 
                 switch (accion) {
@@ -89,12 +89,12 @@ public class HiloServidor extends Thread {
                         break;
                     case "ENVIAR-RESPUESTA":
                         if (numPreguntaSeleccionada > 0) {
-                            String respuestaCliente = token.nextToken();;
+                            String respuestaCliente = token.nextToken();
+                            String nombreCliente = token.nextToken();
                             Pregunta preguntaSelec = examen.getPregunta(numPreguntaSeleccionada - 1);
                             boolean calificacion = respuestaCliente.equals(preguntaSelec.getOpcCorrecta());
-                            // HACER: guardar nombre del cliente para pasarselo a setRespondida(calificacion, nombre)
-                            examen.getPregunta(numPreguntaSeleccionada - 1).setRespondida(calificacion, Integer.toString(idCliente));
-                            enviarMensajeMulticast(getEstadoPreguntas());
+                            examen.getPregunta(numPreguntaSeleccionada - 1).setRespondida(calificacion, nombreCliente);
+                            enviarMensajeMulticast(getEstadoPreguntas()); 
                             numPreguntaSeleccionada = 0;
                         }
                         break;
