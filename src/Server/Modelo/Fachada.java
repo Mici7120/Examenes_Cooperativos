@@ -32,27 +32,26 @@ public class Fachada {
         fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
-        int a= fileChooser.showOpenDialog(new JFrame());
-        
+        int a = fileChooser.showOpenDialog(new JFrame());
+
         archivo = fileChooser.getSelectedFile();
 
-        
         Scanner buffer = null;
         try {
             buffer = new Scanner(archivo);
-        while (buffer.hasNextLine()) {
-            for (int i = 0; i < 7; i++) {
-                datos.add(buffer.nextLine());
+            while (buffer.hasNextLine()) {
+                for (int i = 0; i < 7; i++) {
+                    datos.add(buffer.nextLine());
+                }
             }
-        }
-        return datos;
-        
+            return datos;
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Fachada.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
+        } finally {
             buffer.close();
         }
-        
+
         return null;
     }
 }

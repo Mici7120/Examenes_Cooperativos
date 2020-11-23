@@ -12,9 +12,10 @@ import Client.Controlador.LogicaCliente;
  * @author ruzbe
  */
 public class Principal {
-     public static void main(String[] args) {
+
+    public static void main(String[] args) {
         GUIClient client = new GUIClient();
-        LogicaCliente logica = new LogicaCliente(client);   
+        LogicaCliente logica = new LogicaCliente(client);
         logica.conectar("127.0.0.1");
     }
 }

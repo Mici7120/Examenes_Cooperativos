@@ -41,6 +41,7 @@ public class ConexionesServidor implements ActionListener {
     byte[] vacio = new byte[0];
 
     ArrayList<Examen> examenes;
+    ArrayList<InformeExamen> informes;
     Examen examen;
     boolean examenIniciado;
 
@@ -54,6 +55,7 @@ public class ConexionesServidor implements ActionListener {
         agregarExamenPrueba();
         examenes = new ArrayList<>();
         hilos = new ArrayList<>();
+        informes = new ArrayList<>();
         ejecutarServidor();
     }
 
@@ -87,7 +89,7 @@ public class ConexionesServidor implements ActionListener {
                 try {
                     Socket socket = serverSocket.accept(); // permite al servidor aceptar la conexión                    
                     estudiantes++;
-                    HiloServidor hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama);
+                    HiloServidor hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama, informes);
                     hilo.start();
                     hilos.add(hilo);
                     interfaz.appendEstadoServidor("Conectado el estudiante: " + estudiantes);
@@ -118,18 +120,18 @@ public class ConexionesServidor implements ActionListener {
                 interfaz.appendEstadoServidor("Ya se ha iniciado el examen\n");
             } else {
                 if (estudiantes <= 3) {
-               
+
                     for (HiloServidor x : hilos) {
                         //x.start();
                         x.setExamen(examen);
                     }
                     interfaz.appendEstadoServidor("Se ha iniciado el examen\n");
                     examenIniciado = true;
-                    String mensaje = "INICIO: " + examen.numeroPreguntas() + " : " + examen.getNombre();
+                    String mensaje = "INICIO:" + examen.numeroPreguntas(); //+ " : " + examen.getNombre();
                     byte[] buffer = mensaje.getBytes();
                     datagrama.setData(buffer);
                     datagrama.setLength(buffer.length);
-                    iniciarTiempo();
+                    //iniciarTiempo();
                     try {
                         socketCast.send(datagrama);
                     } catch (IOException ex) {
@@ -194,7 +196,7 @@ public class ConexionesServidor implements ActionListener {
 
             ArrayList<String> opciones = new ArrayList<>();
             for (int x = 0; x < 4; x++) {
-                iterator.next().toString();
+                opciones.add(iterator.next().toString());
             }
             String opcCorrecta = iterator.next().toString();
             examen.addPregunta(new Pregunta(enunciado, cuerpo, opciones, opcCorrecta));
@@ -202,16 +204,24 @@ public class ConexionesServidor implements ActionListener {
         examenes.add(examen);
         interfaz.mostrarPreguntasTabla(examen.getInfoPreguntas());
     }
+    
+    public void terminarExamen(){
+        
+    }
 
     public void iniciarTiempo() {
-        s = 100;
+        s = examen.getDuracion();
         ActionListener acciones = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                s--;
-                interfaz.setDuracionRestante(s);
-                String mens = "TIEMPO-RESTANTE:" + s;
-                enviarMensajeMulticast(mens);
+                if (s == 0) {
+                    terminarExamen();
+                } else {
+                    s--;
+                    interfaz.setDuracionRestante(s);
+                    String mens = "TIEMPO-RESTANTE:" + s;
+                    enviarMensajeMulticast(mens);
+                }
             }
         };
         tiempo = new Timer(1000, acciones);

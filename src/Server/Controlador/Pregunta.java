@@ -12,21 +12,18 @@ import java.util.ArrayList;
  * @author villa
  */
 public class Pregunta {
+
     String enunciado, cuerpo;
-    ArrayList <String> opciones;
+    ArrayList<String> opciones;
     String opcCorrecta;
     String estado; // los valores posibles son: "Libre", "Ocupada", "Respondida"
-    String respondidaPor;
-    boolean calificacion; // true si es correcta; false si es incorrecta
 
-    public Pregunta(String enunciado, String cuerpo, ArrayList<String> opciones, String opcCorrecta){
+    public Pregunta(String enunciado, String cuerpo, ArrayList<String> opciones, String opcCorrecta) {
         this.enunciado = enunciado;
         this.cuerpo = cuerpo;
         this.opciones = opciones;
         this.opcCorrecta = opcCorrecta;
-        this.calificacion = false;
         this.estado = "Libre";
-        this.respondidaPor = "NO RESPONDIDA";
     }
 
     public String getEnunciado() {
@@ -53,13 +50,7 @@ public class Pregunta {
         estado = nuevoEstado;
     }
 
-    public void setRespondida(boolean nota, String nombreEstudiante) {
-        estado = "Respondida";
-        calificacion = nota;
-        respondidaPor = nombreEstudiante;
-    }
-    
-    public boolean getDisponible(){
+    public boolean getDisponible() {
         if (estado.equals("Libre")) {
             return true;
         } else {
@@ -67,11 +58,4 @@ public class Pregunta {
         }
     }
 
-    public boolean getCalificacion() {
-        return calificacion;
-    }
-
-    public String getRespondidaPor() {
-        return respondidaPor;
-    }
 }

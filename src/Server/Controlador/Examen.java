@@ -50,7 +50,7 @@ public class Examen {
 
     public ArrayList<String> getInfoPreguntas() {
         ArrayList<String> enunciados = new ArrayList<>();
-        for(Pregunta x: preguntas){
+        for (Pregunta x : preguntas) {
             enunciados.add(x.getEnunciado());
             enunciados.add(x.getCuerpo());
         }

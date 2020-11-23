@@ -13,42 +13,39 @@ import javax.swing.*;
  *
  * @author villa
  */
-public class GUIClient extends JFrame{
+public class GUIClient extends JFrame {
 
     Container contenPPal;
     public JPanel pExamColab, pDerecho, pIzquierdo, pCentro, pCenArri, pCenAbaj;
-    JLabel lPreguntas, lTimeRest; 
+    JLabel lPreguntas, lTimeRest;
     JTextField tRestTime;
     public JComboBox<String> selectPregunta;
     public JButton bObtener, bEnviar, bCancelar;
     public JTextArea tAreaMensajes;
     JScrollPane barras;
     public JRadioButton rBPreguntaA, rBPreguntaB, rBPreguntaC, rBPreguntaD;
-    
-    
-    public GUIClient() 
-    {
-        
+
+    public GUIClient() {
+
         //super("Cliente - Ejemplo");
-        
         pExamColab = new JPanel();
         pDerecho = new JPanel();
         pIzquierdo = new JPanel();
         pCentro = new JPanel();
         pCenArri = new JPanel();
         pCenAbaj = new JPanel();
-                
+
         lPreguntas = new JLabel("Preguntas Disponibles:");
         lTimeRest = new JLabel("Tiempo restante: ");
-        
+
         selectPregunta = new JComboBox<>();
-        
+
         tRestTime = new JTextField();
-        
+
         bObtener = new JButton("Obtener");
         bEnviar = new JButton("Enviar");
         bCancelar = new JButton("Cancelar");
-        
+
         tAreaMensajes = new JTextArea("Mensaje: ");
         barras = new JScrollPane(tAreaMensajes);
 
@@ -56,7 +53,7 @@ public class GUIClient extends JFrame{
         rBPreguntaB = new JRadioButton("");
         rBPreguntaC = new JRadioButton("");
         rBPreguntaD = new JRadioButton("");
-        
+
         ButtonGroup rBgrupo = new ButtonGroup();
         rBgrupo.add(rBPreguntaA);
         rBgrupo.add(rBPreguntaB);
@@ -65,57 +62,56 @@ public class GUIClient extends JFrame{
 
         lPreguntas.setAlignmentX(Component.RIGHT_ALIGNMENT);
         bObtener.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
+
         pIzquierdo.setLayout(new BoxLayout(pIzquierdo, 1));
         pIzquierdo.add(lPreguntas);
-        pIzquierdo.add(Box.createRigidArea(new Dimension(0,30)));
+        pIzquierdo.add(Box.createRigidArea(new Dimension(0, 30)));
         pIzquierdo.add(selectPregunta);
-        pIzquierdo.add(Box.createRigidArea(new Dimension(0,290)));
+        pIzquierdo.add(Box.createRigidArea(new Dimension(0, 290)));
         pIzquierdo.add(bObtener);
-        
+
         pCenArri.setLayout(new BoxLayout(pCenArri, 1));
         pCenArri.add(barras);
-        pCenArri.add(Box.createRigidArea(new Dimension(0,5)));
+        pCenArri.add(Box.createRigidArea(new Dimension(0, 5)));
         pCenArri.add(rBPreguntaA);
-        pCenArri.add(Box.createRigidArea(new Dimension(0,5)));
+        pCenArri.add(Box.createRigidArea(new Dimension(0, 5)));
         pCenArri.add(rBPreguntaB);
-        pCenArri.add(Box.createRigidArea(new Dimension(0,5)));
+        pCenArri.add(Box.createRigidArea(new Dimension(0, 5)));
         pCenArri.add(rBPreguntaC);
-        pCenArri.add(Box.createRigidArea(new Dimension(0,5)));
+        pCenArri.add(Box.createRigidArea(new Dimension(0, 5)));
         pCenArri.add(rBPreguntaD);
-        
+
         pCenAbaj.setLayout(new BoxLayout(pCenAbaj, 2));
-        pCenAbaj.add(Box.createRigidArea(new Dimension(0,10)));
+        pCenAbaj.add(Box.createRigidArea(new Dimension(0, 10)));
         pCenAbaj.add(bEnviar);
-        pCenAbaj.add(Box.createRigidArea(new Dimension(0,10)));
+        pCenAbaj.add(Box.createRigidArea(new Dimension(0, 10)));
         pCenAbaj.add(bCancelar);
-        
+
         pCentro.setLayout(new BoxLayout(pCentro, 1));
         pCentro.add(pCenArri);
         pCentro.add(pCenAbaj);
-        
+
         pDerecho.setLayout(new BoxLayout(pDerecho, 1));
         pDerecho.add(lTimeRest);
         pDerecho.add(tRestTime);
-        pDerecho.add(Box.createRigidArea(new Dimension(0,1000)));
-        
-        pExamColab.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY, 3),"Examen Colaborativo Univalle"));
+        pDerecho.add(Box.createRigidArea(new Dimension(0, 1000)));
+
+        pExamColab.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY, 3), "Examen Colaborativo Univalle"));
         pExamColab.setLayout(new BorderLayout());
-        pExamColab.add(pIzquierdo,BorderLayout.WEST);
-        pExamColab.add(pCentro,BorderLayout.CENTER);
-        pExamColab.add(pDerecho,BorderLayout.EAST);
-        
+        pExamColab.add(pIzquierdo, BorderLayout.WEST);
+        pExamColab.add(pCentro, BorderLayout.CENTER);
+        pExamColab.add(pDerecho, BorderLayout.EAST);
+
         contenPPal = getContentPane();
         contenPPal.setLayout(new GridLayout());
         contenPPal.add(pExamColab);
-        
+
         setTitle("Cliente");
         setSize(800, 500);
         setResizable(false);
         setVisible(true);
-     
+
         //pack();
-        
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
@@ -144,19 +140,19 @@ public class GUIClient extends JFrame{
     }
 
     public String getRespuestaSeleccionada() {
-        if(rBPreguntaA.isSelected()) {
+        if (rBPreguntaA.isSelected()) {
             return "A";
-        } else if(rBPreguntaB.isSelected()) {
+        } else if (rBPreguntaB.isSelected()) {
             return "B";
-        } else if(rBPreguntaC.isSelected()) {
+        } else if (rBPreguntaC.isSelected()) {
             return "C";
-        } else if(rBPreguntaD.isSelected()) {
+        } else if (rBPreguntaD.isSelected()) {
             return "D";
         }
         return "";
     }
-    
-    public void setTimeRest(int segundos){
+
+    public void setTimeRest(int segundos) {
         tRestTime.setText("" + segundos);
     }
 

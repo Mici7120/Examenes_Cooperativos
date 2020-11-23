@@ -6,13 +6,13 @@
 package Server.Controlador;
 
 import Server.Vista.GUIServer;
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,13 +29,14 @@ public class HiloServidor extends Thread {
     private int idCliente;
     private GUIServer interfaz;
     private Examen examen;
+    private ArrayList<InformeExamen> informes;
+    private InformeExamen informe;
     private int numPreguntaSeleccionada;
 
     private MulticastSocket sMulti;
     private DatagramPacket datagrama;
 
-
-    public HiloServidor(Socket socket, int numeroEstudiante, GUIServer interfaz, MulticastSocket multi, DatagramPacket paquete) {
+    public HiloServidor(Socket socket, int numeroEstudiante, GUIServer interfaz, MulticastSocket multi, DatagramPacket paquete, ArrayList<InformeExamen> informes) {
 
         sCliente = socket;
         idCliente = numeroEstudiante;
@@ -43,6 +44,8 @@ public class HiloServidor extends Thread {
         sMulti = multi;
         datagrama = paquete;
         numPreguntaSeleccionada = 0;
+        this.informes = informes;
+        informe = new InformeExamen();
     }
 
     @Override
@@ -73,10 +76,10 @@ public class HiloServidor extends Thread {
                             }
 
                             examen.getPregunta(numPregunta - 1).setEstado("Ocupada");
-                            
+
                             enviarMensaje(opciones);
                             enviarMensajeMulticast(getEstadoPreguntas());
-                        }else{
+                        } else {
                             enviarMensaje("PREGUNTA OCUPADO O RESPONDIDA\n");
                         }
                         break;
@@ -93,8 +96,9 @@ public class HiloServidor extends Thread {
                             String nombreCliente = token.nextToken();
                             Pregunta preguntaSelec = examen.getPregunta(numPreguntaSeleccionada - 1);
                             boolean calificacion = respuestaCliente.equals(preguntaSelec.getOpcCorrecta());
-                            examen.getPregunta(numPreguntaSeleccionada - 1).setRespondida(calificacion, nombreCliente);
-                            enviarMensajeMulticast(getEstadoPreguntas()); 
+                            informe.respuestaCorrecta(nombreCliente, examen.getPregunta(numPreguntaSeleccionada - 1).getEnunciado(), respuestaCliente, calificacion);
+
+                            enviarMensajeMulticast(getEstadoPreguntas());
                             numPreguntaSeleccionada = 0;
                         }
                         break;
@@ -177,8 +181,8 @@ public class HiloServidor extends Thread {
             System.out.println("error a abrir los flujos del cliente " + idCliente);
         }
     }
-    
-    public void setExamen(Examen examen){
+
+    public void setExamen(Examen examen) {
         this.examen = examen;
     }
 

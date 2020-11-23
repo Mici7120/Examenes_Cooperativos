@@ -111,7 +111,7 @@ public class GUIServer extends JFrame {
         pestañas = new JTabbedPane();
         pestañas.add(pConfiExamenes, "ConfigurarExamenes");
         pestañas.add(pIniExamen, "Iniciar Examen");
-        pestañas.add(pInfoExamenes, "Informacion de Examanes Presentados");
+        pestañas.add(pInfoExamenes, "Informacion de Examenes Presentados");
         container.add(pestañas);
 
         setVisible(true);
