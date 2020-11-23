@@ -178,5 +178,8 @@ public class HiloServidor extends Thread {
         }
     }
     
+    public void setExamen(Examen examen){
+        this.examen = examen;
+    }
 
 }

@@ -31,7 +31,7 @@ public class ConexionesServidor implements ActionListener {
 
     private ServerSocket serverSocket;
     private int estudiantes = 0;
-    private HiloServidor hilo;
+    private ArrayList<HiloServidor> hilos;
     private Timer tiempo;
     int s;
 
@@ -53,6 +53,7 @@ public class ConexionesServidor implements ActionListener {
         interfaz.asignarEscuchasBotones(this);
         agregarExamenPrueba();
         examenes = new ArrayList<>();
+        hilos = new ArrayList<>();
         ejecutarServidor();
     }
 
@@ -86,8 +87,9 @@ public class ConexionesServidor implements ActionListener {
                 try {
                     Socket socket = serverSocket.accept(); // permite al servidor aceptar la conexión                    
                     estudiantes++;
-                    hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama);
+                    HiloServidor hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama);
                     hilo.start();
+                    hilos.add(hilo);
                     interfaz.appendEstadoServidor("Conectado el estudiante: " + estudiantes);
 
                 } catch (EOFException excepcionEOF) {
@@ -116,6 +118,11 @@ public class ConexionesServidor implements ActionListener {
                 interfaz.appendEstadoServidor("Ya se ha iniciado el examen\n");
             } else {
                 if (estudiantes <= 3) {
+               
+                    for (HiloServidor x : hilos) {
+                        //x.start();
+                        x.setExamen(examen);
+                    }
                     interfaz.appendEstadoServidor("Se ha iniciado el examen\n");
                     examenIniciado = true;
                     String mensaje = "INICIO: " + examen.numeroPreguntas() + " : " + examen.getNombre();
