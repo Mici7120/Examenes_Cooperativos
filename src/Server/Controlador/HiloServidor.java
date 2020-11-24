@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -45,7 +46,6 @@ public class HiloServidor extends Thread {
         datagrama = paquete;
         numPreguntaSeleccionada = 0;
         this.informes = informes;
-        informe = new InformeExamen();
     }
 
     @Override
@@ -57,14 +57,14 @@ public class HiloServidor extends Thread {
         do {
             try {
                 mensaje = (String) entrada.readObject();
-                interfaz.appendEstadoServidor("\nCliente " + idCliente + ": " + mensaje);
+                interfaz.appendEstadoServidor("\nCliente " + idCliente + ":" + mensaje);
 
-                StringTokenizer token = new StringTokenizer(mensaje, " : ");
+                StringTokenizer token = new StringTokenizer(mensaje, ":");
                 String accion = token.nextToken().trim();
-
+                int numPregunta;
                 switch (accion) {
                     case "PEDIR-PREGUNTA":
-                        int numPregunta = Integer.parseInt(token.nextToken());
+                        numPregunta = Integer.parseInt(token.nextToken());
                         if (examen.getPregunta(numPregunta - 1).getDisponible()) {
                             numPreguntaSeleccionada = numPregunta;
                             String enviarMsg = examen.getPregunta(numPregunta - 1).getEnunciado();
@@ -92,11 +92,16 @@ public class HiloServidor extends Thread {
                         break;
                     case "ENVIAR-RESPUESTA":
                         if (numPreguntaSeleccionada > 0) {
+                            numPregunta = Integer.parseInt(token.nextToken());
+                            System.out.println(numPregunta);
                             String respuestaCliente = token.nextToken();
+                            System.out.println(respuestaCliente);
                             String nombreCliente = token.nextToken();
-                            Pregunta preguntaSelec = examen.getPregunta(numPreguntaSeleccionada - 1);
+                            System.out.println(nombreCliente);
+                            Pregunta preguntaSelec = examen.getPregunta(numPregunta - 1);
+                            System.out.println(preguntaSelec.getEnunciado());
                             boolean calificacion = respuestaCliente.equals(preguntaSelec.getOpcCorrecta());
-                            informe.respuestaCorrecta(nombreCliente, examen.getPregunta(numPreguntaSeleccionada - 1).getEnunciado(), respuestaCliente, calificacion);
+                            informe.registrarRespuesta(nombreCliente, preguntaSelec.getEnunciado(), respuestaCliente, calificacion);
 
                             enviarMensajeMulticast(getEstadoPreguntas());
                             numPreguntaSeleccionada = 0;
@@ -128,7 +133,7 @@ public class HiloServidor extends Thread {
     }
 
     public void cerrar() {
-        System.out.println(" --se invocó el método cerrar");
+        System.out.println("--se invocó el método cerrar");
         try {
             salida.close();
             entrada.close();
@@ -184,6 +189,7 @@ public class HiloServidor extends Thread {
 
     public void setExamen(Examen examen) {
         this.examen = examen;
+        informe = new InformeExamen(examen.getNombre());
     }
 
 }

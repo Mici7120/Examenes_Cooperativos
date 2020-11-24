@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 /**
@@ -41,9 +42,11 @@ public class ConexionesServidor implements ActionListener {
     byte[] vacio = new byte[0];
 
     ArrayList<Examen> examenes;
-    ArrayList<InformeExamen> informes;
     Examen examen;
     boolean examenIniciado;
+
+    InformeExamen informe;
+    ArrayList<InformeExamen> informes;
 
     GUIServer interfaz;
     Fachada fachada;
@@ -131,7 +134,9 @@ public class ConexionesServidor implements ActionListener {
                     byte[] buffer = mensaje.getBytes();
                     datagrama.setData(buffer);
                     datagrama.setLength(buffer.length);
-                    //iniciarTiempo();
+                    iniciarTiempo();
+
+                    informe = new InformeExamen(examen.getNombre());
                     try {
                         socketCast.send(datagrama);
                     } catch (IOException ex) {
@@ -143,6 +148,13 @@ public class ConexionesServidor implements ActionListener {
             }
         } else if (ae.getSource() == interfaz.getBLimpiarAreaEstadoServidor()) {
             interfaz.limpiarAreaEstadoServidor();
+        } else if (ae.getSource() == interfaz.getBConsultarInforme()) {
+            for (InformeExamen x : informes) {
+                if (x.getNombre().equals(interfaz.getInformeSeleccionado())) {
+                    interfaz.printInformeExamem(x.getInforme());
+                    break;
+                }
+            }
         }
 
     }
@@ -150,7 +162,7 @@ public class ConexionesServidor implements ActionListener {
     public void agregarExamenPrueba() {
         examen = new Examen();
         examen.setNombre("Examen de prueba mixto");
-        examen.setDuracion(5);
+        examen.setDuracion(30);
         Pregunta p1 = new Pregunta(
                 "Determine el resultado",
                 "1+1",
@@ -204,10 +216,6 @@ public class ConexionesServidor implements ActionListener {
         examenes.add(examen);
         interfaz.mostrarPreguntasTabla(examen.getInfoPreguntas());
     }
-    
-    public void terminarExamen(){
-        
-    }
 
     public void iniciarTiempo() {
         s = examen.getDuracion();
@@ -216,6 +224,7 @@ public class ConexionesServidor implements ActionListener {
             public void actionPerformed(ActionEvent ae) {
                 if (s == 0) {
                     terminarExamen();
+                    tiempo.stop();
                 } else {
                     s--;
                     interfaz.setDuracionRestante(s);
@@ -226,5 +235,12 @@ public class ConexionesServidor implements ActionListener {
         };
         tiempo = new Timer(1000, acciones);
         tiempo.start();
+    }
+
+    public void terminarExamen() {
+        interfaz.appendEstadoServidor("Se ha acabado el examen\n");
+        informes.add(informe);
+        interfaz.addInformeExamenJCB(informe.getNombre());
+        enviarMensajeMulticast("FIN-EXAMEN");
     }
 }

@@ -11,6 +11,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.StringTokenizer;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -94,6 +95,8 @@ public class LogicaMulticast extends Thread {
                     index++;
                 }
                 break;
+            case "FIN-EXAMEN":
+                logicaCliente.examenTerminado();
         }
         logicaCliente.actualizarCBpreguntas();
     }

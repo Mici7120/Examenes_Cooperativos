@@ -29,6 +29,7 @@ public class LogicaCliente implements ActionListener {
     private GUIClient interfaz;
     private String nombreCliente;
     private ArrayList<EstadoPregunta> estadoPreguntas;
+    private int numPregunta;
 
     LogicaMulticast multicast;
 
@@ -138,14 +139,17 @@ public class LogicaCliente implements ActionListener {
         //interfaz.mostrarDatos(enviarDatos(interfaz.obtenerDato()));
         //interfaz.limpiarCampos();
         if (ae.getSource() == interfaz.bObtener) {
-            String numPregunta = interfaz.selectPregunta.getItemAt(interfaz.selectPregunta.getSelectedIndex());
-            String mensaje = "PEDIR-PREGUNTA :" + numPregunta;
+            String numeroPregunta = interfaz.selectPregunta.getItemAt(interfaz.selectPregunta.getSelectedIndex());
+            String mensaje = "PEDIR-PREGUNTA :" + numeroPregunta;
             actualizarCBpreguntas();
             enviarDatos(mensaje);
             // mostrar mensaje de dialogo si enviarDatos devuelve error
+            
+            //guarda el numero de pregunta la cual esta contestando
+            numPregunta = Integer.parseInt(interfaz.selectPregunta.getItemAt(interfaz.selectPregunta.getSelectedIndex()));
         } else if (ae.getSource() == interfaz.bEnviar) {
             // HACER: validar que respuestaSeleccionada sea diferente a vacio ""
-            String mensaje = "ENVIAR-RESPUESTA :" + interfaz.getRespuestaSeleccionada() + " : " + nombreCliente;
+            String mensaje = "ENVIAR-RESPUESTA:" + numPregunta + ":" + interfaz.getRespuestaSeleccionada() + ":" + nombreCliente;
             enviarDatos(mensaje);
             interfaz.limpiarAreaMensajes();
             interfaz.limpiarOpciones();
@@ -177,5 +181,12 @@ public class LogicaCliente implements ActionListener {
 
     public ArrayList<EstadoPregunta> getEstadoPreguntas() {
         return estadoPreguntas;
+    }
+
+    public void examenTerminado() {
+        JOptionPane.showMessageDialog(null, "Se ha acabado el examen");
+        interfaz.limpiarAreaMensajes();
+        interfaz.limpiarOpciones();
+        estadoPreguntas = new ArrayList<>();
     }
 }

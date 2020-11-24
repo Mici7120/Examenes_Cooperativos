@@ -12,20 +12,30 @@ import java.util.ArrayList;
  * @author villa
  */
 public class InformeExamen {
-    ArrayList<String> informacionPregunta;
+    String nombre;
+    String informeExamen;
     int respuestasCorrectas = 0;
     
-    public InformeExamen(){
-        informacionPregunta = new ArrayList<>();
+    public InformeExamen(String nombre){
+        this.nombre = nombre;
     }
     
-    public void respuestaCorrecta(String nombreEstudiante, String pregunta, String respuestaEstudiante, boolean correcta){
-        String info = "\n" + pregunta + " " + respuestaEstudiante + " " + nombreEstudiante;
+    public String getNombre(){
+        return nombre;
+    }
+    
+    public void registrarRespuesta(String nombreEstudiante, String pregunta, String respuestaEstudiante, boolean correcta){
+        informeExamen += pregunta + " respondida por " +  nombreEstudiante + ", " + respuestaEstudiante;
         if(correcta){
             respuestasCorrectas ++;
-            info += " Respuesta Correcta";
+            informeExamen += " - Respuesta Correcta\n";
         }else{
-            info += " Respuesta Incorrecta";            
+            informeExamen += " - Respuesta Incorrecta\n";            
         }
+    }
+    
+    public String getInforme(){
+        String informe = nombre + "\n" + informeExamen + "Respuestas Correctas: " + respuestasCorrectas;
+        return informe;
     }
 }

@@ -36,13 +36,14 @@ public class GUIServer extends JFrame {
 
     Container container;
     JTabbedPane pestañas;
-    JPanel /*1 Pestaña*/ pConfiExamenes, pConfiguracion,/*2 Pestaña*/ pIniExamen, pInfoExamenes, pCargarExamen, pOpIniExamen;
+    JPanel /*1 Pestaña*/ pConfiExamenes, pConfiguracion,/*2 Pestaña*/ pIniExamen, pInfoExamenes, pCargarExamen, pOpIniExamen, /*3 Pestañ
+            a*/ pOpInfoExamenes;
     JTextField nombreExamen, tfDuracion, estadoTiempo;
-    JTextArea estadoServidor;
+    JTextArea estadoServidor, taInformeExamen;
     JScrollPane jcpEstadoServidor, spTabla;
-    JLabel lNombreExamen, lDuracion, lInfoDuracion;
-    JButton bAgregarExamen, bCargarArchivo, bIniciarExamen, bLimpiarAreaEstadoServidor;
-    JComboBox jcbExamenes;
+    JLabel lNombreExamen, lDuracion, lInfoDuracion, lInformes;
+    JButton bAgregarExamen, bCargarArchivo, bIniciarExamen, bLimpiarAreaEstadoServidor, bConsultarInforme;
+    JComboBox jcbExamenes, jcbInfoExamenes;
     JTable tablePreguntas;
 
     int numeroPregunta = 1;
@@ -105,7 +106,20 @@ public class GUIServer extends JFrame {
         pIniExamen.add(jcpEstadoServidor, BorderLayout.CENTER);
 
         //configuracion de la pestaña informacion de examenes prestados
-        pInfoExamenes = new JPanel();
+        pInfoExamenes = new JPanel(new BorderLayout());
+        taInformeExamen = new JTextArea();
+        
+        pOpInfoExamenes = new JPanel();
+        lInformes = new JLabel("Seleccione Informe");
+        jcbInfoExamenes = new JComboBox();
+        bConsultarInforme = new JButton("Consultar");
+        
+        pOpInfoExamenes.add(lInformes);
+        pOpInfoExamenes.add(jcbInfoExamenes);
+        pOpInfoExamenes.add(bConsultarInforme);
+        
+        pInfoExamenes.add(pOpInfoExamenes, BorderLayout.NORTH);
+        pInfoExamenes.add(taInformeExamen, BorderLayout.CENTER);
 
         //configuracion de las pestañas
         pestañas = new JTabbedPane();
@@ -170,9 +184,17 @@ public class GUIServer extends JFrame {
     public void addExamenJCB(String nombreExamen) {
         jcbExamenes.addItem(nombreExamen);
     }
+    
+    public void addInformeExamenJCB(String nombreInforme){
+        jcbInfoExamenes.addItem(nombreInforme);
+    }
 
     public void appendEstadoServidor(String mensaje) {
         estadoServidor.append(mensaje);
+    }
+    
+    public void printInformeExamem(String mensaje){
+        taInformeExamen.setText(mensaje);
     }
 
     public JButton getbCargarArchivo() {
@@ -181,6 +203,14 @@ public class GUIServer extends JFrame {
 
     public JButton getBLimpiarAreaEstadoServidor() {
         return bLimpiarAreaEstadoServidor;
+    }
+    
+    public JButton getBConsultarInforme(){
+        return bConsultarInforme;
+    }
+    
+    public String getInformeSeleccionado() {
+        return jcbInfoExamenes.getSelectedItem().toString();
     }
 
     public void limpiarCamposPregunta() {
