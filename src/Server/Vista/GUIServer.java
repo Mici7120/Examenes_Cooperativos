@@ -58,7 +58,7 @@ public class GUIServer extends JFrame {
         pConfiExamenes.setLayout(new BorderLayout());
         lNombreExamen = new JLabel("Nombre del examen:");
         nombreExamen = new JTextField();
-        lDuracion = new JLabel("Duracion en segundos");
+        lDuracion = new JLabel("Duracion en minutos");
         bAgregarExamen = new JButton("Agregar Examen");
         bCargarArchivo = new JButton("Cargar Archivo");
 
@@ -108,16 +108,16 @@ public class GUIServer extends JFrame {
         //configuracion de la pestaña informacion de examenes prestados
         pInfoExamenes = new JPanel(new BorderLayout());
         taInformeExamen = new JTextArea();
-        
+
         pOpInfoExamenes = new JPanel();
         lInformes = new JLabel("Seleccione Informe");
         jcbInfoExamenes = new JComboBox();
         bConsultarInforme = new JButton("Consultar");
-        
+
         pOpInfoExamenes.add(lInformes);
         pOpInfoExamenes.add(jcbInfoExamenes);
         pOpInfoExamenes.add(bConsultarInforme);
-        
+
         pInfoExamenes.add(pOpInfoExamenes, BorderLayout.NORTH);
         pInfoExamenes.add(taInformeExamen, BorderLayout.CENTER);
 
@@ -139,6 +139,28 @@ public class GUIServer extends JFrame {
         bAgregarExamen.addActionListener(escucha);
         bIniciarExamen.addActionListener(escucha);
         bLimpiarAreaEstadoServidor.addActionListener(escucha);
+        bConsultarInforme.addActionListener(escucha);
+    }
+
+    //Retornar botones
+    public JButton getBAgregarExamen() {
+        return bAgregarExamen;
+    }
+
+    public JButton getbCargarArchivo() {
+        return bCargarArchivo;
+    }
+    
+    public JButton getBIniciarExamen() {
+        return bIniciarExamen;
+    }
+
+    public JButton getBLimpiarAreaEstadoServidor() {
+        return bLimpiarAreaEstadoServidor;
+    }
+
+    public JButton getBConsultarInforme() {
+        return bConsultarInforme;
     }
 
     public void mostrarPreguntasTabla(ArrayList<String> infoPreguntas) {
@@ -161,16 +183,8 @@ public class GUIServer extends JFrame {
         }
     }
 
-    public JButton getBAgregarExamen() {
-        return bAgregarExamen;
-    }
-
     public String getExamenSeleccionado() {
         return jcbExamenes.getSelectedItem().toString();
-    }
-
-    public JButton getBIniciarExamen() {
-        return bIniciarExamen;
     }
 
     public String getNombreExamen() {
@@ -184,31 +198,19 @@ public class GUIServer extends JFrame {
     public void addExamenJCB(String nombreExamen) {
         jcbExamenes.addItem(nombreExamen);
     }
-    
-    public void addInformeExamenJCB(String nombreInforme){
+
+    public void addInformeExamenJCB(String nombreInforme) {
         jcbInfoExamenes.addItem(nombreInforme);
     }
 
     public void appendEstadoServidor(String mensaje) {
         estadoServidor.append(mensaje);
     }
-    
-    public void printInformeExamem(String mensaje){
+
+    public void printInformeExamem(String mensaje) {
         taInformeExamen.setText(mensaje);
     }
 
-    public JButton getbCargarArchivo() {
-        return bCargarArchivo;
-    }
-
-    public JButton getBLimpiarAreaEstadoServidor() {
-        return bLimpiarAreaEstadoServidor;
-    }
-    
-    public JButton getBConsultarInforme(){
-        return bConsultarInforme;
-    }
-    
     public String getInformeSeleccionado() {
         return jcbInfoExamenes.getSelectedItem().toString();
     }
@@ -222,7 +224,7 @@ public class GUIServer extends JFrame {
         estadoServidor.setText("");
     }
 
-    public void setDuracionRestante(int segundos) {
-        estadoTiempo.setText("" + segundos);
+    public void setDuracionRestante(String tiempo) {
+        estadoTiempo.setText("" + tiempo);
     }
 }

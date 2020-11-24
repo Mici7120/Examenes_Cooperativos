@@ -78,7 +78,8 @@ public class LogicaMulticast extends Thread {
                 logicaCliente.iniciarExamen(cantidadPreguntas);
                 break;
             case "TIEMPO-RESTANTE":
-                interfaz.setTimeRest(Integer.parseInt(mensaje[1]));
+                String tiempo = mensaje[1] + ":" + mensaje[2];
+                interfaz.setTimeRest(tiempo);
                 break;
             case "ACTUALIZAR-PREGUNTA":
                 StringTokenizer estadoPreguntas = new StringTokenizer(mensaje[1], ",");

@@ -15,27 +15,32 @@ public class InformeExamen {
     String nombre;
     String informeExamen;
     int respuestasCorrectas = 0;
+    int totalPreguntas = 0;
     
-    public InformeExamen(String nombre){
-        this.nombre = nombre;
+    public InformeExamen(){
     }
     
+    public void setNombre(String nombre){
+        this.nombre = nombre;
+    }
     public String getNombre(){
         return nombre;
     }
     
     public void registrarRespuesta(String nombreEstudiante, String pregunta, String respuestaEstudiante, boolean correcta){
+        totalPreguntas++;
         informeExamen += pregunta + " respondida por " +  nombreEstudiante + ", " + respuestaEstudiante;
         if(correcta){
             respuestasCorrectas ++;
-            informeExamen += " - Respuesta Correcta\n";
+            informeExamen += " - Respuesta Correcta\n\n";
         }else{
-            informeExamen += " - Respuesta Incorrecta\n";            
+            informeExamen += " - Respuesta Incorrecta\n\n";            
         }
     }
     
     public String getInforme(){
-        String informe = nombre + "\n" + informeExamen + "Respuestas Correctas: " + respuestasCorrectas;
+        double nota = (respuestasCorrectas / totalPreguntas) * 5; 
+        String informe = nombre + "\n\n" + informeExamen + "Respuestas Correctas: " + respuestasCorrectas + "\n\nCalificacion final: " + nota;
         return informe;
     }
 }

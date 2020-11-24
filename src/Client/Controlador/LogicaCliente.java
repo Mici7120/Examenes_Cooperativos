@@ -110,7 +110,6 @@ public class LogicaCliente implements ActionListener {
         } catch (IOException ex) {
             System.out.println("se produjo error al cerrar la conexion");
         }
-
     }
 
     /**
@@ -144,7 +143,7 @@ public class LogicaCliente implements ActionListener {
             actualizarCBpreguntas();
             enviarDatos(mensaje);
             // mostrar mensaje de dialogo si enviarDatos devuelve error
-            
+
             //guarda el numero de pregunta la cual esta contestando
             numPregunta = Integer.parseInt(interfaz.selectPregunta.getItemAt(interfaz.selectPregunta.getSelectedIndex()));
         } else if (ae.getSource() == interfaz.bEnviar) {
@@ -188,5 +187,15 @@ public class LogicaCliente implements ActionListener {
         interfaz.limpiarAreaMensajes();
         interfaz.limpiarOpciones();
         estadoPreguntas = new ArrayList<>();
+        try {
+            //se cierra la conexion
+            entrada.close();
+            salida.close();
+            cliente.close();
+            System.out.println("Se cerró la conexion");
+        } catch (IOException ex) {
+            System.out.println("Se produjo error al cerrar la conexion");
+        }
+
     }
 }

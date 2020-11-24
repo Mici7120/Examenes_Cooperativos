@@ -34,7 +34,7 @@ public class ConexionesServidor implements ActionListener {
     private int estudiantes = 0;
     private ArrayList<HiloServidor> hilos;
     private Timer tiempo;
-    int s;
+    int m, s;
 
     private MulticastSocket socketCast;
 
@@ -59,6 +59,7 @@ public class ConexionesServidor implements ActionListener {
         examenes = new ArrayList<>();
         hilos = new ArrayList<>();
         informes = new ArrayList<>();
+        informe = new InformeExamen();
         ejecutarServidor();
     }
 
@@ -92,10 +93,10 @@ public class ConexionesServidor implements ActionListener {
                 try {
                     Socket socket = serverSocket.accept(); // permite al servidor aceptar la conexión                    
                     estudiantes++;
-                    HiloServidor hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama, informes);
+                    HiloServidor hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama);
                     hilo.start();
                     hilos.add(hilo);
-                    interfaz.appendEstadoServidor("Conectado el estudiante: " + estudiantes);
+                    interfaz.appendEstadoServidor("Conectado el estudiante: " + estudiantes + "\n");
 
                 } catch (EOFException excepcionEOF) {
                     System.out.println("\nServidor termino la conexion");
@@ -123,10 +124,12 @@ public class ConexionesServidor implements ActionListener {
                 interfaz.appendEstadoServidor("Ya se ha iniciado el examen\n");
             } else {
                 if (estudiantes <= 3) {
-
+                    informe = new InformeExamen();
+                    informe.setNombre(examen.getNombre());
                     for (HiloServidor x : hilos) {
                         //x.start();
                         x.setExamen(examen);
+                        x.setInforme(informe);
                     }
                     interfaz.appendEstadoServidor("Se ha iniciado el examen\n");
                     examenIniciado = true;
@@ -136,7 +139,6 @@ public class ConexionesServidor implements ActionListener {
                     datagrama.setLength(buffer.length);
                     iniciarTiempo();
 
-                    informe = new InformeExamen(examen.getNombre());
                     try {
                         socketCast.send(datagrama);
                     } catch (IOException ex) {
@@ -149,9 +151,11 @@ public class ConexionesServidor implements ActionListener {
         } else if (ae.getSource() == interfaz.getBLimpiarAreaEstadoServidor()) {
             interfaz.limpiarAreaEstadoServidor();
         } else if (ae.getSource() == interfaz.getBConsultarInforme()) {
+            System.out.println("1." + informes.get(0).getInforme());
             for (InformeExamen x : informes) {
                 if (x.getNombre().equals(interfaz.getInformeSeleccionado())) {
                     interfaz.printInformeExamem(x.getInforme());
+                    System.out.println(x.getInforme());
                     break;
                 }
             }
@@ -162,7 +166,7 @@ public class ConexionesServidor implements ActionListener {
     public void agregarExamenPrueba() {
         examen = new Examen();
         examen.setNombre("Examen de prueba mixto");
-        examen.setDuracion(30);
+        examen.setDuracion(1);
         Pregunta p1 = new Pregunta(
                 "Determine el resultado",
                 "1+1",
@@ -218,18 +222,22 @@ public class ConexionesServidor implements ActionListener {
     }
 
     public void iniciarTiempo() {
-        s = examen.getDuracion();
+        m = examen.getDuracion();
+        s = 0;
         ActionListener acciones = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if (s == 0) {
+                if (m == 0 && s == 0) {
                     terminarExamen();
                     tiempo.stop();
-                } else {
+                } else if (s > 0) {
                     s--;
-                    interfaz.setDuracionRestante(s);
-                    String mens = "TIEMPO-RESTANTE:" + s;
+                    interfaz.setDuracionRestante(m + ":" + s);
+                    String mens = "TIEMPO-RESTANTE:" + m + ":" + s;
                     enviarMensajeMulticast(mens);
+                } else {
+                    m--;
+                    s = 20;
                 }
             }
         };
@@ -241,6 +249,11 @@ public class ConexionesServidor implements ActionListener {
         interfaz.appendEstadoServidor("Se ha acabado el examen\n");
         informes.add(informe);
         interfaz.addInformeExamenJCB(informe.getNombre());
-        enviarMensajeMulticast("FIN-EXAMEN");
+        enviarMensajeMulticast("FIN-EXAMEN:");
+    }
+
+    public void enviarInformeFinal() {
+        String mensaje = "INFORME:" + informe.getInforme();
+        enviarMensajeMulticast(mensaje);
     }
 }

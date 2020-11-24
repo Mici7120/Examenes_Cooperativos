@@ -16,14 +16,14 @@ public class Pregunta {
     String enunciado, cuerpo;
     ArrayList<String> opciones;
     String opcCorrecta;
-    String estado; // los valores posibles son: "Libre", "Ocupada", "Respondida"
+    String estado; // los valores posibles son: "LIBRE", "OCUPADA", "RESPONDIDA"
 
     public Pregunta(String enunciado, String cuerpo, ArrayList<String> opciones, String opcCorrecta) {
         this.enunciado = enunciado;
         this.cuerpo = cuerpo;
         this.opciones = opciones;
         this.opcCorrecta = opcCorrecta;
-        this.estado = "Libre";
+        this.estado = "LIBRE";
     }
 
     public String getEnunciado() {
@@ -51,7 +51,7 @@ public class Pregunta {
     }
 
     public boolean getDisponible() {
-        if (estado.equals("Libre")) {
+        if (estado.equals("LIBRE")) {
             return true;
         } else {
             return false;
