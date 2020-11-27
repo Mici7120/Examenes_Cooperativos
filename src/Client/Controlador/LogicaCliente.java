@@ -41,6 +41,7 @@ public class LogicaCliente implements ActionListener {
         nombreCliente = null;
         interfaz.asignarEscuchasBotones(this);
         estadoPreguntas = new ArrayList<>();
+        numPregunta = 0;
         //Para hacer obligatorio el ingresar nombre cliente
         if(nombreCliente == null)  {
             nombreCliente="";
@@ -152,14 +153,12 @@ public class LogicaCliente implements ActionListener {
      * método para poner eventos a los botones 
      */
     public void actionPerformed(ActionEvent ae) {
-        //interfaz.mostrarDatos(enviarDatos(interfaz.obtenerDato()));
-        //interfaz.limpiarCampos();
-        if (ae.getSource() == interfaz.getBObtenerPregunta()) {
+        
+        if (ae.getSource() == interfaz.getBObtenerPregunta() && numPregunta == 0) {
             //guarda el numero de pregunta la cual esta contestando
             numPregunta = Integer.parseInt(interfaz.getComboBoxSelectPregunta().getItemAt(interfaz.getComboBoxSelectPregunta().getSelectedIndex()));
             String mensaje = "PEDIR-PREGUNTA:" + numPregunta;
             enviarDatos(mensaje);
-            // mostrar mensaje de dialogo si enviarDatos devuelve error
             
         } else if (ae.getSource() == interfaz.getBEnviarPregunta()) {
             if(interfaz.getRespuestaSeleccionada() == "") {
@@ -167,6 +166,7 @@ public class LogicaCliente implements ActionListener {
             }else {
                 String mensaje = "ENVIAR-RESPUESTA:" + numPregunta + ":" + interfaz.getRespuestaSeleccionada() + ":" + nombreCliente;
                 enviarDatos(mensaje);
+                numPregunta = 0;
                 interfaz.limpiarAreaMensajes();
                 interfaz.LimpiarSelecRButton();
                 interfaz.limpiarOpciones(); 
@@ -175,6 +175,7 @@ public class LogicaCliente implements ActionListener {
         } else if (ae.getSource() == interfaz.getBCancelarPregunta()) {
             String mensaje = "CANCELAR-PREGUNTA:"  + numPregunta;
             enviarDatos(mensaje);
+            numPregunta = 0;
             interfaz.limpiarAreaMensajes();
             interfaz.LimpiarSelecRButton();
             interfaz.limpiarOpciones();
