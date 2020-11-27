@@ -38,6 +38,9 @@ public class LogicaCliente implements ActionListener {
         nombreCliente = JOptionPane.showInputDialog("Ingrese su nombre: ");
         interfaz.asignarEscuchasBotones(this);
         estadoPreguntas = new ArrayList<>();
+        while(nombreCliente.equals("")) {
+            nombreCliente = JOptionPane.showInputDialog("Ingrese su nombre: ");
+        }
         
     }
 
