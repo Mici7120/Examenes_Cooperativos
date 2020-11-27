@@ -32,12 +32,16 @@ public class LogicaCliente implements ActionListener {
     private int numPregunta;
 
     LogicaMulticast multicast;
-
+/**
+ * Constructor de logicaCliente
+ * @param interfaz 
+ */
     public LogicaCliente(GUIClient interfaz) {
         this.interfaz = interfaz;
         nombreCliente = null;
         interfaz.asignarEscuchasBotones(this);
         estadoPreguntas = new ArrayList<>();
+        //Para hacer obligatorio el ingresar nombre cliente
         if(nombreCliente == null)  {
             nombreCliente="";
             while(nombreCliente.equals("")) {
@@ -50,9 +54,8 @@ public class LogicaCliente implements ActionListener {
     }
 
     /**
-     * Método que conecta al cliente con el servidor ycrea los flujos de entrada
+     * Método que conecta al cliente con el servidor y crea los flujos de entrada
      * y salida para comunicarse con él
-     *
      * @param direccionServer
      */
     public void conectar(String direccionServer) {
@@ -85,6 +88,10 @@ public class LogicaCliente implements ActionListener {
         escucharAlServidor();
     }
 
+    /**
+     * método para escuchar los mensajes del servidor y 
+     * agregarlos al area de texto y a las opciones
+     */
     public void escucharAlServidor() {
         System.out.println("estoy en escuchar al servidor");
         String mensajeRecibido = "";
@@ -122,8 +129,7 @@ public class LogicaCliente implements ActionListener {
 
     /**
      * método que envia al servidor un mensaje
-     *
-     * @param mensaje el mensaje que se va a enviaar al servidor
+     * @param mensaje el mensaje que se va a enviar al servidor
      * @return el mensaje para ser mostrado por pantalla
      */
     public String enviarDatos(String mensaje) {
@@ -142,6 +148,9 @@ public class LogicaCliente implements ActionListener {
     } // fin del método enviarDatos
 
     @Override
+    /**
+     * método para poner eventos a los botones 
+     */
     public void actionPerformed(ActionEvent ae) {
         //interfaz.mostrarDatos(enviarDatos(interfaz.obtenerDato()));
         //interfaz.limpiarCampos();
@@ -153,12 +162,16 @@ public class LogicaCliente implements ActionListener {
             // mostrar mensaje de dialogo si enviarDatos devuelve error
             
         } else if (ae.getSource() == interfaz.getBEnviarPregunta()) {
-            // HACER: validar que respuestaSeleccionada sea diferente a vacio ""
-            String mensaje = "ENVIAR-RESPUESTA:" + numPregunta + ":" + interfaz.getRespuestaSeleccionada() + ":" + nombreCliente;
-            enviarDatos(mensaje);
-            interfaz.limpiarAreaMensajes();
-            interfaz.LimpiarSelecRButton();
-            interfaz.limpiarOpciones();
+            if(interfaz.getRespuestaSeleccionada() == "") {
+                JOptionPane.showMessageDialog(null, "No ha seleccionado ninguna respuesta");
+            }else {
+                String mensaje = "ENVIAR-RESPUESTA:" + numPregunta + ":" + interfaz.getRespuestaSeleccionada() + ":" + nombreCliente;
+                enviarDatos(mensaje);
+                interfaz.limpiarAreaMensajes();
+                interfaz.LimpiarSelecRButton();
+                interfaz.limpiarOpciones(); 
+            }
+            
         } else if (ae.getSource() == interfaz.getBCancelarPregunta()) {
             String mensaje = "CANCELAR-PREGUNTA:"  + numPregunta;
             enviarDatos(mensaje);
@@ -168,6 +181,11 @@ public class LogicaCliente implements ActionListener {
         }
     }
 
+    /**
+     * método que inicia el examen en el cliente diciendo su cantidad de 
+     * preguntas y añadiendo las preguntas al listado de preguntas a seleccionar
+     * @param cantidadPreguntas 
+     */
     public void iniciarExamen(int cantidadPreguntas) {
         interfaz.getAreaMensajes().append("\nInicia examen.\nCantidad de preguntas: " + cantidadPreguntas);
         for (int i = 0; i < cantidadPreguntas; i++) {
@@ -176,6 +194,9 @@ public class LogicaCliente implements ActionListener {
         actualizarCBpreguntas();
     }
 
+    /**
+     * método que actualiza la lista de preguntas que se pueden seleccionar
+     */
     public void actualizarCBpreguntas() {
         interfaz.getComboBoxSelectPregunta().removeAllItems();
         for (EstadoPregunta pregunta : estadoPreguntas) {
@@ -186,10 +207,18 @@ public class LogicaCliente implements ActionListener {
         interfaz.getPanelIzquierdo().revalidate();
     }
 
+    /**
+     * metodo que retorna la lista de estados de las preguntas
+     * @return ArrayList de estados de las preguntas
+     */
     public ArrayList<EstadoPregunta> getEstadoPreguntas() {
         return estadoPreguntas;
     }
 
+    /**
+     * método que termina el examen al cliente, limpiando areas, 
+     * opciones y lista de preguntas además de terminar la conexion
+     */
     public void examenTerminado() {
         JOptionPane.showMessageDialog(null, "Se ha acabado el examen");
         interfaz.limpiarAreaMensajes();
