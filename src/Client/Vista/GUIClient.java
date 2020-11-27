@@ -24,6 +24,7 @@ public class GUIClient extends JFrame {
     JTextArea tAreaMensajes;
     JScrollPane barras;
     JRadioButton rBPreguntaA, rBPreguntaB, rBPreguntaC, rBPreguntaD;
+    ButtonGroup rBgrupo;
 
     public GUIClient() {
 
@@ -54,7 +55,7 @@ public class GUIClient extends JFrame {
         rBPreguntaC = new JRadioButton("");
         rBPreguntaD = new JRadioButton("");
 
-        ButtonGroup rBgrupo = new ButtonGroup();
+        rBgrupo = new ButtonGroup();
         rBgrupo.add(rBPreguntaA);
         rBgrupo.add(rBPreguntaB);
         rBgrupo.add(rBPreguntaC);
@@ -130,6 +131,10 @@ public class GUIClient extends JFrame {
     
     public JButton getBCancelarPregunta() {
         return bCancelar;
+    }
+    
+    public void LimpiarSelecRButton() {
+         rBgrupo.clearSelection();
     }
     
     public JComboBox<String> getComboBoxSelectPregunta() {
