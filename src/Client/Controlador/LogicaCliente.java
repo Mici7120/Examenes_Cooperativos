@@ -38,6 +38,7 @@ public class LogicaCliente implements ActionListener {
         nombreCliente = JOptionPane.showInputDialog("Ingrese su nombre: ");
         interfaz.asignarEscuchasBotones(this);
         estadoPreguntas = new ArrayList<>();
+        
     }
 
     /**
@@ -151,12 +152,14 @@ public class LogicaCliente implements ActionListener {
             String mensaje = "ENVIAR-RESPUESTA :" + numPregunta + ":" + interfaz.getRespuestaSeleccionada() + ":" + nombreCliente;
             enviarDatos(mensaje);
             interfaz.limpiarAreaMensajes();
+            interfaz.LimpiarSelecRButton();
             interfaz.limpiarOpciones();
         } else if (ae.getSource() == interfaz.getBCancelarPregunta()) {
             String numeroPregunta = interfaz.getComboBoxSelectPregunta().getItemAt(interfaz.getComboBoxSelectPregunta().getSelectedIndex());
             String mensaje = "CANCELAR-PREGUNTA :"  + numeroPregunta;
             enviarDatos(mensaje);
             interfaz.limpiarAreaMensajes();
+            interfaz.LimpiarSelecRButton();
             interfaz.limpiarOpciones();
         }
     }
