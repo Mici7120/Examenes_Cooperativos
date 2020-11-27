@@ -16,14 +16,14 @@ import javax.swing.*;
 public class GUIClient extends JFrame {
 
     Container contenPPal;
-    public JPanel pExamColab, pDerecho, pIzquierdo, pCentro, pCenArri, pCenAbaj;
+    JPanel pExamColab, pDerecho, pIzquierdo, pCentro, pCenArri, pCenAbaj;
     JLabel lPreguntas, lTimeRest;
     JTextField tRestTime;
-    public JComboBox<String> selectPregunta;
-    public JButton bObtener, bEnviar, bCancelar;
-    public JTextArea tAreaMensajes;
+    JComboBox<String> selectPregunta;
+    JButton bObtener, bEnviar, bCancelar;
+    JTextArea tAreaMensajes;
     JScrollPane barras;
-    public JRadioButton rBPreguntaA, rBPreguntaB, rBPreguntaC, rBPreguntaD;
+    JRadioButton rBPreguntaA, rBPreguntaB, rBPreguntaC, rBPreguntaD;
 
     public GUIClient() {
 
@@ -120,6 +120,30 @@ public class GUIClient extends JFrame {
         bEnviar.addActionListener(escucha);
         bCancelar.addActionListener(escucha);
     }
+    public JButton getBObtenerPregunta() {
+        return bObtener;
+    }
+    
+    public JButton getBEnviarPregunta() {
+        return bEnviar;
+    }
+    
+    public JButton getBCancelarPregunta() {
+        return bCancelar;
+    }
+    
+    public JComboBox<String> getComboBoxSelectPregunta() {
+        return selectPregunta;
+    }
+    
+    public JTextArea getAreaMensajes() {
+        return tAreaMensajes;
+    }
+    
+    public JPanel getPanelIzquierdo() {
+        return pIzquierdo;
+    }
+    
 
     public void setRBOpciones(String opcionA, String opcionB, String opcionC, String opcionD) {
         rBPreguntaA.setText("A. " + opcionA);
@@ -129,7 +153,7 @@ public class GUIClient extends JFrame {
     }
 
     public void limpiarAreaMensajes() {
-        tAreaMensajes.setText("");
+        tAreaMensajes.setText("Mensaje: ");
     }
 
     public void limpiarOpciones() {

@@ -85,13 +85,13 @@ public class LogicaCliente implements ActionListener {
                 //interfaz.mostrarDatos("\n" + mensajeRecibido);
                 System.out.println(mensajeRecibido);
                 if (mensajeRecibido.contains("PREGUNTA")) {
-                    interfaz.tAreaMensajes.setText(mensajeRecibido);
+                    interfaz.getAreaMensajes().setText(mensajeRecibido);
                 } else if (mensajeRecibido.contains("OPCIONES")) {
                     StringTokenizer token = new StringTokenizer(mensajeRecibido, "\n");
                     token.nextToken();
                     interfaz.setRBOpciones(token.nextToken(), token.nextToken(), token.nextToken(), token.nextToken());
                 } else {
-                    interfaz.tAreaMensajes.append(mensajeRecibido);
+                    interfaz.getAreaMensajes().append(mensajeRecibido);
                 }
 
             } catch (ClassNotFoundException ene) {
@@ -137,23 +137,24 @@ public class LogicaCliente implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         //interfaz.mostrarDatos(enviarDatos(interfaz.obtenerDato()));
         //interfaz.limpiarCampos();
-        if (ae.getSource() == interfaz.bObtener) {
-            String numeroPregunta = interfaz.selectPregunta.getItemAt(interfaz.selectPregunta.getSelectedIndex());
+        if (ae.getSource() == interfaz.getBObtenerPregunta()) {
+            String numeroPregunta = interfaz.getComboBoxSelectPregunta().getItemAt(interfaz.getComboBoxSelectPregunta().getSelectedIndex());
             String mensaje = "PEDIR-PREGUNTA :" + numeroPregunta;
             actualizarCBpreguntas();
             enviarDatos(mensaje);
             // mostrar mensaje de dialogo si enviarDatos devuelve error
 
             //guarda el numero de pregunta la cual esta contestando
-            numPregunta = Integer.parseInt(interfaz.selectPregunta.getItemAt(interfaz.selectPregunta.getSelectedIndex()));
-        } else if (ae.getSource() == interfaz.bEnviar) {
+            numPregunta = Integer.parseInt(interfaz.getComboBoxSelectPregunta().getItemAt(interfaz.getComboBoxSelectPregunta().getSelectedIndex()));
+        } else if (ae.getSource() == interfaz.getBEnviarPregunta()) {
             // HACER: validar que respuestaSeleccionada sea diferente a vacio ""
-            String mensaje = "ENVIAR-RESPUESTA:" + numPregunta + ":" + interfaz.getRespuestaSeleccionada() + ":" + nombreCliente;
+            String mensaje = "ENVIAR-RESPUESTA :" + numPregunta + ":" + interfaz.getRespuestaSeleccionada() + ":" + nombreCliente;
             enviarDatos(mensaje);
             interfaz.limpiarAreaMensajes();
             interfaz.limpiarOpciones();
-        } else if (ae.getSource() == interfaz.bCancelar) {
-            String mensaje = "CANCELAR-PREGUNTA";
+        } else if (ae.getSource() == interfaz.getBCancelarPregunta()) {
+            String numeroPregunta = interfaz.getComboBoxSelectPregunta().getItemAt(interfaz.getComboBoxSelectPregunta().getSelectedIndex());
+            String mensaje = "CANCELAR-PREGUNTA :"  + numeroPregunta;
             enviarDatos(mensaje);
             interfaz.limpiarAreaMensajes();
             interfaz.limpiarOpciones();
@@ -161,7 +162,7 @@ public class LogicaCliente implements ActionListener {
     }
 
     public void iniciarExamen(int cantidadPreguntas) {
-        interfaz.tAreaMensajes.append("\nInicia examen.\nCantidad de preguntas: " + cantidadPreguntas);
+        interfaz.getAreaMensajes().append("\nInicia examen.\nCantidad de preguntas: " + cantidadPreguntas);
         for (int i = 0; i < cantidadPreguntas; i++) {
             estadoPreguntas.add(new EstadoPregunta(i + 1, true));
         }
@@ -169,13 +170,13 @@ public class LogicaCliente implements ActionListener {
     }
 
     public void actualizarCBpreguntas() {
-        interfaz.selectPregunta.removeAllItems();
+        interfaz.getComboBoxSelectPregunta().removeAllItems();
         for (EstadoPregunta pregunta : estadoPreguntas) {
             if (pregunta.esVisible()) {
-                interfaz.selectPregunta.addItem(Integer.toString(pregunta.getNumero()));
+                interfaz.getComboBoxSelectPregunta().addItem(Integer.toString(pregunta.getNumero()));
             }
         }
-        interfaz.pIzquierdo.revalidate();
+        interfaz.getPanelIzquierdo().revalidate();
     }
 
     public ArrayList<EstadoPregunta> getEstadoPreguntas() {
