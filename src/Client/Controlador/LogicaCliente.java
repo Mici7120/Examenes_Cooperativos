@@ -35,7 +35,7 @@ public class LogicaCliente implements ActionListener {
 
     public LogicaCliente(GUIClient interfaz) {
         this.interfaz = interfaz;
-        nombreCliente = JOptionPane.showInputDialog("Ingrese su nombre: ");
+        nombreCliente = null;
         interfaz.asignarEscuchasBotones(this);
         estadoPreguntas = new ArrayList<>();
         if(nombreCliente == null)  {
@@ -47,8 +47,6 @@ public class LogicaCliente implements ActionListener {
                 }
             }
         }
-        
-        
     }
 
     /**
@@ -93,7 +91,6 @@ public class LogicaCliente implements ActionListener {
         do {
             try {
                 mensajeRecibido = (String) entrada.readObject();
-                //interfaz.mostrarDatos("\n" + mensajeRecibido);
                 System.out.println(mensajeRecibido);
                 if (mensajeRecibido.contains("PREGUNTA")) {
                     interfaz.getAreaMensajes().setText(mensajeRecibido);
