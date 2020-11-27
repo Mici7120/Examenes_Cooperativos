@@ -9,8 +9,11 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -23,6 +26,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
 
 /**
  *
@@ -68,7 +72,13 @@ public class GUIServer extends JFrame {
         pCargarExamen.add(bCargarArchivo, BorderLayout.WEST);
         pCargarExamen.add(spTabla, BorderLayout.CENTER);
 
-        tfDuracion = new JFormattedTextField();
+        MaskFormatter mask;
+        try {
+            mask = new MaskFormatter("##");
+            tfDuracion = new JFormattedTextField(mask);
+        } catch (ParseException ex) {
+            Logger.getLogger(GUIServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         pConfiguracion = new JPanel(new GridLayout(1, 4, 25, 0));
         pConfiguracion.add(lNombreExamen);
