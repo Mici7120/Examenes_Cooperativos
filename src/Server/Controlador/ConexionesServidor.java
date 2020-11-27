@@ -44,6 +44,7 @@ public class ConexionesServidor implements ActionListener {
     ArrayList<Examen> examenes;
     Examen examen;
     boolean examenIniciado;
+    boolean archivoCargado;
 
     InformeExamen informe;
     ArrayList<InformeExamen> informes;
@@ -113,17 +114,21 @@ public class ConexionesServidor implements ActionListener {
         if (ae.getSource() == interfaz.getbCargarArchivo()) {
             cargarArchivo();
         } else if (ae.getSource() == interfaz.getBAgregarExamen()) {
-            examen.setNombre(interfaz.getNombreExamen());
-            examen.setDuracion(interfaz.getDuracion());
-            examenes.add(examen);
-            interfaz.addExamenJCB(interfaz.getNombreExamen());
-            interfaz.limpiarCamposPregunta();
-            interfaz.borrarTabla();
+            if (Validaciones.validarBotonAgregarExamen(interfaz) && archivoCargado) {
+                examen.setNombre(interfaz.getNombreExamen());
+                examen.setDuracion(Integer.parseInt(interfaz.getDuracion()));
+                examenes.add(examen);
+                interfaz.addExamenJCB(interfaz.getNombreExamen());
+                interfaz.limpiarCamposPregunta();
+                interfaz.borrarTabla();
+            } else {
+                JOptionPane.showMessageDialog(interfaz, "Por favor complete los campos y cargue el archivo correctamente");
+            }
         } else if (ae.getSource() == interfaz.getBIniciarExamen()) {
             if (examenIniciado) {
                 interfaz.appendEstadoServidor("Ya se ha iniciado el examen\n");
             } else {
-                if (estudiantes <= 3) {
+                if (estudiantes > 0) {
                     informe = new InformeExamen();
                     informe.setNombre(examen.getNombre());
                     for (HiloServidor x : hilos) {
@@ -151,13 +156,17 @@ public class ConexionesServidor implements ActionListener {
         } else if (ae.getSource() == interfaz.getBLimpiarAreaEstadoServidor()) {
             interfaz.limpiarAreaEstadoServidor();
         } else if (ae.getSource() == interfaz.getBConsultarInforme()) {
-            System.out.println("1." + informes.get(0).getInforme());
-            for (InformeExamen x : informes) {
-                if (x.getNombre().equals(interfaz.getInformeSeleccionado())) {
-                    interfaz.printInformeExamem(x.getInforme());
-                    System.out.println(x.getInforme());
-                    break;
+            if (!informes.isEmpty()) {
+                for (InformeExamen x : informes) {
+                    if (x.getNombre().equals(interfaz.getInformeSeleccionado())) {
+                        interfaz.printInformeExamem(x.getInforme());
+                        fachada.guardarInforme(x.getInforme());
+                        System.out.println(x.getInforme());
+                        break;
+                    }
                 }
+            } else {
+                JOptionPane.showMessageDialog(interfaz, "No hay informes por consultar");
             }
         }
 
@@ -206,19 +215,24 @@ public class ConexionesServidor implements ActionListener {
         ArrayList<String> datos = fachada.cargarArchivo();
         examen = new Examen();
         Iterator iterator = datos.iterator();
-        while (iterator.hasNext()) {
-            String enunciado = iterator.next().toString();
-            String cuerpo = iterator.next().toString();
+        try {
+            while (iterator.hasNext()) {
+                String enunciado = iterator.next().toString();
+                String cuerpo = iterator.next().toString();
 
-            ArrayList<String> opciones = new ArrayList<>();
-            for (int x = 0; x < 4; x++) {
-                opciones.add(iterator.next().toString());
+                ArrayList<String> opciones = new ArrayList<>();
+                for (int x = 0; x < 4; x++) {
+                    opciones.add(iterator.next().toString());
+                }
+                String opcCorrecta = iterator.next().toString();
+                examen.addPregunta(new Pregunta(enunciado, cuerpo, opciones, opcCorrecta));
             }
-            String opcCorrecta = iterator.next().toString();
-            examen.addPregunta(new Pregunta(enunciado, cuerpo, opciones, opcCorrecta));
+            examenes.add(examen);
+            interfaz.mostrarPreguntasTabla(examen.getInfoPreguntas());
+            archivoCargado = true;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(interfaz, "Error al cargar el archivo");
         }
-        examenes.add(examen);
-        interfaz.mostrarPreguntasTabla(examen.getInfoPreguntas());
     }
 
     public void iniciarTiempo() {

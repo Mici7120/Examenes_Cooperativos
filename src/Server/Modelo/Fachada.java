@@ -7,12 +7,17 @@ package Server.Modelo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -53,5 +58,22 @@ public class Fachada {
         }
 
         return null;
+    }
+
+    public void guardarInforme(String informe) {
+        archivo = new File("C:\\Users\\camil\\Desktop\\Git\\Examenes_Cooperativos");
+        try {
+            FileWriter guardar = new FileWriter(archivo);
+            PrintWriter writer = new PrintWriter(guardar);
+            StringTokenizer token = new StringTokenizer(informe, "\n");
+            writer.print(token.nextToken() + "\n\n");
+            while(token.hasMoreTokens()){
+                writer.println(token.nextToken());
+            }
+            
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Error al guardar el archivo");
+        }
+        
     }
 }

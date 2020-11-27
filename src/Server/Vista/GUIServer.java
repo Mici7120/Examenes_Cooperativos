@@ -9,11 +9,8 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -26,7 +23,6 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.MaskFormatter;
 
 /**
  *
@@ -150,7 +146,7 @@ public class GUIServer extends JFrame {
     public JButton getbCargarArchivo() {
         return bCargarArchivo;
     }
-    
+
     public JButton getBIniciarExamen() {
         return bIniciarExamen;
     }
@@ -191,8 +187,8 @@ public class GUIServer extends JFrame {
         return nombreExamen.getText();
     }
 
-    public int getDuracion() {
-        return Integer.parseInt(tfDuracion.getText());
+    public String getDuracion() {
+        return tfDuracion.getText();
     }
 
     public void addExamenJCB(String nombreExamen) {
