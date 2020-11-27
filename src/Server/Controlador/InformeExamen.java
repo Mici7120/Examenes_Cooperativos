@@ -16,7 +16,7 @@ public class InformeExamen {
     String nombre;
     String informeExamen;
     int respuestasCorrectas = 0;
-    int totalPreguntas = 0;
+    int totalPreguntas = 0; 
 
     public InformeExamen() {
         nombre = "";

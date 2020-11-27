@@ -45,7 +45,7 @@ public class Examen {
     }
 
     public Pregunta getPregunta(int indice) {
-        return preguntas.get(indice);
+        return preguntas.get(indice - 1);
     }
 
     public ArrayList<String> getInfoPreguntas() {

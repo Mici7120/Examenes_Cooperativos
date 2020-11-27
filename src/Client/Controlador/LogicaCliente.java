@@ -138,23 +138,20 @@ public class LogicaCliente implements ActionListener {
         //interfaz.mostrarDatos(enviarDatos(interfaz.obtenerDato()));
         //interfaz.limpiarCampos();
         if (ae.getSource() == interfaz.getBObtenerPregunta()) {
-            String numeroPregunta = interfaz.getComboBoxSelectPregunta().getItemAt(interfaz.getComboBoxSelectPregunta().getSelectedIndex());
-            String mensaje = "PEDIR-PREGUNTA :" + numeroPregunta;
-            actualizarCBpreguntas();
-            enviarDatos(mensaje);
-            // mostrar mensaje de dialogo si enviarDatos devuelve error
-
             //guarda el numero de pregunta la cual esta contestando
             numPregunta = Integer.parseInt(interfaz.getComboBoxSelectPregunta().getItemAt(interfaz.getComboBoxSelectPregunta().getSelectedIndex()));
+            String mensaje = "PEDIR-PREGUNTA:" + numPregunta;
+            enviarDatos(mensaje);
+            // mostrar mensaje de dialogo si enviarDatos devuelve error
+            
         } else if (ae.getSource() == interfaz.getBEnviarPregunta()) {
             // HACER: validar que respuestaSeleccionada sea diferente a vacio ""
-            String mensaje = "ENVIAR-RESPUESTA :" + numPregunta + ":" + interfaz.getRespuestaSeleccionada() + ":" + nombreCliente;
+            String mensaje = "ENVIAR-RESPUESTA:" + numPregunta + ":" + interfaz.getRespuestaSeleccionada() + ":" + nombreCliente;
             enviarDatos(mensaje);
             interfaz.limpiarAreaMensajes();
             interfaz.limpiarOpciones();
         } else if (ae.getSource() == interfaz.getBCancelarPregunta()) {
-            String numeroPregunta = interfaz.getComboBoxSelectPregunta().getItemAt(interfaz.getComboBoxSelectPregunta().getSelectedIndex());
-            String mensaje = "CANCELAR-PREGUNTA :"  + numeroPregunta;
+            String mensaje = "CANCELAR-PREGUNTA:"  + numPregunta;
             enviarDatos(mensaje);
             interfaz.limpiarAreaMensajes();
             interfaz.limpiarOpciones();

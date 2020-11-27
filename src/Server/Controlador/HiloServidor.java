@@ -62,16 +62,16 @@ public class HiloServidor extends Thread {
                 int numPreguntaSeleccionada = Integer.parseInt(token.nextToken());;
                 switch (accion) {
                     case "PEDIR-PREGUNTA":
-                        if (examen.getPregunta(numPreguntaSeleccionada - 1).getDisponible()) {
-                            String enviarMsg = examen.getPregunta(numPreguntaSeleccionada - 1).getEnunciado();
-                            enviarMsg += "\n" + examen.getPregunta(numPreguntaSeleccionada - 1).getCuerpo();
+                        if (examen.getPregunta(numPreguntaSeleccionada).getDisponible()) {
+                            String enviarMsg = examen.getPregunta(numPreguntaSeleccionada).getEnunciado();
+                            enviarMsg += "\n" + examen.getPregunta(numPreguntaSeleccionada).getCuerpo();
                             enviarMensaje("PREGUNTA:" + enviarMsg);
                             String opciones = "OPCIONES\n";
-                            for (String x : examen.getPregunta(numPreguntaSeleccionada - 1).getOpciones()) {
+                            for (String x : examen.getPregunta(numPreguntaSeleccionada).getOpciones()) {
                                 opciones += x + "\n";
                             }
 
-                            examen.getPregunta(numPreguntaSeleccionada - 1).setEstado("OCUPADA");
+                            examen.getPregunta(numPreguntaSeleccionada).setEstado("OCUPADA");
 
                             enviarMensaje(opciones);
                             enviarMensajeMulticast(getEstadoPreguntas());
@@ -80,20 +80,19 @@ public class HiloServidor extends Thread {
                         }
                         break;
                     case "CANCELAR-PREGUNTA":
-                        if (numPreguntaSeleccionada > 0) {
-                            examen.getPregunta(numPreguntaSeleccionada - 1).setEstado("LIBRE");
-                            numPreguntaSeleccionada = 0;
+                        //if (numPreguntaSeleccionada > 0) {
+                            examen.getPregunta(numPreguntaSeleccionada).setEstado("LIBRE");
                             enviarMensajeMulticast(getEstadoPreguntas());
-                        }
+                        //}
                         break;
                     case "ENVIAR-RESPUESTA":
                         if (numPreguntaSeleccionada > 0) {
                             String respuestaCliente = token.nextToken();
                             String nombreCliente = token.nextToken();
-                            Pregunta preguntaSelec = examen.getPregunta(numPreguntaSeleccionada - 1);
+                            Pregunta preguntaSelec = examen.getPregunta(numPreguntaSeleccionada);
                             boolean calificacion = respuestaCliente.equals(preguntaSelec.getOpcCorrecta());
                             informe.registrarRespuesta(nombreCliente, preguntaSelec.getEnunciado(), respuestaCliente, calificacion);
-                            examen.getPregunta(numPreguntaSeleccionada - 1).setEstado("RESPONDIDA");
+                            examen.getPregunta(numPreguntaSeleccionada).setEstado("RESPONDIDA");
                             enviarMensajeMulticast(getEstadoPreguntas());
                         }
                         break;
