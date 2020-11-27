@@ -40,6 +40,9 @@ public class LogicaMulticast extends Thread {
         }
     }
 
+    /**
+     * Implementacion del metodo run para inicializar el hilo
+     */
     @Override
     public void run() {
         while (true) {
@@ -59,9 +62,7 @@ public class LogicaMulticast extends Thread {
                 // Copiamos los datos en el nuevo array de tamaño adecuado:
                 System.arraycopy(dgp.getData(), 0, buffer2, 0, dgp.getLength());
 
-                //Vemos los datos recibidos por pantalla:
                 salida = new String(buffer2);
-                //interfaz.tAreaMensajes.setText("\nDesde multicast: "+salida);
 
                 procesarEntrada(salida);
             } catch (IOException e) {
@@ -70,6 +71,10 @@ public class LogicaMulticast extends Thread {
         }//fin while
     }//fin run
 
+    /**
+     * método auxiliar para procesar el mensaje recibido desde el socket multicast
+     * @param salida 
+     */
     private void procesarEntrada(String salida) {
         String[] mensaje = salida.split(":");
         switch (mensaje[0]) {

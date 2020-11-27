@@ -116,6 +116,10 @@ public class GUIClient extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
+    /**
+     * Asigna escuchas a los botones
+     * @param escucha 
+     */
     public void asignarEscuchasBotones(ActionListener escucha) {
         bObtener.addActionListener(escucha);
         bEnviar.addActionListener(escucha);
@@ -150,6 +154,13 @@ public class GUIClient extends JFrame {
     }
     
 
+    /**
+     * método para añadir las opciones de respuesta en los radioButtons
+     * @param opcionA
+     * @param opcionB
+     * @param opcionC
+     * @param opcionD 
+     */
     public void setRBOpciones(String opcionA, String opcionB, String opcionC, String opcionD) {
         rBPreguntaA.setText("A. " + opcionA);
         rBPreguntaB.setText("B. " + opcionB);
@@ -161,6 +172,9 @@ public class GUIClient extends JFrame {
         tAreaMensajes.setText("Mensaje: ");
     }
 
+    /**
+     * método para borrar las opciones de los radioButtons
+     */
     public void limpiarOpciones() {
         rBPreguntaA.setText("");
         rBPreguntaB.setText("");
@@ -168,6 +182,10 @@ public class GUIClient extends JFrame {
         rBPreguntaD.setText("");
     }
 
+    /**
+     * método para obtener cual respuesta es la seleccionada de los radioButtons
+     * @return 
+     */
     public String getRespuestaSeleccionada() {
         if (rBPreguntaA.isSelected()) {
             return "A";
@@ -181,6 +199,10 @@ public class GUIClient extends JFrame {
         return "";
     }
 
+    /**
+     * método para añadir el tiempo restante en el textField
+     * @param tiempo 
+     */
     public void setTimeRest(String tiempo) {
         tRestTime.setText("" + tiempo);
     }
