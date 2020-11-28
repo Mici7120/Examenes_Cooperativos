@@ -18,19 +18,37 @@ public class InformeExamen {
     double respuestasCorrectas = 0;
     double totalPreguntas = 0;
 
+    /**
+     * constructor
+     */
     public InformeExamen() {
         nombre = "";
         informeExamen = "";
     }
 
+    /**
+     * guarda el nombre del informe
+     * @param nombre 
+     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
+    /**
+     * obtiene el nombre del informe
+     * @return 
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     * registra la respuesta del estudiante cual es, si es correcta o incorrecta y quien la respondio
+     * @param nombreEstudiante
+     * @param pregunta
+     * @param respuestaEstudiante
+     * @param correcta 
+     */
     public void registrarRespuesta(String nombreEstudiante, String pregunta, String respuestaEstudiante, boolean correcta) {
         totalPreguntas++;
         informeExamen += pregunta + " respondida por " + nombreEstudiante + ", " + respuestaEstudiante;
@@ -42,6 +60,13 @@ public class InformeExamen {
         }
     }
     
+    /**
+     * asigna los datos al informe
+     * @param nombre
+     * @param informeExamen
+     * @param totalPreguntas
+     * @param respuestasCorrectas 
+     */
     public void setInforme(String nombre, String informeExamen, double totalPreguntas, double respuestasCorrectas){
         this.nombre = nombre;
         this.informeExamen = informeExamen;
@@ -49,6 +74,10 @@ public class InformeExamen {
         this.respuestasCorrectas = respuestasCorrectas;
     }
 
+    /**
+     * obtiene el informe con la nota
+     * @return String con los datos del informe
+     */
     public String getInforme() {
         double nota = (respuestasCorrectas / totalPreguntas) * 5;
         String informe = nombre + "\n" + informeExamen + "Respuestas Correctas: " + respuestasCorrectas + "\nCalificacion final: " + nota;
