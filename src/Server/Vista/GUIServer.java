@@ -42,12 +42,15 @@ public class GUIServer extends JFrame {
     JTextArea estadoServidor, taInformeExamen;
     JScrollPane jcpEstadoServidor, spTabla;
     JLabel lNombreExamen, lDuracion, lInfoDuracion, lInformes;
-    JButton bAgregarExamen, bCargarArchivo, bIniciarExamen, bLimpiarAreaEstadoServidor, bConsultarInforme, bCerrar;
+    JButton bAgregarExamen, bCargarArchivo, bIniciarExamen, bLimpiarAreaEstadoServidor, bConsultarInforme;
     JComboBox jcbExamenes, jcbInfoExamenes;
     JTable tablePreguntas;
 
     int numeroPregunta = 1;
 
+    /**
+     * contructor de la GUI del server donde se inicializan todos los componentes
+     */
     public GUIServer() {
         super("Servidor - Examenes Cooperativos");
 
@@ -133,8 +136,6 @@ public class GUIServer extends JFrame {
         pestañas.add(pIniExamen, "Iniciar Examen");
         pestañas.add(pInfoExamenes, "Informacion de Examenes Presentados");
         container.add(pestañas);
-
-        bCerrar = new JButton();
         
         setVisible(true);
         setSize(800, 500);
@@ -142,37 +143,63 @@ public class GUIServer extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
+    /**
+     * asigna las escuchas a los botones
+     * @param escucha 
+     */
     public void asignarEscuchasBotones(ActionListener escucha) {
         bCargarArchivo.addActionListener(escucha);
         bAgregarExamen.addActionListener(escucha);
         bIniciarExamen.addActionListener(escucha);
         bLimpiarAreaEstadoServidor.addActionListener(escucha);
         bConsultarInforme.addActionListener(escucha);
-        
-        bCerrar.addActionListener(escucha);
     }
 
     //Retornar botones
+    /**
+     * retorna el boton de agregar examen
+     * @return 
+     */
     public JButton getBAgregarExamen() {
         return bAgregarExamen;
     }
 
+    /**
+     * retorna el boton de cargar archivo
+     * @return 
+     */
     public JButton getbCargarArchivo() {
         return bCargarArchivo;
     }
 
+    /**
+     * retorna el boton de iniciar examen
+     * @return 
+     */
     public JButton getBIniciarExamen() {
         return bIniciarExamen;
     }
 
+    /**
+     * retorna el boton de limpiar el area del servidor
+     * @return 
+     */
     public JButton getBLimpiarAreaEstadoServidor() {
         return bLimpiarAreaEstadoServidor;
     }
 
+    /**
+     * retorna el boton de consultar informe
+     * @return 
+     */
     public JButton getBConsultarInforme() {
         return bConsultarInforme;
     }
 
+    /**
+     * imprime el enunciado y el cuerpo de las preguntas del examen a cargar
+     * @param infoPreguntas 
+     */
     public void mostrarPreguntasTabla(ArrayList<String> infoPreguntas) {
         DefaultTableModel model = (DefaultTableModel) tablePreguntas.getModel();
         Object[] datos = new Object[model.getColumnCount()];
@@ -185,6 +212,9 @@ public class GUIServer extends JFrame {
         tablePreguntas.setModel(model);
     }
 
+    /**
+     * borro todos los elementos de la tabla
+     */
     public void borrarTabla() {
         DefaultTableModel modelo = (DefaultTableModel) tablePreguntas.getModel();
 
@@ -193,47 +223,89 @@ public class GUIServer extends JFrame {
         }
     }
 
+    /**
+     * retorna el nombre del examen seleccionado en el JComboBox para iniciar un examen
+     * @return 
+     */
     public String getExamenSeleccionado() {
         return jcbExamenes.getSelectedItem().toString();
     }
 
+    /**
+     * retorna el nombre configurado para un examen
+     * @return 
+     */
     public String getNombreExamen() {
         return nombreExamen.getText();
     }
 
+    /**
+     * retorna la duracion configurada para un examen
+     * @return 
+     */
     public String getDuracion() {
         return tfDuracion.getText();
     }
 
+    /**
+     * añade al JComboBox de examenes el nombre de examen recibido
+     * @param nombreExamen 
+     */
     public void addExamenJCB(String nombreExamen) {
         jcbExamenes.addItem(nombreExamen);
     }
 
+    /**
+     * añade al JComboBox de informes el nombre del informe de un examen
+     * @param nombreInforme 
+     */
     public void addInformeExamenJCB(String nombreInforme) {
         jcbInfoExamenes.addItem(nombreInforme);
     }
 
+    /**
+     * añade el mensaje recibido en el area de texto del estado del servidor
+     * @param mensaje 
+     */
     public void appendEstadoServidor(String mensaje) {
         estadoServidor.append(mensaje);
     }
 
+    /**
+     * imprime en la GUI el informe correspondiente
+     * @param mensaje 
+     */
     public void printInformeExamem(String mensaje) {
         taInformeExamen.setText(mensaje);
     }
 
+    /**
+     * retorna el nombre del informe seleccionado
+     * @return 
+     */
     public String getInformeSeleccionado() {
         return jcbInfoExamenes.getSelectedItem().toString();
     }
 
+    /**
+     * pone en blanco los campos de texto del nombre del examen y el de duracion
+     */
     public void limpiarCamposPregunta() {
         nombreExamen.setText("");
         tfDuracion.setText("");
     }
 
+    /**
+     * pone en blanco el area de texto del estado del servidor
+     */
     public void limpiarAreaEstadoServidor() {
         estadoServidor.setText("");
     }
 
+    /**
+     * imprime en la GUI la duracion restante del examen
+     * @param tiempo 
+     */
     public void setDuracionRestante(String tiempo) {
         estadoTiempo.setText("" + tiempo);
     }

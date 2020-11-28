@@ -56,7 +56,6 @@ public class ConexionesServidor implements ActionListener {
         this.interfaz = interfaz;
         fachada = new Fachada();
         interfaz.asignarEscuchasBotones(this);
-        agregarExamenPrueba();
         examenes = new ArrayList<>();
         hilos = new ArrayList<>();
         informes = fachada.cargarInformes();
@@ -95,7 +94,7 @@ public class ConexionesServidor implements ActionListener {
                 try {
                     Socket socket = serverSocket.accept(); // permite al servidor aceptar la conexión                    
                     estudiantes++;
-                    HiloServidor hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama);
+                    HiloServidor hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama, tiempo, informes);
                     hilo.start();
                     hilos.add(hilo);
                     interfaz.appendEstadoServidor("Conectado el estudiante: " + estudiantes + "\n");
@@ -133,7 +132,6 @@ public class ConexionesServidor implements ActionListener {
                     informe = new InformeExamen();
                     informe.setNombre(examen.getNombre());
                     for (HiloServidor x : hilos) {
-                        //x.start();
                         x.setExamen(examen);
                         x.setInforme(informe);
                     }
@@ -161,7 +159,6 @@ public class ConexionesServidor implements ActionListener {
                 for (InformeExamen x : informes) {
                     if (x.getNombre().equals(interfaz.getInformeSeleccionado())) {
                         interfaz.printInformeExamem(x.getInforme());
-                        System.out.println(x.getInforme());
                         break;
                     }
                 }
@@ -170,34 +167,6 @@ public class ConexionesServidor implements ActionListener {
             }
         }
 
-    }
-
-    public void agregarExamenPrueba() {
-        examen = new Examen();
-        examen.setNombre("Examen de prueba mixto");
-        examen.setDuracion(1);
-        Pregunta p1 = new Pregunta(
-                "Determine el resultado",
-                "1+1",
-                new ArrayList<String>(Arrays.asList("pez", "1", "2", "ninguna de las anteriores")),
-                "C"
-        );
-        Pregunta p2 = new Pregunta(
-                "Aproximadamente, ¿cuántos huesos tiene el cuerpo humano?",
-                "",
-                new ArrayList<String>(Arrays.asList("5", "40", "390", "208")),
-                "D"
-        );
-        Pregunta p3 = new Pregunta(
-                "Responde la siguiente trivia sobre Avengers",
-                "¿Cómo se llama la nave de los Guardianes de la galaxia en Avengers: Infinity War?",
-                new ArrayList<String>(Arrays.asList("El Milano", "El Comodoro", "El Benatar", "El Halcón milenario")),
-                "C"
-        );
-        examen.addPregunta(p1);
-        examen.addPregunta(p2);
-        examen.addPregunta(p3);
-        interfaz.addExamenJCB(examen.getNombre());
     }
 
     public void enviarMensajeMulticast(String mens) {
@@ -259,7 +228,7 @@ public class ConexionesServidor implements ActionListener {
                     enviarMensajeMulticast(mens);
                 } else {
                     m--;
-                    s = 20;
+                    s = 59;
                 }
             }
         };
@@ -273,6 +242,7 @@ public class ConexionesServidor implements ActionListener {
         interfaz.addInformeExamenJCB(informe.getNombre());
         enviarMensajeMulticast("FIN-EXAMEN:" + informe.getInforme());
         fachada.guardarInformes(informes);
+        tiempo.stop();
     }
 
     public void enviarInformeFinal() {

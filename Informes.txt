@@ -10,3 +10,8 @@ Responde la siguiente pregunta: respondida por Camila, D - Respuesta Incorrecta
 Responde la siguiente trivia sobre Avengers respondida por Camila, C - Respuesta Correcta
 Respuestas Correctas: 2.0
 Calificacion final: 3.333333333333333
+examen 3
+Dada la siguiente definicion de las clases: Animal, Lion y Jumplable seleccione las respuestas correctas en asignacion de una variable respondida por Camila, A - Respuesta Correcta
+Complete con la respuesta correcta respondida por Camila, A - Respuesta Incorrecta
+Respuestas Correctas: 1.0
+Calificacion final: 2.5
