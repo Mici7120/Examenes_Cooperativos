@@ -161,7 +161,6 @@ public class ConexionesServidor implements ActionListener {
                 for (InformeExamen x : informes) {
                     if (x.getNombre().equals(interfaz.getInformeSeleccionado())) {
                         interfaz.printInformeExamem(x.getInforme());
-                        fachada.guardarInforme(x.getInforme());
                         System.out.println(x.getInforme());
                         break;
                     }
@@ -273,6 +272,7 @@ public class ConexionesServidor implements ActionListener {
         informes.add(informe);
         interfaz.addInformeExamenJCB(informe.getNombre());
         enviarMensajeMulticast("FIN-EXAMEN:" + informe.getInforme());
+        fachada.guardarInformes(informes);
     }
 
     public void enviarInformeFinal() {

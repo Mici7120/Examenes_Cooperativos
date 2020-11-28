@@ -4,3 +4,9 @@ Responde la siguiente pregunta: respondida por Ruz, D - Respuesta Incorrecta
 Responde la siguiente trivia sobre Avengers respondida por Ruz, C - Respuesta Correcta
 Respuestas Correctas: 1.0
 Calificacion final: 1.6666666666666665
+examen 1
+Determine el resultado respondida por Camila, C - Respuesta Correcta
+Responde la siguiente pregunta: respondida por Camila, D - Respuesta Incorrecta
+Responde la siguiente trivia sobre Avengers respondida por Camila, C - Respuesta Correcta
+Respuestas Correctas: 2.0
+Calificacion final: 3.333333333333333

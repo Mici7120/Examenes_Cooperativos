@@ -42,7 +42,7 @@ public class GUIServer extends JFrame {
     JTextArea estadoServidor, taInformeExamen;
     JScrollPane jcpEstadoServidor, spTabla;
     JLabel lNombreExamen, lDuracion, lInfoDuracion, lInformes;
-    JButton bAgregarExamen, bCargarArchivo, bIniciarExamen, bLimpiarAreaEstadoServidor, bConsultarInforme;
+    JButton bAgregarExamen, bCargarArchivo, bIniciarExamen, bLimpiarAreaEstadoServidor, bConsultarInforme, bCerrar;
     JComboBox jcbExamenes, jcbInfoExamenes;
     JTable tablePreguntas;
 
@@ -134,6 +134,8 @@ public class GUIServer extends JFrame {
         pestañas.add(pInfoExamenes, "Informacion de Examenes Presentados");
         container.add(pestañas);
 
+        bCerrar = new JButton();
+        
         setVisible(true);
         setSize(800, 500);
         setResizable(false);
@@ -146,6 +148,8 @@ public class GUIServer extends JFrame {
         bIniciarExamen.addActionListener(escucha);
         bLimpiarAreaEstadoServidor.addActionListener(escucha);
         bConsultarInforme.addActionListener(escucha);
+        
+        bCerrar.addActionListener(escucha);
     }
 
     //Retornar botones

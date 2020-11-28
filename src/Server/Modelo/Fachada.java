@@ -63,14 +63,16 @@ public class Fachada {
         return null;
     }
 
-    public void guardarInforme(String informe) {
+    public void guardarInformes(ArrayList<InformeExamen> informes) {
         archivo = new File("Informes.txt");
         try {
             guardar = new FileWriter(archivo);
             pWriter = new PrintWriter(guardar);
-            StringTokenizer token = new StringTokenizer(informe, "\n");
-            while(token.hasMoreTokens()){
-                pWriter.println(token.nextToken());
+            for (InformeExamen i : informes) {
+                StringTokenizer token = new StringTokenizer(i.getInforme(), "\n");
+                while (token.hasMoreTokens()) {
+                    pWriter.println(token.nextToken());
+                }
             }
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Error al guardar el archivo");
@@ -88,27 +90,26 @@ public class Fachada {
     public ArrayList<InformeExamen> cargarInformes() {
         archivo = new File("Informes.txt");
         Scanner buffer = null;
-        ArrayList <InformeExamen> informes = new ArrayList<>();
+        ArrayList<InformeExamen> informes = new ArrayList<>();
         try {
             buffer = new Scanner(archivo);
             while (buffer.hasNextLine()) {
                 InformeExamen informeExamen = new InformeExamen();
                 String nombre = buffer.nextLine();
-                System.out.println(nombre);
+                //System.out.println(nombre);
                 String informe = "";
                 int totalPreguntas = 0;
                 String dato = buffer.nextLine();
-                System.out.println(dato);
+                //System.out.println(dato);
                 while (!dato.contains("Respuestas")) {
                     informe += dato + "\n";
                     totalPreguntas++;
                     dato = buffer.nextLine();
-                    System.out.println(dato);
+                    //System.out.println(dato);
                 };
-                //informe += "\n";
                 String[] split = dato.split(":");
                 double respuestasCorrectas = Double.parseDouble(split[1].trim());
-                System.out.println(respuestasCorrectas);
+                //System.out.println(respuestasCorrectas);
                 dato = buffer.nextLine();
                 informeExamen.setInforme(nombre, informe, totalPreguntas, respuestasCorrectas);
                 informes.add(informeExamen);
