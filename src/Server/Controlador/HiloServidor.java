@@ -50,7 +50,6 @@ public class HiloServidor extends Thread {
         datagrama = paquete;
         this.tiempo = tiempo;
         this.informes = informes;
-        
     }
 
     /**
