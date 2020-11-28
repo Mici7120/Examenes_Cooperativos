@@ -95,7 +95,7 @@ public class ConexionesServidor implements ActionListener {
                 try {
                     Socket socket = serverSocket.accept(); // permite al servidor aceptar la conexión                    
                     estudiantes++;
-                    HiloServidor hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama);
+                    HiloServidor hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama, tiempo, informes);
                     hilo.start();
                     hilos.add(hilo);
                     interfaz.appendEstadoServidor("Conectado el estudiante: " + estudiantes + "\n");
