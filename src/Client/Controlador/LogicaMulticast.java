@@ -98,7 +98,7 @@ public class LogicaMulticast extends Thread {
                 logicaCliente.actualizarCBpreguntas();
                 break;
             case "FIN-EXAMEN":
-                logicaCliente.examenTerminado();
+                logicaCliente.examenTerminado(mensaje[1]);
         }
     }
 }

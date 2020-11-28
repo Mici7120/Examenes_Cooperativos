@@ -15,11 +15,12 @@ public class InformeExamen {
 
     String nombre;
     String informeExamen;
-    int respuestasCorrectas = 0;
-    int totalPreguntas = 0; 
+    double respuestasCorrectas = 0;
+    double totalPreguntas = 0;
 
     public InformeExamen() {
         nombre = "";
+        informeExamen = "";
     }
 
     public void setNombre(String nombre) {
@@ -35,10 +36,17 @@ public class InformeExamen {
         informeExamen += pregunta + " respondida por " + nombreEstudiante + ", " + respuestaEstudiante;
         if (correcta) {
             respuestasCorrectas++;
-            informeExamen += " - Respuesta Correcta\n\n";
+            informeExamen += " - Respuesta Correcta\n";
         } else {
-            informeExamen += " - Respuesta Incorrecta\n\n";
+            informeExamen += " - Respuesta Incorrecta\n";
         }
+    }
+    
+    public void setInforme(String nombre, String informeExamen, double totalPreguntas, double respuestasCorrectas){
+        this.nombre = nombre;
+        this.informeExamen = informeExamen;
+        this.totalPreguntas = totalPreguntas;
+        this.respuestasCorrectas = respuestasCorrectas;
     }
 
     public String getInforme() {

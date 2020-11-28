@@ -5,6 +5,7 @@
  */
 package Server.Modelo;
 
+import Server.Controlador.InformeExamen;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -27,6 +28,8 @@ public class Fachada {
 
     JFileChooser fileChooser;
     File archivo;
+    FileWriter guardar;
+    PrintWriter pWriter;
 
     public Fachada() {
 
@@ -61,19 +64,59 @@ public class Fachada {
     }
 
     public void guardarInforme(String informe) {
-        archivo = new File("C:\\Users\\camil\\Desktop\\Git\\Examenes_Cooperativos");
+        archivo = new File("Informes.txt");
         try {
-            FileWriter guardar = new FileWriter(archivo);
-            PrintWriter writer = new PrintWriter(guardar);
+            guardar = new FileWriter(archivo);
+            pWriter = new PrintWriter(guardar);
             StringTokenizer token = new StringTokenizer(informe, "\n");
-            writer.print(token.nextToken() + "\n\n");
             while(token.hasMoreTokens()){
-                writer.println(token.nextToken());
+                pWriter.println(token.nextToken());
             }
-            
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Error al guardar el archivo");
+        } finally {
+            try {
+                if (guardar != null) {
+                    guardar.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
         }
-        
+    }
+
+    public ArrayList<InformeExamen> cargarInformes() {
+        archivo = new File("Informes.txt");
+        Scanner buffer = null;
+        ArrayList <InformeExamen> informes = new ArrayList<>();
+        try {
+            buffer = new Scanner(archivo);
+            while (buffer.hasNextLine()) {
+                InformeExamen informeExamen = new InformeExamen();
+                String nombre = buffer.nextLine();
+                System.out.println(nombre);
+                String informe = "";
+                int totalPreguntas = 0;
+                String dato = buffer.nextLine();
+                System.out.println(dato);
+                while (!dato.contains("Respuestas")) {
+                    informe += dato + "\n";
+                    totalPreguntas++;
+                    dato = buffer.nextLine();
+                    System.out.println(dato);
+                };
+                //informe += "\n";
+                String[] split = dato.split(":");
+                double respuestasCorrectas = Double.parseDouble(split[1].trim());
+                System.out.println(respuestasCorrectas);
+                dato = buffer.nextLine();
+                informeExamen.setInforme(nombre, informe, totalPreguntas, respuestasCorrectas);
+                informes.add(informeExamen);
+            }
+            return informes;
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "No se ha cargado correctamente los informes");
+            return new ArrayList<>();
+        }
     }
 }

@@ -1,0 +1,14 @@
+Dada la siguiente definicion de las clases: Animal, Lion y Jumplable seleccione las respuestas correctas en asignacion de una variable
+interface Jumpable{}    class Animal {}    class Lion extends Animal implements Jumpable {}
+Lion var3 = new Animal();
+Animal var2 = new Lion();
+Jumpable var1 = new Jumpable var1 = new Jumpable();
+Jumpable var4 = new Lion();
+A
+Complete con la respuesta correcta
+La clase _____________ lee bytes y los pasa a caracteres Unicode
+StreamTokenizer
+InputStreamReader
+BufferReader
+InputStream
+B

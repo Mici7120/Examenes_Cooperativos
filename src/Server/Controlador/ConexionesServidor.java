@@ -59,7 +59,8 @@ public class ConexionesServidor implements ActionListener {
         agregarExamenPrueba();
         examenes = new ArrayList<>();
         hilos = new ArrayList<>();
-        informes = new ArrayList<>();
+        informes = fachada.cargarInformes();
+        actualizarCBInformes();
         informe = new InformeExamen();
         ejecutarServidor();
     }
@@ -211,6 +212,14 @@ public class ConexionesServidor implements ActionListener {
         }
     }
 
+    public void actualizarCBInformes() {
+        if (!informes.isEmpty()) {
+            for (InformeExamen i : informes) {
+                interfaz.addInformeExamenJCB(i.getNombre());
+            }
+        }
+    }
+
     public void cargarArchivo() {
         ArrayList<String> datos = fachada.cargarArchivo();
         examen = new Examen();
@@ -263,7 +272,7 @@ public class ConexionesServidor implements ActionListener {
         interfaz.appendEstadoServidor("Se ha acabado el examen\n");
         informes.add(informe);
         interfaz.addInformeExamenJCB(informe.getNombre());
-        enviarMensajeMulticast("FIN-EXAMEN:");
+        enviarMensajeMulticast("FIN-EXAMEN:" + informe.getInforme());
     }
 
     public void enviarInformeFinal() {

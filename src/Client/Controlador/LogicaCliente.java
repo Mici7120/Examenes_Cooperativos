@@ -220,10 +220,11 @@ public class LogicaCliente implements ActionListener {
      * método que termina el examen al cliente, limpiando areas, 
      * opciones y lista de preguntas además de terminar la conexion
      */
-    public void examenTerminado() {
-        JOptionPane.showMessageDialog(null, "Se ha acabado el examen");
+    public void examenTerminado(String informe) {
+        JOptionPane.showMessageDialog(interfaz, "Se ha acabado el examen");
         interfaz.limpiarAreaMensajes();
         interfaz.limpiarOpciones();
+        interfaz.getAreaMensajes().append(informe);
         estadoPreguntas = new ArrayList<>();
         try {
             //se cierra la conexion
