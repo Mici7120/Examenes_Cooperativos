@@ -1,0 +1,21 @@
+Dada la siguiente definicion de las clases, seleccione las respuestas correctas en asignacion de una variable
+interface Jumpable{}    class Animal {}    class Lion extends Animal implements Jumpable {}
+Lion var3 = new Animal();
+Animal var2 = new Lion();
+Jumpable var1 = new Jumpable var1 = new Jumpable();
+Jumpable var4 = new Lion();
+B
+Complete con la respuesta correcta:
+La clase _____________ lee bytes y los pasa a caracteres Unicode
+StreamTokenizer
+InputStreamReader
+BufferReader
+InputStream
+B
+Seleccione la opcion correcta
+Diferencias entre base de datos y manipulacion de datos en programas Java
+En las  bases de datos  el acceso y manipulación de los  datos es independiente de  los programas Java
+En los archivos el acceso y manipulación de los  datos es independiente de  los programas Java
+En las  bases de datos  el acceso y manipulación de los  datos es dependiente de  los programas Java
+Ninguna de las anteriores
+A

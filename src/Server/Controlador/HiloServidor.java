@@ -38,10 +38,11 @@ public class HiloServidor extends Thread {
 
     private MulticastSocket sMulti;
     private DatagramPacket datagrama;
-    
+
     private Fachada fachada;
 
-    public HiloServidor(Socket socket, int numeroEstudiante, GUIServer interfaz, MulticastSocket multi, DatagramPacket paquete, Timer tiempo, ArrayList informes) {
+    public HiloServidor(Socket socket, int numeroEstudiante, GUIServer interfaz, MulticastSocket multi,
+            DatagramPacket paquete, Timer tiempo, ArrayList informes) {
 
         sCliente = socket;
         idCliente = numeroEstudiante;
@@ -50,6 +51,7 @@ public class HiloServidor extends Thread {
         datagrama = paquete;
         this.tiempo = tiempo;
         this.informes = informes;
+
     }
 
     /**

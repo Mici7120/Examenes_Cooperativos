@@ -128,7 +128,7 @@ public class ConexionesServidor implements ActionListener {
             if (examenIniciado) {
                 interfaz.appendEstadoServidor("Ya se ha iniciado el examen\n");
             } else {
-                if (estudiantes > 0) {
+                if (estudiantes == 3 && !examenes.isEmpty()) {
                     informe = new InformeExamen();
                     informe.setNombre(examen.getNombre());
                     for (HiloServidor x : hilos) {
@@ -149,7 +149,11 @@ public class ConexionesServidor implements ActionListener {
                         Logger.getLogger(ConexionesServidor.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else {
-                    interfaz.appendEstadoServidor("No estan conectados los 3 estudiantes\n");
+                    if (examenes.isEmpty()) {
+                        interfaz.appendEstadoServidor("No hay examenes cargados");
+                    } else {
+                        interfaz.appendEstadoServidor("No estan conectados los 3 estudiantes\n");
+                    }
                 }
             }
         } else if (ae.getSource() == interfaz.getBLimpiarAreaEstadoServidor()) {
@@ -234,7 +238,6 @@ public class ConexionesServidor implements ActionListener {
         };
         tiempo = new Timer(1000, acciones);
         tiempo.start();
-        tiempo.stop();
     }
 
     public void terminarExamen() {
@@ -243,6 +246,7 @@ public class ConexionesServidor implements ActionListener {
         interfaz.addInformeExamenJCB(informe.getNombre());
         enviarMensajeMulticast("FIN-EXAMEN:" + informe.getInforme());
         fachada.guardarInformes(informes);
+        tiempo.stop();
     }
 
     public void enviarInformeFinal() {

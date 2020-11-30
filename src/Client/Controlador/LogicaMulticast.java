@@ -72,8 +72,10 @@ public class LogicaMulticast extends Thread {
     }//fin run
 
     /**
-     * método auxiliar para procesar el mensaje recibido desde el socket multicast
-     * @param salida 
+     * método auxiliar para procesar el mensaje recibido desde el socket
+     * multicast
+     *
+     * @param salida
      */
     private void procesarEntrada(String salida) {
         String[] mensaje = salida.split(":");

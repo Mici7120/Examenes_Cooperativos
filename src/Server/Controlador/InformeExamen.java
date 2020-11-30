@@ -5,8 +5,6 @@
  */
 package Server.Controlador;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author villa
@@ -49,7 +47,7 @@ public class InformeExamen {
      * @param respuestaEstudiante
      * @param correcta 
      */
-    public void registrarRespuesta(String nombreEstudiante, String pregunta, String respuestaEstudiante, boolean correcta) {
+    public synchronized void registrarRespuesta(String nombreEstudiante, String pregunta, String respuestaEstudiante, boolean correcta) {
         totalPreguntas++;
         informeExamen += pregunta + " respondida por " + nombreEstudiante + ", " + respuestaEstudiante;
         if (correcta) {

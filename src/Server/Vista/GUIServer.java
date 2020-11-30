@@ -75,13 +75,7 @@ public class GUIServer extends JFrame {
         pCargarExamen.add(bCargarArchivo, BorderLayout.WEST);
         pCargarExamen.add(spTabla, BorderLayout.CENTER);
 
-        MaskFormatter mask;
-        try {
-            mask = new MaskFormatter("##");
-            tfDuracion = new JFormattedTextField(mask);
-        } catch (ParseException ex) {
-            Logger.getLogger(GUIServer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        tfDuracion = new JTextField();
 
         pConfiguracion = new JPanel(new GridLayout(1, 4, 25, 0));
         pConfiguracion.add(lNombreExamen);

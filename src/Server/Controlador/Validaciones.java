@@ -14,11 +14,16 @@ import javax.swing.JOptionPane;
  */
 public class Validaciones {
     public static boolean validarBotonAgregarExamen(GUIServer interfaz){
+        try{
+        int numero = Integer.parseInt(interfaz.getDuracion());
         if(interfaz.getNombreExamen().equals("") 
                 || interfaz.getDuracion().equals("")){
             return false;
         }else {
             return true;
+        }
+        }catch(Exception e){
+            return false;
         }
     }
 }

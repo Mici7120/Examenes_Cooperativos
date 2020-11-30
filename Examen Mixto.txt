@@ -1,4 +1,4 @@
-Determine el resultado
+Determine el resultado de la suma:
 1+1
 pez
 1
@@ -12,7 +12,7 @@ Aproximadamente, ¿cuántos huesos tiene el cuerpo humano?
 390
 208
 C
-Responde la siguiente trivia sobre Avengers
+Responde la siguiente trivia sobre Avengers:
 ¿Cómo se llama la nave de los Guardianes de la galaxia en Avengers: Infinity War?
 El Milano
 El Comodoro
