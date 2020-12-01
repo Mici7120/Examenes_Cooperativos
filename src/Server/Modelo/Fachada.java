@@ -100,7 +100,6 @@ public class Fachada {
                 String informe = "";
                 int totalPreguntas = 0;
                 String dato = buffer.nextLine();
-                //System.out.println(dato);
                 while (!dato.contains("Respuestas")) {
                     informe += dato + "\n";
                     totalPreguntas++;

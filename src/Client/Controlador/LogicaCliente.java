@@ -5,8 +5,8 @@
   Email: christian.villanueva@correounivalle.edu.co
   Autor: Daniel Rodriguez Sanchez (1927631)
   Email: daniel.rodriguez.sanchez@correounivalle.edu.co
-*/
-/*
+ */
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -127,7 +127,7 @@ public class LogicaCliente implements ActionListener {
                 System.out.println("Se arrojó un ioexcepcion cuando se trataba de leer del servidor " + ex.getMessage());
                 break;
             }
-        } while (!mensajeRecibido.equals("SERVIDOR>>> TERMINAR"));
+        } while (true);
         try {
             //se cierra la conexion
             entrada.close();
@@ -240,6 +240,7 @@ public class LogicaCliente implements ActionListener {
         interfaz.limpiarOpciones();
         interfaz.getAreaMensajes().append(informe);
         estadoPreguntas = new ArrayList<>();
+        /*
         try {
             //se cierra la conexion
             entrada.close();
@@ -249,6 +250,7 @@ public class LogicaCliente implements ActionListener {
         } catch (IOException ex) {
             System.out.println("Se produjo error al cerrar la conexion");
         }
+    */
 
     }
 }

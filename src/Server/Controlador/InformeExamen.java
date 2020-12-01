@@ -39,6 +39,10 @@ public class InformeExamen {
     public String getNombre() {
         return nombre;
     }
+    
+    public void setTotalPreguntas(int totalPreguntas){
+        this.totalPreguntas = totalPreguntas;
+    }
 
     /**
      * registra la respuesta del estudiante cual es, si es correcta o incorrecta y quien la respondio
@@ -48,7 +52,6 @@ public class InformeExamen {
      * @param correcta 
      */
     public synchronized void registrarRespuesta(String nombreEstudiante, String pregunta, String respuestaEstudiante, boolean correcta) {
-        totalPreguntas++;
         informeExamen += pregunta + " respondida por " + nombreEstudiante + ", " + respuestaEstudiante;
         if (correcta) {
             respuestasCorrectas++;
@@ -78,7 +81,7 @@ public class InformeExamen {
      */
     public String getInforme() {
         double nota = (respuestasCorrectas / totalPreguntas) * 5;
-        String informe = nombre + "\n" + informeExamen + "Respuestas Correctas: " + respuestasCorrectas + "\nCalificacion final: " + nota;
+        String informe = "\n" + nombre + "\n" + informeExamen + "Respuestas Correctas: " + respuestasCorrectas + "\nCalificacion final: " + nota;
         return informe;
     }
 }

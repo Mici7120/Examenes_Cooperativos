@@ -17,12 +17,12 @@ import java.net.MulticastSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.Timer;
+import java.util.Timer;
 
 /**
  *
@@ -54,13 +54,15 @@ public class ConexionesServidor implements ActionListener {
 
     public ConexionesServidor(GUIServer interfaz) {
         this.interfaz = interfaz;
-        fachada = new Fachada();
         interfaz.asignarEscuchasBotones(this);
+        
         examenes = new ArrayList<>();
         hilos = new ArrayList<>();
+        
+        fachada = new Fachada();
         informes = fachada.cargarInformes();
         actualizarCBInformes();
-        informe = new InformeExamen();
+        
         ejecutarServidor();
     }
 
@@ -85,6 +87,10 @@ public class ConexionesServidor implements ActionListener {
         }
 
         try {
+            /*
+            InetAddress ipDestino = InetAddress.getByName("190.99.134.17");
+            serverSocket = new ServerSocket(12345, 1,ipDestino);
+             */
             serverSocket = new ServerSocket(12345);
 
             interfaz.appendEstadoServidor("Iniciado servidor por el puerto " + serverSocket.getLocalPort() + "\n");
@@ -94,7 +100,7 @@ public class ConexionesServidor implements ActionListener {
                 try {
                     Socket socket = serverSocket.accept(); // permite al servidor aceptar la conexión                    
                     estudiantes++;
-                    HiloServidor hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama, tiempo, informes);
+                    HiloServidor hilo = new HiloServidor(socket, estudiantes, interfaz, socketCast, datagrama);
                     hilo.start();
                     hilos.add(hilo);
                     interfaz.appendEstadoServidor("Conectado el estudiante: " + estudiantes + "\n");
@@ -121,6 +127,7 @@ public class ConexionesServidor implements ActionListener {
                 interfaz.addExamenJCB(interfaz.getNombreExamen());
                 interfaz.limpiarCamposPregunta();
                 interfaz.borrarTabla();
+                archivoCargado = false;
             } else {
                 JOptionPane.showMessageDialog(interfaz, "Por favor complete los campos y cargue el archivo correctamente");
             }
@@ -129,19 +136,28 @@ public class ConexionesServidor implements ActionListener {
                 interfaz.appendEstadoServidor("Ya se ha iniciado el examen\n");
             } else {
                 if (estudiantes == 3 && !examenes.isEmpty()) {
+                    Examen examenSeleccionado = new Examen();
+                    for(Examen e : examenes){
+                        if(e.getNombre().equals(interfaz.getExamenSeleccionado())){
+                            examenSeleccionado = e;
+                            break;
+                        }
+                    }
                     informe = new InformeExamen();
-                    informe.setNombre(examen.getNombre());
+                    informe.setTotalPreguntas(examenSeleccionado.numeroPreguntas());
+                    interfaz.getExamenSeleccionado();
+                    informe.setNombre(examenSeleccionado.getNombre());
                     for (HiloServidor x : hilos) {
-                        x.setExamen(examen);
+                        x.setExamen(examenSeleccionado);
                         x.setInforme(informe);
                     }
                     interfaz.appendEstadoServidor("Se ha iniciado el examen\n");
                     examenIniciado = true;
-                    String mensaje = "INICIO:" + examen.numeroPreguntas(); //+ " : " + examen.getNombre();
+                    String mensaje = "INICIO:" + examenSeleccionado.numeroPreguntas(); //+ " : " + examen.getNombre();
                     byte[] buffer = mensaje.getBytes();
                     datagrama.setData(buffer);
                     datagrama.setLength(buffer.length);
-                    iniciarTiempo();
+                    iniciarTiempo(examenSeleccionado.getDuracion());
 
                     try {
                         socketCast.send(datagrama);
@@ -150,9 +166,9 @@ public class ConexionesServidor implements ActionListener {
                     }
                 } else {
                     if (examenes.isEmpty()) {
-                        interfaz.appendEstadoServidor("No hay examenes cargados");
+                        interfaz.appendEstadoServidor("\nNo hay examenes cargados");
                     } else {
-                        interfaz.appendEstadoServidor("No estan conectados los 3 estudiantes\n");
+                        interfaz.appendEstadoServidor("\nNo estan conectados los 3 estudiantes\n");
                     }
                 }
             }
@@ -216,15 +232,15 @@ public class ConexionesServidor implements ActionListener {
         }
     }
 
-    public void iniciarTiempo() {
-        m = examen.getDuracion();
+    public void iniciarTiempo(int duracion) {
+        m = duracion;
         s = 0;
-        ActionListener acciones = new ActionListener() {
+        TimerTask time0 = new TimerTask(){
             @Override
-            public void actionPerformed(ActionEvent ae) {
-                if (m == 0 && s == 0) {
+            public void run(){
+                if ((m == 0 && s == 0) || todasPreguntasRespondidas()) {
                     terminarExamen();
-                    tiempo.stop();
+                    cancel();
                 } else if (s > 0) {
                     s--;
                     interfaz.setDuracionRestante(m + ":" + s);
@@ -236,21 +252,27 @@ public class ConexionesServidor implements ActionListener {
                 }
             }
         };
-        tiempo = new Timer(1000, acciones);
-        tiempo.start();
+        tiempo = new Timer();
+        tiempo.scheduleAtFixedRate(time0, 0, 1000);
+    }
+    
+    public boolean todasPreguntasRespondidas() {
+        for (Pregunta p : examen.preguntas) {
+            if (!p.getEstado().equals("RESPONDIDA")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void terminarExamen() {
         interfaz.appendEstadoServidor("Se ha acabado el examen\n");
-        informes.add(informe);
         interfaz.addInformeExamenJCB(informe.getNombre());
         enviarMensajeMulticast("FIN-EXAMEN:" + informe.getInforme());
+        
+        informes.add(informe);
         fachada.guardarInformes(informes);
-        tiempo.stop();
-    }
-
-    public void enviarInformeFinal() {
-        String mensaje = "INFORME:" + informe.getInforme();
-        enviarMensajeMulticast(mensaje);
+        
+        examenIniciado = false;
     }
 }

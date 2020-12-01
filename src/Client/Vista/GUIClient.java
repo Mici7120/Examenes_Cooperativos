@@ -5,8 +5,8 @@
   Email: christian.villanueva@correounivalle.edu.co
   Autor: Daniel Rodriguez Sanchez (1927631)
   Email: daniel.rodriguez.sanchez@correounivalle.edu.co
-*/
-/*
+ */
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -126,48 +126,50 @@ public class GUIClient extends JFrame {
 
     /**
      * Asigna escuchas a los botones
-     * @param escucha 
+     *
+     * @param escucha
      */
     public void asignarEscuchasBotones(ActionListener escucha) {
         bObtener.addActionListener(escucha);
         bEnviar.addActionListener(escucha);
         bCancelar.addActionListener(escucha);
     }
+
     public JButton getBObtenerPregunta() {
         return bObtener;
     }
-    
+
     public JButton getBEnviarPregunta() {
         return bEnviar;
     }
-    
+
     public JButton getBCancelarPregunta() {
         return bCancelar;
     }
-    
+
     public void LimpiarSelecRButton() {
-         rBgrupo.clearSelection();
+        rBgrupo.clearSelection();
     }
-    
+
     public JComboBox<String> getComboBoxSelectPregunta() {
         return selectPregunta;
     }
-    
+
     public JTextArea getAreaMensajes() {
         return tAreaMensajes;
     }
-    
+
     public JPanel getPanelIzquierdo() {
         return pIzquierdo;
     }
-    
 
     /**
      * método para añadir las opciones de respuesta en los radioButtons
+     *
      * @param opcionA
      * @param opcionB
      * @param opcionC
-     * @param opcionD 
+     * @param opcionD
      */
     public void setRBOpciones(String opcionA, String opcionB, String opcionC, String opcionD) {
         rBPreguntaA.setText("A. " + opcionA);
@@ -177,7 +179,7 @@ public class GUIClient extends JFrame {
     }
 
     public void limpiarAreaMensajes() {
-        tAreaMensajes.setText("Mensaje: ");
+        tAreaMensajes.setText("Mensaje:");
     }
 
     /**
@@ -192,7 +194,8 @@ public class GUIClient extends JFrame {
 
     /**
      * método para obtener cual respuesta es la seleccionada de los radioButtons
-     * @return 
+     *
+     * @return
      */
     public String getRespuestaSeleccionada() {
         if (rBPreguntaA.isSelected()) {
@@ -209,7 +212,8 @@ public class GUIClient extends JFrame {
 
     /**
      * método para añadir el tiempo restante en el textField
-     * @param tiempo 
+     *
+     * @param tiempo
      */
     public void setTimeRest(String tiempo) {
         tRestTime.setText("" + tiempo);

@@ -31,28 +31,23 @@ public class HiloServidor extends Thread {
     private int idCliente;
     private GUIServer interfaz;
     private Examen examen;
-    private Timer tiempo;
-
     private InformeExamen informe;
-    private ArrayList<InformeExamen> informes;
 
     private MulticastSocket sMulti;
     private DatagramPacket datagrama;
 
     private Fachada fachada;
 
-    public HiloServidor(Socket socket, int numeroEstudiante, GUIServer interfaz, MulticastSocket multi,
-            DatagramPacket paquete, Timer tiempo, ArrayList informes) {
+    public HiloServidor(Socket socket, int numeroEstudiante, GUIServer interfaz,
+            MulticastSocket multi, DatagramPacket paquete) {
 
         sCliente = socket;
         idCliente = numeroEstudiante;
         this.interfaz = interfaz;
         sMulti = multi;
         datagrama = paquete;
-        this.tiempo = tiempo;
-        this.informes = informes;
-
     }
+
 
     /**
      *
@@ -103,9 +98,6 @@ public class HiloServidor extends Thread {
                         informe.registrarRespuesta(nombreCliente, preguntaSelec.getEnunciado(), respuestaCliente, calificacion);
                         examen.getPregunta(numPreguntaSeleccionada).setEstado("RESPONDIDA");
                         enviarMensajeMulticast(getEstadoPreguntas());
-                        if (todasPreguntasRespondidas()) {
-                            terminarExamen();
-                        }
                         break;
                 }
 
@@ -196,7 +188,7 @@ public class HiloServidor extends Thread {
             System.out.println("Error a abrir los flujos del cliente " + idCliente);
         }
     }
-
+/*
     public boolean todasPreguntasRespondidas() {
         for (Pregunta p : examen.preguntas) {
             if (!p.getEstado().equals("RESPONDIDA")) {
@@ -205,16 +197,19 @@ public class HiloServidor extends Thread {
         }
         return true;
     }
-
+    */
+    /*
     public void terminarExamen() {
         interfaz.appendEstadoServidor("Se ha acabado el examen\n");
         informes.add(informe);
         interfaz.addInformeExamenJCB(informe.getNombre());
         enviarMensajeMulticast("FIN-EXAMEN:" + informe.getInforme());
         fachada.guardarInformes(informes);
+        examenFinalizado = true;
         tiempo.stop();
     }
 
+    */
     public void setExamen(Examen examen) {
         this.examen = examen;
     }

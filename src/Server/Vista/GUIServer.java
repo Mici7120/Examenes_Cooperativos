@@ -9,14 +9,10 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,7 +22,6 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.MaskFormatter;
 
 /**
  *
@@ -40,7 +35,7 @@ public class GUIServer extends JFrame {
             a*/ pOpInfoExamenes;
     JTextField nombreExamen, tfDuracion, estadoTiempo;
     JTextArea estadoServidor, taInformeExamen;
-    JScrollPane jcpEstadoServidor, spTabla;
+    JScrollPane jcpEstadoServidor, spTabla, spInformeExamen;
     JLabel lNombreExamen, lDuracion, lInfoDuracion, lInformes;
     JButton bAgregarExamen, bCargarArchivo, bIniciarExamen, bLimpiarAreaEstadoServidor, bConsultarInforme;
     JComboBox jcbExamenes, jcbInfoExamenes;
@@ -111,6 +106,7 @@ public class GUIServer extends JFrame {
         //configuracion de la pestaña informacion de examenes prestados
         pInfoExamenes = new JPanel(new BorderLayout());
         taInformeExamen = new JTextArea();
+        spInformeExamen = new JScrollPane(taInformeExamen);
 
         pOpInfoExamenes = new JPanel();
         lInformes = new JLabel("Seleccione Informe");
@@ -122,7 +118,7 @@ public class GUIServer extends JFrame {
         pOpInfoExamenes.add(bConsultarInforme);
 
         pInfoExamenes.add(pOpInfoExamenes, BorderLayout.NORTH);
-        pInfoExamenes.add(taInformeExamen, BorderLayout.CENTER);
+        pInfoExamenes.add(spInformeExamen, BorderLayout.CENTER);
 
         //configuracion de las pestañas
         pestañas = new JTabbedPane();

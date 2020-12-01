@@ -17,7 +17,8 @@ public class Validaciones {
         try{
         int numero = Integer.parseInt(interfaz.getDuracion());
         if(interfaz.getNombreExamen().equals("") 
-                || interfaz.getDuracion().equals("")){
+                || interfaz.getDuracion().equals("")
+                || numero < 1){
             return false;
         }else {
             return true;
