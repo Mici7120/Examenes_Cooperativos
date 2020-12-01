@@ -235,7 +235,7 @@ public class ConexionesServidor implements ActionListener {
     public void iniciarTiempo(int duracion) {
         m = duracion;
         s = 0;
-        TimerTask time0 = new TimerTask(){
+        TimerTask time = new TimerTask(){
             @Override
             public void run(){
                 if ((m == 0 && s == 0) || todasPreguntasRespondidas()) {
@@ -253,7 +253,7 @@ public class ConexionesServidor implements ActionListener {
             }
         };
         tiempo = new Timer();
-        tiempo.scheduleAtFixedRate(time0, 0, 1000);
+        tiempo.scheduleAtFixedRate(time, 0, 1000);
     }
     
     public boolean todasPreguntasRespondidas() {

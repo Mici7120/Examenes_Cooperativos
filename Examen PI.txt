@@ -14,8 +14,8 @@ InputStream
 B
 Seleccione la opcion correcta
 Diferencias entre base de datos y manipulacion de datos en programas Java
-En las  bases de datos  el acceso y manipulación de los  datos es independiente de  los programas Java
-En los archivos el acceso y manipulación de los  datos es independiente de  los programas Java
-En las  bases de datos  el acceso y manipulación de los  datos es dependiente de  los programas Java
+En bases de datos, el acceso y manipulación de datos es independiente de Java
+En archivos el acceso y manipulación de datos es independiente de Java
+En bases de datos el acceso y manipulación los datos es dependiente de Java
 Ninguna de las anteriores
 A

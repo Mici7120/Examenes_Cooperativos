@@ -116,7 +116,7 @@ public class GUIClient extends JFrame {
         contenPPal.add(pExamColab);
 
         setTitle("Cliente");
-        setSize(800, 500);
+        setSize(800, 520);
         setResizable(false);
         setVisible(true);
 
