@@ -240,17 +240,6 @@ public class LogicaCliente implements ActionListener {
         interfaz.limpiarOpciones();
         interfaz.getAreaMensajes().append(informe);
         estadoPreguntas = new ArrayList<>();
-        /*
-        try {
-            //se cierra la conexion
-            entrada.close();
-            salida.close();
-            cliente.close();
-            System.out.println("Se cerró la conexion");
-        } catch (IOException ex) {
-            System.out.println("Se produjo error al cerrar la conexion");
-        }
-    */
 
     }
 }

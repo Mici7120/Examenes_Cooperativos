@@ -188,28 +188,7 @@ public class HiloServidor extends Thread {
             System.out.println("Error a abrir los flujos del cliente " + idCliente);
         }
     }
-/*
-    public boolean todasPreguntasRespondidas() {
-        for (Pregunta p : examen.preguntas) {
-            if (!p.getEstado().equals("RESPONDIDA")) {
-                return false;
-            }
-        }
-        return true;
-    }
-    */
-    /*
-    public void terminarExamen() {
-        interfaz.appendEstadoServidor("Se ha acabado el examen\n");
-        informes.add(informe);
-        interfaz.addInformeExamenJCB(informe.getNombre());
-        enviarMensajeMulticast("FIN-EXAMEN:" + informe.getInforme());
-        fachada.guardarInformes(informes);
-        examenFinalizado = true;
-        tiempo.stop();
-    }
 
-    */
     public void setExamen(Examen examen) {
         this.examen = examen;
     }
