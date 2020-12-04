@@ -1,0 +1,24 @@
+Examen Mixto
+Determine el resultado de la suma: respondida por Daniel, C - Respuesta Correcta
+Responde la siguiente pregunta: respondida por Ruz, C - Respuesta Correcta
+Responde la siguiente trivia sobre Avengers: respondida por Ruz, A - Respuesta Incorrecta
+Respuestas Correctas: 2.0
+Calificacion final: 3.333333333333333
+Examen Mixto 2
+Responde la siguiente trivia sobre Avengers: respondida por Ruz, D - Respuesta Incorrecta
+Responde la siguiente pregunta: respondida por Daniel, D - Respuesta Incorrecta
+Determine el resultado de la suma: respondida por Christian, C - Respuesta Correcta
+Respuestas Correctas: 1.0
+Calificacion final: 1.666666666
+Examen Mixto 3
+Responde la siguiente trivia sobre Avengers: respondida por Ruz, D - Respuesta Incorrecta
+Responde la siguiente pregunta: respondida por Daniel, D - Respuesta Incorrecta
+Determine el resultado de la suma: respondida por Christian, A - Respuesta Incorrecta
+Respuestas Correctas: 0.0
+Calificacion final: 0
+Examen Mixto 4
+Responde la siguiente trivia sobre Avengers: respondida por Ruz, D - Respuesta Incorrecta
+Responde la siguiente pregunta: respondida por Daniel, D - Respuesta Incorrecta
+Determine el resultado de la suma: respondida por Christian, C - Respuesta Correcta
+Respuestas Correctas: 1.0
+Calificacion final: 1.666666666

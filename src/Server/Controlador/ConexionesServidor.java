@@ -55,14 +55,14 @@ public class ConexionesServidor implements ActionListener {
     public ConexionesServidor(GUIServer interfaz) {
         this.interfaz = interfaz;
         interfaz.asignarEscuchasBotones(this);
-        
+
         examenes = new ArrayList<>();
         hilos = new ArrayList<>();
-        
+
         fachada = new Fachada();
         informes = fachada.cargarInformes();
         actualizarCBInformes();
-        
+
         ejecutarServidor();
     }
 
@@ -137,8 +137,8 @@ public class ConexionesServidor implements ActionListener {
             } else {
                 if (estudiantes == 3 && !examenes.isEmpty()) {
                     Examen examenSeleccionado = new Examen();
-                    for(Examen e : examenes){
-                        if(e.getNombre().equals(interfaz.getExamenSeleccionado())){
+                    for (Examen e : examenes) {
+                        if (e.getNombre().equals(interfaz.getExamenSeleccionado())) {
                             examenSeleccionado = e;
                             break;
                         }
@@ -185,6 +185,10 @@ public class ConexionesServidor implements ActionListener {
             } else {
                 JOptionPane.showMessageDialog(interfaz, "No hay informes por consultar");
             }
+        } else if (ae.getSource() == interfaz.getBConsultarProcentaje()) {
+            calcularPorcentajeExamenesPerdidos();
+        } else if (ae.getSource() == interfaz.getBPreguntasPerdidas()) {
+            preguntasPerdidas();
         }
 
     }
@@ -235,9 +239,9 @@ public class ConexionesServidor implements ActionListener {
     public void iniciarTiempo(int duracion) {
         m = duracion;
         s = 0;
-        TimerTask time = new TimerTask(){
+        TimerTask time = new TimerTask() {
             @Override
-            public void run(){
+            public void run() {
                 if ((m == 0 && s == 0) || todasPreguntasRespondidas()) {
                     terminarExamen();
                     cancel();
@@ -255,7 +259,7 @@ public class ConexionesServidor implements ActionListener {
         tiempo = new Timer();
         tiempo.scheduleAtFixedRate(time, 0, 1000);
     }
-    
+
     public boolean todasPreguntasRespondidas() {
         for (Pregunta p : examen.preguntas) {
             if (!p.getEstado().equals("RESPONDIDA")) {
@@ -269,10 +273,30 @@ public class ConexionesServidor implements ActionListener {
         interfaz.appendEstadoServidor("Se ha acabado el examen\n");
         interfaz.addInformeExamenJCB(informe.getNombre());
         enviarMensajeMulticast("FIN-EXAMEN:" + informe.getInforme());
-        
+
         informes.add(informe);
         fachada.guardarInformes(informes);
-        
+
         examenIniciado = false;
+    }
+
+    public void calcularPorcentajeExamenesPerdidos() {
+        double totalExamenes = informes.size();
+        double examenesPerdidos = 0;
+        String nombreExamPerdidos = "Examenes Perdidos:\n";
+        for (InformeExamen i : informes) {
+            if (i.getNota() < 3) {
+                examenesPerdidos++;
+                nombreExamPerdidos += "-" + i.getNombre() + "\n";
+            }
+        }
+        double porcentajePerdido = (examenesPerdidos / totalExamenes) * 100;
+        String mensaje = "Porcentaje de examenes perdidos: " + porcentajePerdido
+                + "%\n" + nombreExamPerdidos;
+        interfaz.printInformeExamem(mensaje);
+    }
+
+    public void preguntasPerdidas() {
+        
     }
 }

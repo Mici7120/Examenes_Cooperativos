@@ -5,6 +5,8 @@
  */
 package Server.Controlador;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author villa
@@ -15,13 +17,16 @@ public class InformeExamen {
     String informeExamen;
     double respuestasCorrectas = 0;
     double totalPreguntas = 0;
+    ArrayList<Pregunta> preguntas;
+    ArrayList<Pregunta> preguntasCorrectas;
+    ArrayList<Pregunta> preguntasIncorrectas;
 
     /**
      * constructor
      */
     public InformeExamen() {
-        nombre = "";
-        informeExamen = "";
+        preguntasCorrectas = new ArrayList<>();
+        preguntasIncorrectas = new ArrayList<>();
     }
 
     /**
@@ -47,12 +52,13 @@ public class InformeExamen {
     /**
      * registra la respuesta del estudiante cual es, si es correcta o incorrecta y quien la respondio
      * @param nombreEstudiante
-     * @param pregunta
+     * @param enunciado
+     * @param cuerpo
      * @param respuestaEstudiante
      * @param correcta 
      */
-    public synchronized void registrarRespuesta(String nombreEstudiante, String pregunta, String respuestaEstudiante, boolean correcta) {
-        informeExamen += pregunta + " respondida por " + nombreEstudiante + ", " + respuestaEstudiante;
+    public synchronized void registrarRespuesta(String nombreEstudiante, String enunciado, String cuerpo, String respuestaEstudiante, boolean correcta) {
+        informeExamen += enunciado + " respondida por " + nombreEstudiante + ", " + respuestaEstudiante;
         if (correcta) {
             respuestasCorrectas++;
             informeExamen += " - Respuesta Correcta\n";
@@ -83,5 +89,10 @@ public class InformeExamen {
         double nota = (respuestasCorrectas / totalPreguntas) * 5;
         String informe = "\n" + nombre + "\n" + informeExamen + "Respuestas Correctas: " + respuestasCorrectas + "\nCalificacion final: " + nota;
         return informe;
+    }
+    
+    public double getNota(){
+        double nota = (respuestasCorrectas / totalPreguntas) * 5;
+        return nota;
     }
 }

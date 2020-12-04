@@ -95,7 +95,7 @@ public class HiloServidor extends Thread {
                         String nombreCliente = token.nextToken();
                         Pregunta preguntaSelec = examen.getPregunta(numPreguntaSeleccionada);
                         boolean calificacion = respuestaCliente.equals(preguntaSelec.getOpcCorrecta());
-                        informe.registrarRespuesta(nombreCliente, preguntaSelec.getEnunciado(), respuestaCliente, calificacion);
+                        //informe.registrarRespuesta(nombreCliente, preguntaSelec.getEnunciado(), respuestaCliente, calificacion);
                         examen.getPregunta(numPreguntaSeleccionada).setEstado("RESPONDIDA");
                         enviarMensajeMulticast(getEstadoPreguntas());
                         break;

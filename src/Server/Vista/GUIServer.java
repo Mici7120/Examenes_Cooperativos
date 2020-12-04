@@ -37,14 +37,15 @@ public class GUIServer extends JFrame {
     JTextArea estadoServidor, taInformeExamen;
     JScrollPane jcpEstadoServidor, spTabla, spInformeExamen;
     JLabel lNombreExamen, lDuracion, lInfoDuracion, lInformes;
-    JButton bAgregarExamen, bCargarArchivo, bIniciarExamen, bLimpiarAreaEstadoServidor, bConsultarInforme;
+    JButton bAgregarExamen, bCargarArchivo, bIniciarExamen, bLimpiarAreaEstadoServidor, bConsultarInforme, bConsultarPorcentaje, bPreguntasPerdidas;
     JComboBox jcbExamenes, jcbInfoExamenes;
     JTable tablePreguntas;
 
     int numeroPregunta = 1;
 
     /**
-     * contructor de la GUI del server donde se inicializan todos los componentes
+     * contructor de la GUI del server donde se inicializan todos los
+     * componentes
      */
     public GUIServer() {
         super("Servidor - Examenes Cooperativos");
@@ -112,10 +113,14 @@ public class GUIServer extends JFrame {
         lInformes = new JLabel("Seleccione Informe");
         jcbInfoExamenes = new JComboBox();
         bConsultarInforme = new JButton("Consultar");
+        bConsultarPorcentaje = new JButton("Porcentaje");
+        bPreguntasPerdidas = new JButton("Preguntas Perdidas");
 
         pOpInfoExamenes.add(lInformes);
         pOpInfoExamenes.add(jcbInfoExamenes);
         pOpInfoExamenes.add(bConsultarInforme);
+        pOpInfoExamenes.add(bConsultarPorcentaje);
+        pOpInfoExamenes.add(bPreguntasPerdidas);
 
         pInfoExamenes.add(pOpInfoExamenes, BorderLayout.NORTH);
         pInfoExamenes.add(spInformeExamen, BorderLayout.CENTER);
@@ -126,7 +131,7 @@ public class GUIServer extends JFrame {
         pestañas.add(pIniExamen, "Iniciar Examen");
         pestañas.add(pInfoExamenes, "Informacion de Examenes Presentados");
         container.add(pestañas);
-        
+
         setVisible(true);
         setSize(800, 500);
         setResizable(false);
@@ -135,7 +140,8 @@ public class GUIServer extends JFrame {
 
     /**
      * asigna las escuchas a los botones
-     * @param escucha 
+     *
+     * @param escucha
      */
     public void asignarEscuchasBotones(ActionListener escucha) {
         bCargarArchivo.addActionListener(escucha);
@@ -143,12 +149,15 @@ public class GUIServer extends JFrame {
         bIniciarExamen.addActionListener(escucha);
         bLimpiarAreaEstadoServidor.addActionListener(escucha);
         bConsultarInforme.addActionListener(escucha);
+        bConsultarPorcentaje.addActionListener(escucha);
+        bPreguntasPerdidas.addActionListener(escucha);
     }
 
     //Retornar botones
     /**
      * retorna el boton de agregar examen
-     * @return 
+     *
+     * @return
      */
     public JButton getBAgregarExamen() {
         return bAgregarExamen;
@@ -156,7 +165,8 @@ public class GUIServer extends JFrame {
 
     /**
      * retorna el boton de cargar archivo
-     * @return 
+     *
+     * @return
      */
     public JButton getbCargarArchivo() {
         return bCargarArchivo;
@@ -164,7 +174,8 @@ public class GUIServer extends JFrame {
 
     /**
      * retorna el boton de iniciar examen
-     * @return 
+     *
+     * @return
      */
     public JButton getBIniciarExamen() {
         return bIniciarExamen;
@@ -172,7 +183,8 @@ public class GUIServer extends JFrame {
 
     /**
      * retorna el boton de limpiar el area del servidor
-     * @return 
+     *
+     * @return
      */
     public JButton getBLimpiarAreaEstadoServidor() {
         return bLimpiarAreaEstadoServidor;
@@ -180,15 +192,25 @@ public class GUIServer extends JFrame {
 
     /**
      * retorna el boton de consultar informe
-     * @return 
+     *
+     * @return
      */
     public JButton getBConsultarInforme() {
         return bConsultarInforme;
     }
 
+    public JButton getBConsultarProcentaje() {
+        return bConsultarPorcentaje;
+    }
+
+    public JButton getBPreguntasPerdidas() {
+        return bPreguntasPerdidas;
+    }
+
     /**
      * imprime el enunciado y el cuerpo de las preguntas del examen a cargar
-     * @param infoPreguntas 
+     *
+     * @param infoPreguntas
      */
     public void mostrarPreguntasTabla(ArrayList<String> infoPreguntas) {
         DefaultTableModel model = (DefaultTableModel) tablePreguntas.getModel();
@@ -214,8 +236,10 @@ public class GUIServer extends JFrame {
     }
 
     /**
-     * retorna el nombre del examen seleccionado en el JComboBox para iniciar un examen
-     * @return 
+     * retorna el nombre del examen seleccionado en el JComboBox para iniciar un
+     * examen
+     *
+     * @return
      */
     public String getExamenSeleccionado() {
         return jcbExamenes.getSelectedItem().toString();
@@ -223,7 +247,8 @@ public class GUIServer extends JFrame {
 
     /**
      * retorna el nombre configurado para un examen
-     * @return 
+     *
+     * @return
      */
     public String getNombreExamen() {
         return nombreExamen.getText();
@@ -231,7 +256,8 @@ public class GUIServer extends JFrame {
 
     /**
      * retorna la duracion configurada para un examen
-     * @return 
+     *
+     * @return
      */
     public String getDuracion() {
         return tfDuracion.getText();
@@ -239,7 +265,8 @@ public class GUIServer extends JFrame {
 
     /**
      * añade al JComboBox de examenes el nombre de examen recibido
-     * @param nombreExamen 
+     *
+     * @param nombreExamen
      */
     public void addExamenJCB(String nombreExamen) {
         jcbExamenes.addItem(nombreExamen);
@@ -247,7 +274,8 @@ public class GUIServer extends JFrame {
 
     /**
      * añade al JComboBox de informes el nombre del informe de un examen
-     * @param nombreInforme 
+     *
+     * @param nombreInforme
      */
     public void addInformeExamenJCB(String nombreInforme) {
         jcbInfoExamenes.addItem(nombreInforme);
@@ -255,7 +283,8 @@ public class GUIServer extends JFrame {
 
     /**
      * añade el mensaje recibido en el area de texto del estado del servidor
-     * @param mensaje 
+     *
+     * @param mensaje
      */
     public void appendEstadoServidor(String mensaje) {
         estadoServidor.append(mensaje);
@@ -263,7 +292,8 @@ public class GUIServer extends JFrame {
 
     /**
      * imprime en la GUI el informe correspondiente
-     * @param mensaje 
+     *
+     * @param mensaje
      */
     public void printInformeExamem(String mensaje) {
         taInformeExamen.setText(mensaje);
@@ -271,7 +301,8 @@ public class GUIServer extends JFrame {
 
     /**
      * retorna el nombre del informe seleccionado
-     * @return 
+     *
+     * @return
      */
     public String getInformeSeleccionado() {
         return jcbInfoExamenes.getSelectedItem().toString();
@@ -294,7 +325,8 @@ public class GUIServer extends JFrame {
 
     /**
      * imprime en la GUI la duracion restante del examen
-     * @param tiempo 
+     *
+     * @param tiempo
      */
     public void setDuracionRestante(String tiempo) {
         estadoTiempo.setText("" + tiempo);
